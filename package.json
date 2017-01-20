@@ -1,0 +1,38 @@
+{
+  "name": "github-repo-settings",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "mocha && xo"
+  },
+  "author": "Brandon Keepers",
+  "license": "ISC",
+  "dependencies": {
+    "expect": "^1.20.2",
+    "github": "^6.0.4",
+    "js-yaml": "^3.7.0"
+  },
+  "devDependencies": {
+    "mocha": "^3.0.2",
+    "xo": "^0.16.0"
+  },
+  "xo": {
+    "esnext": true,
+    "space": true,
+    "rules": {
+      "camelcase": 1,
+      "no-else-return": 0,
+      "key-spacing": 0
+    },
+    "ignores": [],
+    "envs": [
+      "node",
+      "mocha"
+    ]
+  },
+  "engines": {
+    "node": "6.6.0"
+  }
+}
