@@ -51,6 +51,7 @@ describe('Configurer', () => {
     it('syncs labels', () => {
       github.issues.getLabels.andReturn(Promise.resolve([
         {name: 'no-change', color: 'FF0000'},
+        {name: 'new-color', color: '000000'},
         {name: 'update-me', color: '0000FF'},
         {name: 'delete-me', color: '000000'}
       ]));
@@ -60,8 +61,10 @@ describe('Configurer', () => {
           - name: no-change
             color: FF0000
           - name: new-name
-            oldName: update-me
+            oldname: update-me
             color: FFFFFF
+          - name: new-color
+            color: 999999
           - name: added
             color: FFCC00
       `);
@@ -83,13 +86,21 @@ describe('Configurer', () => {
         expect(github.issues.updateLabel).toHaveBeenCalledWith({
           owner: 'bkeepers',
           repo: 'test',
-          oldName: 'update-me',
+          oldname: 'update-me',
           name: 'new-name',
           color: 'FFFFFF'
         });
 
+        expect(github.issues.updateLabel).toHaveBeenCalledWith({
+          owner: 'bkeepers',
+          repo: 'test',
+          oldname: 'new-color',
+          name: 'new-color',
+          color: '999999'
+        });
+
         expect(github.issues.deleteLabel.calls.length).toBe(1);
-        expect(github.issues.updateLabel.calls.length).toBe(1);
+        expect(github.issues.updateLabel.calls.length).toBe(2);
         expect(github.issues.createLabel.calls.length).toBe(1);
       });
     });

@@ -21,7 +21,7 @@ labels:
   - name: feature
     color: 336699
   - name: first-timers-only
-    oldName: Help Wanted # include the old name to rename and existing label
+    oldname: Help Wanted # include the old name to rename and existing label
 
 collaborators:
   - username: bkeepers
