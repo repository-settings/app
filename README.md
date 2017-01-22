@@ -1,21 +1,55 @@
-# github-configurer
+# Github Configurer
 
-This service syncs repository settings defined in `.github/config.yml` to GitHub. Any changes to this file on the default branch will be synced to the repository.
+Pull Requests for GitHub repository settings.
 
-## Configuration
+This GitHub Integration syncs repository settings defined in `.github/config.yml` to GitHub. Changes to this file on the default branch will be synced to the repository.
+
+## Usage
+
+0. **[Install the integration](https://github.com/integration/configurer)** on an organization.
+0. Create a `.github/config.yml` file in your repository.
+
+All settings are optional.
 
 ```yaml
 repository:
-  description: name of repo that shows up on GitHub
+  # See https://developer.github.com/v3/repos/#edit for all available settings.
+
+  # The name of the repository. Changing this will rename the repository
+  name: repo-name
+
+  # A short description of the repository that will show up on GitHub
+  description: description of repo
+
+  # A URL with more information about the repository
   homepage: https://example.github.io/
+
+  # Either `true` to make the repository private, or `false` to make it public.
   private: false
-  default_branch: master
-  allow_rebase_merge: true
-  allow_squash_merge: true
-  allow_merge_commit: true
+
+  # Either `true` to enable issues for this repository, `false` to disable them.
   has_issues: true
-  has_downloads: true
+
+  # Either `true` to enable the wiki for this repository, `false` to disable it.
   has_wiki: true
+
+  # Either `true` to enable downloads for this repository, `false` to disable them.
+  has_downloads: true
+
+  # Updates the default branch for this repository.
+  default_branch: master
+
+  # Either `true` to allow squash-merging pull requests, or `false` to prevent
+  # squash-merging.
+  allow_squash_merge: true
+
+  # Either `true` to allow merging pull requests with a merge commit, or `false`
+  # to prevent merging pull requests with merge commits.
+  allow_merge_commit: true
+
+  # Either `true` to allow rebase-merging pull requests, or `false` to prevent
+  # rebase-merging.
+  allow_rebase_merge: true
 
 labels:
   - name: bug
@@ -23,12 +57,23 @@ labels:
   - name: feature
     color: 336699
   - name: first-timers-only
-    oldname: Help Wanted # include the old name to rename and existing label
+    # include the old name to rename and existing label
+    oldname: Help Wanted
 
+# Collaborators: give specific users access to this repository.
 collaborators:
   - username: bkeepers
-    permission: push # pull, push, admin
+    # Note: Only valid on organization-owned repositories.
+    # The permission to grant the collaborator. Can be one of:
+    # * `pull` - can pull, but not push to or administer this repository.
+    # * `push` - can pull and push, but not administer this repository.
+    # * `admin` - can pull, push and administer this repository.
+    permission: push
+
   - username: hubot
+    permission: pull
+
+  - username:
     permission: pull
 
 ## Note: none of these are implemented yet
@@ -61,9 +106,6 @@ protected_branches:
 
 ## Usage
 
-0. **[Go to the integration](https://github.com/integration/configurer)**, click **Install**, and then select an organization.
-0. Create a `.github/config.yml` file in your repository. See [Configuration](#configuration) for more information.
-0. Any configuration changed in `.github/config.yml` should be reflected on GitHub.
 
 ### Deploy your own bot to Heroku
 
