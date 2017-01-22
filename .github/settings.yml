@@ -1,6 +1,7 @@
 repository:
   name: github-configurer
   description: Pull Requests for GitHub repository settings
+  has_wiki: true
 
   # Defaults:
   # private: false
@@ -10,4 +11,3 @@ repository:
   # allow_merge_commit: true
   # has_issues: true
   # has_downloads: true
-  # has_wiki: true
