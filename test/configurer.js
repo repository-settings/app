@@ -113,7 +113,8 @@ describe('Configurer', () => {
       github.repos.getCollaborators.andReturn(Promise.resolve([
         {login: 'bkeepers', permissions: {admin: true, push: true, pull: true}},
         {login: 'updated-permission', permissions: {admin: false, push: false, pull: true}},
-        {login: 'removed-user', permissions: {admin: false, push: true, pull: true}}
+        {login: 'removed-user', permissions: {admin: false, push: true, pull: true}},
+        {login: 'differentCase', permissions: {admin: false, push: true, pull: true}}
       ]));
 
       const config = configure(`
@@ -123,6 +124,8 @@ describe('Configurer', () => {
           - username: added-user
             permission: push
           - username: updated-permission
+            permission: push
+          - username: DIFFERENTcase
             permission: push
       `);
 
