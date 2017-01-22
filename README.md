@@ -1,4 +1,4 @@
-# github-repo-settings
+# github-configurer
 
 This service syncs repository settings defined in `.github/settings.yml` to GitHub. Any changes to this file on the default branch will be synced to the repository.
 
