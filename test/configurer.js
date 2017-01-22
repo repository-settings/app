@@ -110,11 +110,10 @@ describe('Configurer', () => {
       github.repos.removeCollaborator = expect.createSpy().andReturn(Promise.resolve());
       github.repos.addCollaborator = expect.createSpy().andReturn(Promise.resolve());
 
-      // FIXME: figure out what this actual response is.
       github.repos.getCollaborators.andReturn(Promise.resolve([
-        {username: 'bkeepers', permission: 'admin'},
-        {username: 'updated-permission', permission: 'pull'},
-        {username: 'removed-user', permission: 'push'}
+        {login: 'bkeepers', permissions: {admin: true, push: true, pull: true}},
+        {login: 'updated-permission', permissions: {admin: false, push: false, pull: true}},
+        {login: 'removed-user', permissions: {admin: false, push: true, pull: true}}
       ]));
 
       const config = configure(`
