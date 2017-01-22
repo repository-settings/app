@@ -1,7 +1,7 @@
 repository:
   name: github-configurer
   description: Pull Requests for GitHub repository settings
-  has_wiki: true
+  has_wiki: false
 
   # Defaults:
   # private: false
