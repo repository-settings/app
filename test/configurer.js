@@ -28,7 +28,22 @@ describe('Configurer', () => {
         expect(github.repos.edit).toHaveBeenCalledWith({
           owner: 'bkeepers',
           repo: 'test',
+          name: 'test',
           descripton: 'Hello World!'
+        });
+      });
+    });
+
+    it('handles renames', () => {
+      const config = configure(`
+        repository:
+          name: new-name
+      `);
+      return config.update().then(() => {
+        expect(github.repos.edit).toHaveBeenCalledWith({
+          owner: 'bkeepers',
+          repo: 'test',
+          name: 'new-name'
         });
       });
     });
