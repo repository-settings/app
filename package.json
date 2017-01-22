@@ -15,7 +15,8 @@
     "expect": "^1.20.2",
     "github": "^6.0.4",
     "github-webhook-handler": "^0.6.0",
-    "js-yaml": "^3.7.0"
+    "js-yaml": "^3.7.0",
+    "jsonwebtoken": "^7.2.1"
   },
   "devDependencies": {
     "mocha": "^3.0.2",
