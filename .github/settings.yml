@@ -1,0 +1,13 @@
+repository:
+  name: github-configurer
+  description: Pull Requests for GitHub repository settings
+
+  # Defaults:
+  # private: false
+  # default_branch: master
+  # allow_rebase_merge: true
+  # allow_squash_merge: true
+  # allow_merge_commit: true
+  # has_issues: true
+  # has_downloads: true
+  # has_wiki: true
