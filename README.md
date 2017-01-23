@@ -56,7 +56,7 @@ labels:
   - name: feature
     color: 336699
   - name: first-timers-only
-    # include the old name to rename and existing label
+    # include the old name to rename an existing label
     oldname: Help Wanted
 
 # Collaborators: give specific users access to this repository.
