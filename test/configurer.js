@@ -155,5 +155,54 @@ describe('Configurer', () => {
         expect(github.repos.removeCollaborator.calls.length).toBe(1);
       });
     });
+
+    it('syncs teams', () => {
+      github.orgs.deleteTeamRepo = expect.createSpy().andReturn(Promise.resolve());
+      github.orgs.addTeamRepo = expect.createSpy().andReturn(Promise.resolve());
+      github.repos.getTeams = expect.createSpy().andReturn(Promise.resolve([
+        {id: 1, slug: 'unchanged', permission: 'push'},
+        {id: 2, slug: 'removed', permission: 'push'},
+        {id: 3, slug: 'updated-permission', permission: 'pull'}
+      ]));
+      github.orgs.getTeams = expect.createSpy().andReturn(Promise.resolve([
+        {id: 4, slug: 'added'}
+      ]));
+
+      const config = configure(`
+        teams:
+          - name: unchanged
+            permission: push
+          - name: updated-permission
+            permission: admin
+          - name: added
+            permission: pull
+      `);
+
+      return config.update().then(() => {
+        expect(github.orgs.addTeamRepo).toHaveBeenCalledWith({
+          org: 'bkeepers',
+          repo: 'test',
+          id: 3,
+          permission: 'admin'
+        });
+
+        expect(github.orgs.addTeamRepo).toHaveBeenCalledWith({
+          org: 'bkeepers',
+          repo: 'test',
+          id: 4,
+          permission: 'pull'
+        });
+
+        expect(github.orgs.addTeamRepo.calls.length).toBe(2);
+
+        expect(github.orgs.deleteTeamRepo).toHaveBeenCalledWith({
+          owner: 'bkeepers',
+          repo: 'test',
+          id: 2
+        });
+
+        expect(github.orgs.deleteTeamRepo.calls.length).toBe(1);
+      });
+    });
   });
 });
