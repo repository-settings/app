@@ -84,4 +84,4 @@ collaborators:
   - **Repository contents**: **Read only**, and check the **Push** checkbox
   - **Single file**: **Read & Write** and enter `.github/config.yml`
 0. After creating your GitHub integration, go back to the Heroku tab and fill in the configuration variables with the values for the GitHub Integration
-0. Create a `.github/config.yml` file in your repository. See [Configuration](#configuration) for more information.
+0. Create a `.github/config.yml` file in your repository. See [Usage](#usage) for more information.
