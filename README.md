@@ -74,6 +74,12 @@ collaborators:
 
   - username:
     permission: pull
+
+teams:
+  - name: core
+    permission: admin
+  - name: docs
+    permission: push
 ```
 
 ## Deploy your own bot to Heroku
