@@ -74,6 +74,12 @@ collaborators:
 
   - username:
     permission: pull
+
+teams:
+  - name: core
+    permission: admin
+  - name: docs
+    permission: push
 ```
 
 **WARNING:** Note that this integration inherently _escalates anyone with `push` permissions to the **admin** role_, since they can push config settings to the `master` branch, which will be synced. In a future, we may add restrictions to allow changes to the config file to be merged only by specific people/teams, or those with **admin** access _(via a combination of protected branches, required statuses, and branch restrictions)_. Until then, use caution when merging PRs and adding collaborators.
