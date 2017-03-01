@@ -1,21 +1,26 @@
 const expect = require('expect');
-const GitHubApi = require('github');
 const Settings = require('../lib/configurer');
 
 describe('Configurer', () => {
-  const github = new GitHubApi();
+  let github;
 
   function configure(yaml) {
     return new Settings(github, {owner: 'bkeepers', repo: 'test'}, yaml);
   }
 
   beforeEach(() => {
-    github.repos.get = expect.createSpy().andReturn(Promise.resolve({}));
-    github.repos.edit = expect.createSpy().andReturn(Promise.resolve());
-    github.issues.getLabels = expect.createSpy().andReturn(Promise.resolve([]));
-    github.issues.createLabel = expect.createSpy().andReturn(Promise.resolve());
-    github.issues.deleteLabel = expect.createSpy().andReturn(Promise.resolve());
-    github.issues.updateLabel = expect.createSpy().andReturn(Promise.resolve());
+    github = {
+      repos: {
+        get: expect.createSpy().andReturn(Promise.resolve({})),
+        edit: expect.createSpy().andReturn(Promise.resolve())
+      },
+      issues: {
+        getLabels: expect.createSpy().andReturn(Promise.resolve([])),
+        createLabel: expect.createSpy().andReturn(Promise.resolve()),
+        deleteLabel: expect.createSpy().andReturn(Promise.resolve()),
+        updateLabel: expect.createSpy().andReturn(Promise.resolve())
+      }
+    };
   });
 
   describe('update', () => {

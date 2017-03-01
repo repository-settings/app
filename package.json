@@ -16,12 +16,11 @@
     "github": "^6.0.4",
     "github-integration": "^1.0.0",
     "github-webhook-handler": "^0.6.0",
-    "js-yaml": "^3.7.0",
-    "jsonwebtoken": "^7.2.1"
+    "js-yaml": "^3.7.0"
   },
   "devDependencies": {
     "mocha": "^3.0.2",
-    "xo": "^0.16.0"
+    "xo": "^0.17.1"
   },
   "xo": {
     "esnext": true,
