@@ -4,18 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "probot ./index.js",
     "test": "mocha && xo"
   },
   "author": "Brandon Keepers",
   "license": "ISC",
   "dependencies": {
-    "bunyan": "^1.8.5",
-    "dotenv": "^4.0.0",
-    "expect": "^1.20.2",
-    "github": "^6.0.4",
-    "github-integration": "^1.0.0",
-    "github-webhook-handler": "^0.6.0",
+    "probot": "probot/probot",
     "js-yaml": "^3.7.0"
   },
   "devDependencies": {
