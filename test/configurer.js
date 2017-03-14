@@ -162,6 +162,7 @@ describe('Configurer', () => {
     });
 
     it('syncs teams', () => {
+      github.orgs = {};
       github.orgs.deleteTeamRepo = expect.createSpy().andReturn(Promise.resolve());
       github.orgs.addTeamRepo = expect.createSpy().andReturn(Promise.resolve());
       github.repos.getTeams = expect.createSpy().andReturn(Promise.resolve([

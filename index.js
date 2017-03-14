@@ -1,23 +1,24 @@
-const fs = require('fs');
-const createHandler = require('github-webhook-handler');
-const createIntegration = require('github-integration');
-const Server = require('./lib/server.js');
-const log = require('./lib/log');
+module.exports = (robot, _, Configurer = require('./lib/configurer')) => {
+  robot.on('push', receive);
 
-const webhook = createHandler({
-  path: '/',
-  secret: process.env.WEBHOOK_SECRET || 'development'
-});
+  async function receive(event) {
+    const payload = event.payload;
+    const defaultBranch = payload.ref === 'refs/heads/' + payload.repository.default_branch;
 
-const integration = createIntegration({
-  id: process.env.INTEGRATION_ID,
-  cert: process.env.PRIVATE_KEY || fs.readFileSync('private-key.pem'),
-  debug: log.level() <= 10
-});
+    const settingsModified = payload.commits.find(commit => {
+      return commit.added.includes(Configurer.FILE_NAME) ||
+        commit.modified.includes(Configurer.FILE_NAME);
+    });
 
-// Show trace for any unhandled rejections
-process.on('unhandledRejection', reason => {
-  log.error(reason);
-});
+    if (defaultBranch && settingsModified) {
+      const github = await robot.auth(event.payload.installation.id);
 
-new Server(integration, webhook).start(process.env.PORT || 3000);
+      const repo = {
+        owner: event.payload.repository.owner.name,
+        repo: event.payload.repository.name
+      };
+
+      return Configurer.sync(github, repo);
+    }
+  }
+};
