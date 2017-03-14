@@ -1,6 +1,4 @@
-const Configurer = require('./lib/configurer');
-
-module.exports = robot => {
+module.exports = (robot, _, Configurer = require('./lib/configurer')) => {
   robot.on('push', receive);
 
   async function receive(event) {
@@ -13,18 +11,14 @@ module.exports = robot => {
     });
 
     if (defaultBranch && settingsModified) {
-      return sync(event);
+      const github = await robot.auth(event.payload.installation.id);
+
+      const repo = {
+        owner: event.payload.repository.owner.name,
+        repo: event.payload.repository.name
+      };
+
+      return Configurer.sync(github, repo);
     }
-  }
-
-  async function sync(event) {
-    const github = await robot.auth(event.payload.installation.id);
-
-    const repo = {
-      owner: event.payload.repository.owner.name,
-      repo: event.payload.repository.name
-    };
-
-    return Configurer.sync(github, repo);
   }
 };
