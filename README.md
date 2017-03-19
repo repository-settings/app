@@ -1,7 +1,5 @@
 # GitHub Configurer
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/probot/configurer.svg)](https://greenkeeper.io/)
-
 This GitHub Integration syncs repository settings defined in `.github/config.yml` to GitHub, enabling Pull Requests for repository settings.
 
 ## Usage
