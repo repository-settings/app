@@ -1,7 +1,8 @@
 {
-  "name": "github-configurer",
+  "name": "probot-configurer",
   "version": "1.0.0",
   "description": "",
+  "repository": "https://github.com/probot/configurer.git",
   "main": "index.js",
   "scripts": {
     "start": "probot ./index.js",
