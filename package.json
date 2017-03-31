@@ -11,7 +11,7 @@
   "author": "Brandon Keepers",
   "license": "ISC",
   "dependencies": {
-    "probot": "~0.2.0",
+    "probot": "~0.3.0",
     "js-yaml": "^3.7.0"
   },
   "devDependencies": {
