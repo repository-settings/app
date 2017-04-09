@@ -84,12 +84,4 @@ teams:
 
 **WARNING:** Note that this integration inherently _escalates anyone with `push` permissions to the **admin** role_, since they can push config settings to the `master` branch, which will be synced. In a future, we may add restrictions to allow changes to the config file to be merged only by specific people/teams, or those with **admin** access _(via a combination of protected branches, required statuses, and branch restrictions)_. Until then, use caution when merging PRs and adding collaborators.
 
-## Deploy your own bot to Heroku
-
-0. [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy) - Click this button and pick an **App Name** that Heroku is happy with, like `your-name-probot`. Before you can complete this, you'll need config variables from the next step.
-0. In another tab, [create an integration](https://developer.github.com/early-access/integrations/creating-an-integration/) on GitHub, using `https://your-app-name.herokuapp.com/` as the **Homepage URL**, **Callback URL**, and **Webhook URL**, and turn on
-  - **Repository administration**: **Read & Write**
-  - **Repository contents**: **Read only**, and check the **Push** checkbox
-  - **Single file**: **Read & Write** and enter `.github/config.yml`
-0. After creating your GitHub integration, go back to the Heroku tab and fill in the configuration variables with the values for the GitHub Integration
-0. Create a `.github/config.yml` file in your repository. See [Usage](#usage) for more information.
+See [docs/deploy.md](docs/deploy.md) if you would like to run your own instance of this plugin.
