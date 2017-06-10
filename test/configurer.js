@@ -71,7 +71,6 @@ describe('Configurer', () => {
           - name: new-color
             color: 999999
           - name: added
-            color: FFCC00
       `);
 
       return config.update().then(() => {
@@ -84,8 +83,7 @@ describe('Configurer', () => {
         expect(github.issues.createLabel).toHaveBeenCalledWith({
           owner: 'bkeepers',
           repo: 'test',
-          name: 'added',
-          color: 'FFCC00'
+          name: 'added'
         });
 
         expect(github.issues.updateLabel).toHaveBeenCalledWith({
