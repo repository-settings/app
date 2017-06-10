@@ -54,12 +54,12 @@ describe('Configurer', () => {
     });
 
     it('syncs labels', () => {
-      github.issues.getLabels.andReturn(Promise.resolve([
+      github.issues.getLabels.andReturn(Promise.resolve({data: [
         {name: 'no-change', color: 'FF0000'},
         {name: 'new-color', color: '000000'},
         {name: 'update-me', color: '0000FF'},
         {name: 'delete-me', color: '000000'}
-      ]));
+      ]}));
 
       const config = configure(`
         labels:
@@ -115,12 +115,12 @@ describe('Configurer', () => {
       github.repos.removeCollaborator = expect.createSpy().andReturn(Promise.resolve());
       github.repos.addCollaborator = expect.createSpy().andReturn(Promise.resolve());
 
-      github.repos.getCollaborators.andReturn(Promise.resolve([
+      github.repos.getCollaborators.andReturn(Promise.resolve({data: [
         {login: 'bkeepers', permissions: {admin: true, push: true, pull: true}},
         {login: 'updated-permission', permissions: {admin: false, push: false, pull: true}},
         {login: 'removed-user', permissions: {admin: false, push: true, pull: true}},
         {login: 'differentCase', permissions: {admin: false, push: true, pull: true}}
-      ]));
+      ]}));
 
       const config = configure(`
         collaborators:
@@ -165,14 +165,14 @@ describe('Configurer', () => {
       github.orgs = {};
       github.orgs.deleteTeamRepo = expect.createSpy().andReturn(Promise.resolve());
       github.orgs.addTeamRepo = expect.createSpy().andReturn(Promise.resolve());
-      github.repos.getTeams = expect.createSpy().andReturn(Promise.resolve([
+      github.repos.getTeams = expect.createSpy().andReturn(Promise.resolve({data: [
         {id: 1, slug: 'unchanged', permission: 'push'},
         {id: 2, slug: 'removed', permission: 'push'},
         {id: 3, slug: 'updated-permission', permission: 'pull'}
-      ]));
-      github.orgs.getTeams = expect.createSpy().andReturn(Promise.resolve([
+      ]}));
+      github.orgs.getTeams = expect.createSpy().andReturn(Promise.resolve({data: [
         {id: 4, slug: 'added'}
-      ]));
+      ]}));
 
       const config = configure(`
         teams:
