@@ -27,7 +27,7 @@ repository:
 
   # Either `true` to enable issues for this repository, `false` to disable them.
   has_issues: true
-  
+
   # Either `true` to enable projects for this repository, or `false` to disable them.
   # If projects are disabled for the organization, passing `true` will cause an API error.
   has_projects: true
@@ -74,9 +74,6 @@ collaborators:
     permission: push
 
   - username: hubot
-    permission: pull
-
-  - username:
     permission: pull
 
 teams:
