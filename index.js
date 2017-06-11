@@ -1,8 +1,8 @@
 module.exports = (robot, _, Configurer = require('./lib/configurer')) => {
   robot.on('push', receive);
 
-  async function receive(event) {
-    const payload = event.payload;
+  async function receive(context) {
+    const payload = context.payload;
     const defaultBranch = payload.ref === 'refs/heads/' + payload.repository.default_branch;
 
     const settingsModified = payload.commits.find(commit => {
@@ -11,14 +11,7 @@ module.exports = (robot, _, Configurer = require('./lib/configurer')) => {
     });
 
     if (defaultBranch && settingsModified) {
-      const github = await robot.auth(event.payload.installation.id);
-
-      const repo = {
-        owner: event.payload.repository.owner.name,
-        repo: event.payload.repository.name
-      };
-
-      return Configurer.sync(github, repo);
+      return Configurer.sync(context.github, context.repo());
     }
   }
 };
