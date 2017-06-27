@@ -1,33 +1,28 @@
 const expect = require('expect');
+const createProbot = require('probot');
 const plugin = require('../index');
 
 describe('plugin', () => {
+  let probot;
   let event;
-  let hooks;
-  let robot;
   let sync;
 
   beforeEach(() => {
-    hooks = {};
-
-    robot = {
-      on: (name, callback) => {
-        hooks[name] = callback;
-      },
-      auth: () => Promise.resolve({})
-    };
+    probot = createProbot({secret: 'test'});
+    probot.robot.auth = () => Promise.resolve({});
 
     event = {
+      event: 'push',
       payload: JSON.parse(JSON.stringify(require('./fixtures/events/push.settings.json')))
     };
     sync = expect.createSpy();
 
-    plugin(robot, {}, {sync, FILE_NAME: '.github/config.yml'});
+    plugin(probot.robot, {}, {sync, FILE_NAME: '.github/config.yml'});
   });
 
   describe('with settings modified on master', () => {
     it('syncs settings', async () => {
-      await hooks.push(event);
+      await probot.receive(event);
       expect(sync).toHaveBeenCalled();
     });
   });
@@ -38,7 +33,7 @@ describe('plugin', () => {
     });
 
     it('does not sync settings', async () => {
-      await hooks.push(event);
+      await probot.receive(event);
       expect(sync).toNotHaveBeenCalled();
     });
   });
@@ -49,7 +44,7 @@ describe('plugin', () => {
     });
 
     it('does not sync settings', () => {
-      hooks.push(event);
+      probot.receive(event);
       expect(sync).toNotHaveBeenCalled();
     });
   });
