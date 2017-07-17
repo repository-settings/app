@@ -1,8 +1,8 @@
 {
-  "name": "github-configurer",
+  "name": "github-settings",
   "description": "Pull Requests for GitHub repository settings",
   "keywords": ["node", "github"],
-  "repository": "https://github.com/bkeepers/github-configurer",
+  "repository": "https://github.com/bkeepers/github-settings",
   "env": {
     "PRIVATE_KEY": {
       "description": "the private key you downloaded when creating the GitHub Integration"

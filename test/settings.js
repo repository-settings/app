@@ -1,7 +1,7 @@
 const expect = require('expect');
-const Settings = require('../lib/configurer');
+const Settings = require('../lib/settings');
 
-describe('Configurer', () => {
+describe('Settings', () => {
   let github;
 
   function configure(yaml) {

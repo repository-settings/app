@@ -1,8 +1,8 @@
 {
-  "name": "probot-configurer",
+  "name": "probot-settings",
   "version": "1.0.0",
   "description": "",
-  "repository": "https://github.com/probot/configurer.git",
+  "repository": "https://github.com/probot/settings.git",
   "main": "index.js",
   "scripts": {
     "start": "probot run ./index.js",

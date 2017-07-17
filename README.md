@@ -1,10 +1,10 @@
-# GitHub Configurer
+# GitHub Settings
 
 This GitHub Integration syncs repository settings defined in `.github/config.yml` to GitHub, enabling Pull Requests for repository settings.
 
 ## Usage
 
-1. **[Install the integration](https://github.com/integration/configurer)**.
+1. **[Install the integration](https://github.com/integration/settings)**.
 2. Create a `.github/config.yml` file in your repository. Changes to this file on the default branch will be synced to GitHub.
 
 All settings are optional.
