@@ -1,6 +1,6 @@
 # GitHub Settings
 
-This GitHub Integration syncs repository settings defined in `.github/config.yml` to GitHub, enabling Pull Requests for repository settings.
+This GitHub Integration syncs repository settings defined in `.github/settings.yml` to GitHub, enabling Pull Requests for repository settings.
 
 ## Usage
 

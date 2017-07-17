@@ -8,4 +8,4 @@ This plugin requires these **Permissions & events** for the GitHub Integration:
 - Repository contents: **Read only**
   - [x] Check the box for **Push** events
 - Single file: **Read & Write**
-  - Path: `.github/config.yml`
+  - Path: `.github/settings.yml`
