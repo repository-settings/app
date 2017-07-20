@@ -1,4 +1,4 @@
-module.exports = (robot, _, Configurer = require('./lib/configurer')) => {
+module.exports = (robot, _, Settings = require('./lib/settings')) => {
   robot.on('push', receive);
 
   async function receive(context) {
@@ -6,12 +6,12 @@ module.exports = (robot, _, Configurer = require('./lib/configurer')) => {
     const defaultBranch = payload.ref === 'refs/heads/' + payload.repository.default_branch;
 
     const settingsModified = payload.commits.find(commit => {
-      return commit.added.includes(Configurer.FILE_NAME) ||
-        commit.modified.includes(Configurer.FILE_NAME);
+      return commit.added.includes(Settings.FILE_NAME) ||
+        commit.modified.includes(Settings.FILE_NAME);
     });
 
     if (defaultBranch && settingsModified) {
-      return Configurer.sync(context.github, context.repo());
+      return Settings.sync(context.github, context.repo());
     }
   }
 };

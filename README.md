@@ -1,11 +1,11 @@
-# GitHub Configurer
+# GitHub Settings
 
-This GitHub Integration syncs repository settings defined in `.github/config.yml` to GitHub, enabling Pull Requests for repository settings.
+This GitHub App syncs repository settings defined in `.github/settings.yml` to GitHub, enabling Pull Requests for repository settings.
 
 ## Usage
 
-1. **[Install the integration](https://github.com/integration/configurer)**.
-2. Create a `.github/config.yml` file in your repository. Changes to this file on the default branch will be synced to GitHub.
+1. **[Install the app](https://github.com/apps/settings)**.
+2. Create a `.github/settings.yml` file in your repository. Changes to this file on the default branch will be synced to GitHub.
 
 All settings are optional.
 
@@ -85,6 +85,6 @@ teams:
     permission: push
 ```
 
-**WARNING:** Note that this integration inherently _escalates anyone with `push` permissions to the **admin** role_, since they can push config settings to the `master` branch, which will be synced. In a future, we may add restrictions to allow changes to the config file to be merged only by specific people/teams, or those with **admin** access _(via a combination of protected branches, required statuses, and branch restrictions)_. Until then, use caution when merging PRs and adding collaborators.
+**WARNING:** Note that this app inherently _escalates anyone with `push` permissions to the **admin** role_, since they can push config settings to the `master` branch, which will be synced. In a future, we may add restrictions to allow changes to the config file to be merged only by specific people/teams, or those with **admin** access _(via a combination of protected branches, required statuses, and branch restrictions)_. Until then, use caution when merging PRs and adding collaborators.
 
 See [docs/deploy.md](docs/deploy.md) if you would like to run your own instance of this plugin.

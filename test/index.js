@@ -17,7 +17,7 @@ describe('plugin', () => {
     };
     sync = expect.createSpy();
 
-    plugin(probot.robot, {}, {sync, FILE_NAME: '.github/config.yml'});
+    plugin(probot.robot, {}, {sync, FILE_NAME: '.github/settings.yml'});
   });
 
   describe('with settings modified on master', () => {

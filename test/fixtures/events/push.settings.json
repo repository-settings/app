@@ -12,7 +12,7 @@
       "id": "3c8cbf33403deeb9a7c8860b72f1135cb3d0a960",
       "tree_id": "0511cfb889506a2864e09040ad9936b422c476a9",
       "distinct": true,
-      "message": "Create config.yml",
+      "message": "Create settings.yml",
       "timestamp": "2017-01-19T23:59:33-06:00",
       "url": "https://github.com/bkeepers-inc/botland/commit/3c8cbf33403deeb9a7c8860b72f1135cb3d0a960",
       "author": {
@@ -26,7 +26,7 @@
         "username": "web-flow"
       },
       "added": [
-        ".github/config.yml"
+        ".github/settings.yml"
       ],
       "removed": [],
       "modified": []
@@ -36,7 +36,7 @@
     "id": "3c8cbf33403deeb9a7c8860b72f1135cb3d0a960",
     "tree_id": "0511cfb889506a2864e09040ad9936b422c476a9",
     "distinct": true,
-    "message": "Create config.yml",
+    "message": "Create settings.yml",
     "timestamp": "2017-01-19T23:59:33-06:00",
     "url": "https://github.com/bkeepers-inc/botland/commit/3c8cbf33403deeb9a7c8860b72f1135cb3d0a960",
     "author": {
@@ -50,7 +50,7 @@
       "username": "web-flow"
     },
     "added": [
-      ".github/config.yml"
+      ".github/settings.yml"
     ],
     "removed": [],
     "modified": []

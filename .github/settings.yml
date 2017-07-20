@@ -1,5 +1,5 @@
 repository:
-  name: github-configurer
+  name: github-settings
   description: Pull Requests for GitHub repository settings
-  homepage: https://github.com/integration/configurer
+  homepage: https://github.com/integration/settings
   has_wiki: false
