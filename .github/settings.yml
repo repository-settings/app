@@ -1,5 +1,5 @@
 repository:
-  name: github-settings
+  name: settings
   description: Pull Requests for GitHub repository settings
-  homepage: https://github.com/integration/settings
+  homepage: https://github.com/apps/settings
   has_wiki: false
