@@ -1,15 +1,15 @@
 const expect = require('expect');
-const createProbot = require('probot');
+const {createRobot} = require('probot');
 const plugin = require('../index');
 
 describe('plugin', () => {
-  let probot;
+  let robot;
   let event;
   let sync;
 
   beforeEach(() => {
-    probot = createProbot({secret: 'test'});
-    probot.robot.auth = () => Promise.resolve({});
+    robot = createRobot();
+    robot.auth = () => Promise.resolve({});
 
     event = {
       event: 'push',
@@ -17,12 +17,12 @@ describe('plugin', () => {
     };
     sync = expect.createSpy();
 
-    plugin(probot.robot, {}, {sync, FILE_NAME: '.github/settings.yml'});
+    plugin(robot, {}, {sync, FILE_NAME: '.github/settings.yml'});
   });
 
   describe('with settings modified on master', () => {
     it('syncs settings', async () => {
-      await probot.receive(event);
+      await robot.receive(event);
       expect(sync).toHaveBeenCalled();
     });
   });
@@ -33,7 +33,7 @@ describe('plugin', () => {
     });
 
     it('does not sync settings', async () => {
-      await probot.receive(event);
+      await robot.receive(event);
       expect(sync).toNotHaveBeenCalled();
     });
   });
@@ -44,7 +44,7 @@ describe('plugin', () => {
     });
 
     it('does not sync settings', () => {
-      probot.receive(event);
+      robot.receive(event);
       expect(sync).toNotHaveBeenCalled();
     });
   });
