@@ -10,6 +10,8 @@ This GitHub App syncs repository settings defined in `.github/settings.yml` to G
 All settings are optional.
 
 ```yaml
+# These settings are synced to GitHub by https://probot.github.io/apps/settings/
+
 repository:
   # See https://developer.github.com/v3/repos/#edit for all available settings.
 
@@ -21,6 +23,9 @@ repository:
 
   # A URL with more information about the repository
   homepage: https://example.github.io/
+
+  # A comma-separated list of topics to set on the repository
+  topics: github, probot
 
   # Either `true` to make the repository private, or `false` to make it public.
   private: false
