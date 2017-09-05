@@ -2,4 +2,5 @@ repository:
   name: settings
   description: Pull Requests for GitHub repository settings
   homepage: https://github.com/apps/settings
+  topics: probot-app, github-app
   has_wiki: false
