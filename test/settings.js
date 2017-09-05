@@ -12,7 +12,8 @@ describe('Settings', () => {
     github = {
       repos: {
         get: expect.createSpy().andReturn(Promise.resolve({})),
-        edit: expect.createSpy().andReturn(Promise.resolve())
+        edit: expect.createSpy().andReturn(Promise.resolve()),
+        replaceTopics: expect.createSpy().andReturn(Promise.resolve())
       },
       issues: {
         getLabels: expect.createSpy().andReturn(Promise.resolve([])),
@@ -206,6 +207,21 @@ describe('Settings', () => {
         });
 
         expect(github.orgs.deleteTeamRepo.calls.length).toBe(1);
+      });
+    });
+
+    it('syncs topics', () => {
+      const config = configure(`
+        repository:
+          topics: foo, bar
+      `);
+
+      return config.update().then(() => {
+        expect(github.repos.replaceTopics).toHaveBeenCalledWith({
+          owner: 'bkeepers',
+          repo: 'test',
+          names: ['foo', 'bar']
+        });
       });
     });
   });
