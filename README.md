@@ -9,8 +9,12 @@ This GitHub App syncs repository settings defined in `.github/settings.yml` to G
 
 All settings are optional.
 
+By setting `create_issues` to `true`, the repository configurations _*will not be changed*_; instead, an issue will be created, assuming it doesn't exist already.
+
 ```yaml
 # These settings are synced to GitHub by https://probot.github.io/apps/settings/
+
+create_issues: true
 
 repository:
   # See https://developer.github.com/v3/repos/#edit for all available settings.
