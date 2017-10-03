@@ -12,6 +12,8 @@ All settings are optional.
 ```yaml
 # These settings are synced to GitHub by https://probot.github.io/apps/settings/
 
+create_issues: true
+
 repository:
   # See https://developer.github.com/v3/repos/#edit for all available settings.
 
