@@ -4,12 +4,3 @@ node_js:
   - "7.7.1"
 notifications:
   disabled: true
-env:
-  global:
-    secure: "XeBjfvHODYBVLxb2jRFH0aEkYWofKBXc5xURdIyU58GqICScB1OSXUrLGrI9L5M8DGRITbxVfjaw8x3klQanAQnIJyGWZNiGqQ2FUMFFdw6TCA9FjDhz8Hj4wo1NimwxFpuedM1YyqS503JNFAx4ku79uNVrYjPUJzAI4VbrDHFw5t/NDVD3hAL8TplUkl9yhZc14Ay8NIWc5gf2/D3fDdFcr2/N5q+h5RMhpDkLyAoLDvw6Zogp9S6Q0LIp2IbTBgi1LSaI4/7mESQtrSGlBqeap1jv89bp2JSKHQJWcdauz62rDMmVSozkOLsQxpZRCHKSQBXCN92zlGEnIyqamKXHE50uCWT5CPIs6GZvl5H83ez+LcnIPG8OxKCC2LuKyJnsfBeUQtloSEOKEmFoQBphpHFDqbisyGBEvBj2GW2m0xX4q4LGZUBNzy3t2S0pO2RuF3Oy8HKgmYdVfrgagbCE04ZEEXa8wzUW6jECcynGgKmalw1Hp3ulGlrZkEWz5zrdYrf+HLmzLtyqZcgufusNKRhh43ZP8VtneykzfpWhfKfDcJA965PYTKwM2WoYsDbZis0ePbrOsIAUdZHq7pgdcgtLYGjzYyIB6lcff2/MH3xvg+ct/BwJbqE5hFx74L65KuIJAbRqFtPfe/wXpXxbBP6HxNO9PqLjW6wv4Wk="
-before_install:
-# package-lock.json was introduced in npm@5
-- npm install -g npm@5
-- npm install -g greenkeeper-lockfile@1
-before_script: greenkeeper-lockfile-update
-after_script: greenkeeper-lockfile-upload
