@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "probot run ./index.js",
-    "test": "mocha && standard"
+    "test": "jest && standard"
   },
   "author": "Brandon Keepers",
   "license": "ISC",
@@ -15,14 +15,13 @@
     "probot": "^3.0.0"
   },
   "devDependencies": {
-    "expect": "^1.20.2",
+    "jest": "^21.2.1",
     "localtunnel": "^1.8.3",
-    "mocha": "^3.0.2",
     "standard": "^10.0.3"
   },
   "standard": {
     "env": [
-      "mocha"
+      "jest"
     ]
   },
   "engines": {

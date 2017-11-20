@@ -1,4 +1,3 @@
-const expect = require('expect')
 const Settings = require('../lib/settings')
 
 describe('Settings', () => {
@@ -11,15 +10,15 @@ describe('Settings', () => {
   beforeEach(() => {
     github = {
       repos: {
-        get: expect.createSpy().andReturn(Promise.resolve({})),
-        edit: expect.createSpy().andReturn(Promise.resolve()),
-        replaceTopics: expect.createSpy().andReturn(Promise.resolve())
+        get: jest.fn().mockImplementation(() => Promise.resolve({})),
+        edit: jest.fn().mockImplementation(() => Promise.resolve()),
+        replaceTopics: jest.fn().mockImplementation(() => Promise.resolve())
       },
       issues: {
-        getLabels: expect.createSpy().andReturn(Promise.resolve([])),
-        createLabel: expect.createSpy().andReturn(Promise.resolve()),
-        deleteLabel: expect.createSpy().andReturn(Promise.resolve()),
-        updateLabel: expect.createSpy().andReturn(Promise.resolve())
+        getLabels: jest.fn().mockImplementation(() => Promise.resolve([])),
+        createLabel: jest.fn().mockImplementation(() => Promise.resolve()),
+        deleteLabel: jest.fn().mockImplementation(() => Promise.resolve()),
+        updateLabel: jest.fn().mockImplementation(() => Promise.resolve())
       }
     }
   })
@@ -55,7 +54,7 @@ describe('Settings', () => {
     })
 
     it('syncs labels', () => {
-      github.issues.getLabels.andReturn(Promise.resolve({data: [
+      github.issues.getLabels.mockReturnValueOnce(Promise.resolve({data: [
         {name: 'no-change', color: 'FF0000'},
         {name: 'new-color', color: '000000'},
         {name: 'update-me', color: '0000FF'},
@@ -103,18 +102,18 @@ describe('Settings', () => {
           color: '999999'
         })
 
-        expect(github.issues.deleteLabel.calls.length).toBe(1)
-        expect(github.issues.updateLabel.calls.length).toBe(2)
-        expect(github.issues.createLabel.calls.length).toBe(1)
+        expect(github.issues.deleteLabel).toHaveBeenCalledTimes(1)
+        expect(github.issues.updateLabel).toHaveBeenCalledTimes(2)
+        expect(github.issues.createLabel).toHaveBeenCalledTimes(1)
       })
     })
 
     it('syncs collaborators', () => {
-      github.repos.getCollaborators = expect.createSpy().andReturn(Promise.resolve([]))
-      github.repos.removeCollaborator = expect.createSpy().andReturn(Promise.resolve())
-      github.repos.addCollaborator = expect.createSpy().andReturn(Promise.resolve())
+      github.repos.getCollaborators = jest.fn().mockImplementation(() => Promise.resolve([]))
+      github.repos.removeCollaborator = jest.fn().mockImplementation(() => Promise.resolve())
+      github.repos.addCollaborator = jest.fn().mockImplementation(() => Promise.resolve())
 
-      github.repos.getCollaborators.andReturn(Promise.resolve({data: [
+      github.repos.getCollaborators.mockReturnValueOnce(Promise.resolve({data: [
         {login: 'bkeepers', permissions: {admin: true, push: true, pull: true}},
         {login: 'updated-permission', permissions: {admin: false, push: false, pull: true}},
         {login: 'removed-user', permissions: {admin: false, push: true, pull: true}},
@@ -148,7 +147,7 @@ describe('Settings', () => {
           permission: 'push'
         })
 
-        expect(github.repos.addCollaborator.calls.length).toBe(2)
+        expect(github.repos.addCollaborator).toHaveBeenCalledTimes(2)
 
         expect(github.repos.removeCollaborator).toHaveBeenCalledWith({
           owner: 'bkeepers',
@@ -156,20 +155,20 @@ describe('Settings', () => {
           username: 'removed-user'
         })
 
-        expect(github.repos.removeCollaborator.calls.length).toBe(1)
+        expect(github.repos.removeCollaborator).toHaveBeenCalledTimes(1)
       })
     })
 
     it('syncs teams', () => {
       github.orgs = {}
-      github.orgs.deleteTeamRepo = expect.createSpy().andReturn(Promise.resolve())
-      github.orgs.addTeamRepo = expect.createSpy().andReturn(Promise.resolve())
-      github.repos.getTeams = expect.createSpy().andReturn(Promise.resolve({data: [
+      github.orgs.deleteTeamRepo = jest.fn().mockImplementation(() => Promise.resolve())
+      github.orgs.addTeamRepo = jest.fn().mockImplementation(() => Promise.resolve())
+      github.repos.getTeams = jest.fn().mockImplementation(() => Promise.resolve({data: [
         {id: 1, slug: 'unchanged', permission: 'push'},
         {id: 2, slug: 'removed', permission: 'push'},
         {id: 3, slug: 'updated-permission', permission: 'pull'}
       ]}))
-      github.orgs.getTeams = expect.createSpy().andReturn(Promise.resolve({data: [
+      github.orgs.getTeams = jest.fn().mockImplementation(() => Promise.resolve({data: [
         {id: 4, slug: 'added'}
       ]}))
 
@@ -198,7 +197,7 @@ describe('Settings', () => {
           permission: 'pull'
         })
 
-        expect(github.orgs.addTeamRepo.calls.length).toBe(2)
+        expect(github.orgs.addTeamRepo).toHaveBeenCalledTimes(2)
 
         expect(github.orgs.deleteTeamRepo).toHaveBeenCalledWith({
           owner: 'bkeepers',
@@ -206,7 +205,7 @@ describe('Settings', () => {
           id: 2
         })
 
-        expect(github.orgs.deleteTeamRepo.calls.length).toBe(1)
+        expect(github.orgs.deleteTeamRepo).toHaveBeenCalledTimes(1)
       })
     })
 

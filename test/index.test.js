@@ -1,4 +1,3 @@
-const expect = require('expect')
 const {createRobot} = require('probot')
 const plugin = require('../index')
 
@@ -15,7 +14,7 @@ describe('plugin', () => {
       event: 'push',
       payload: JSON.parse(JSON.stringify(require('./fixtures/events/push.settings.json')))
     }
-    sync = expect.createSpy()
+    sync = jest.fn()
 
     plugin(robot, {}, {sync, FILE_NAME: '.github/settings.yml'})
   })
@@ -34,7 +33,7 @@ describe('plugin', () => {
 
     it('does not sync settings', async () => {
       await robot.receive(event)
-      expect(sync).toNotHaveBeenCalled()
+      expect(sync).not.toHaveBeenCalled()
     })
   })
 
@@ -45,7 +44,7 @@ describe('plugin', () => {
 
     it('does not sync settings', () => {
       robot.receive(event)
-      expect(sync).toNotHaveBeenCalled()
+      expect(sync).not.toHaveBeenCalled()
     })
   })
 })
