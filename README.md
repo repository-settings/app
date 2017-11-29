@@ -59,6 +59,7 @@ repository:
   allow_rebase_merge: true
 
 # Labels: define labels for Issues and Pull Requests
+# Any existing labels in the repository will be deleted.
 labels:
   - name: bug
     color: CC0000
