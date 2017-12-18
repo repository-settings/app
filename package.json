@@ -15,7 +15,7 @@
     "probot": "^3.0.0"
   },
   "devDependencies": {
-    "jest": "^21.2.1",
+    "jest": "^22.0.0",
     "localtunnel": "^1.8.3",
     "standard": "^10.0.3"
   },
