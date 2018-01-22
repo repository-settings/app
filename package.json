@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "jest": "^22.0.0",
-    "localtunnel": "^1.8.3",
+    "smee-client": "^1.0.1",
     "standard": "^10.0.3"
   },
   "standard": {
