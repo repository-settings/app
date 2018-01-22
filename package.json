@@ -12,11 +12,11 @@
   "license": "ISC",
   "dependencies": {
     "js-yaml": "^3.7.0",
-    "probot": "^4.0.0"
+    "probot": "^5.0.0"
   },
   "devDependencies": {
     "jest": "^22.0.0",
-    "localtunnel": "^1.8.3",
+    "smee-client": "^1.0.1",
     "standard": "^10.0.3"
   },
   "standard": {
