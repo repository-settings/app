@@ -27,14 +27,14 @@ describe('Settings', () => {
     it('syncs repository settings', () => {
       const config = configure(`
         repository:
-          descripton: Hello World!
+          description: Hello World!
       `)
       return config.update().then(() => {
         expect(github.repos.edit).toHaveBeenCalledWith({
           owner: 'bkeepers',
           repo: 'test',
           name: 'test',
-          descripton: 'Hello World!'
+          description: 'Hello World!'
         })
       })
     })
