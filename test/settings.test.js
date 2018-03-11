@@ -10,9 +10,7 @@ describe('Settings', () => {
   beforeEach(() => {
     github = {
       repos: {
-        get: jest.fn().mockImplementation(() => Promise.resolve({})),
-        edit: jest.fn().mockImplementation(() => Promise.resolve()),
-        replaceTopics: jest.fn().mockImplementation(() => Promise.resolve())
+        get: jest.fn().mockImplementation(() => Promise.resolve({}))
       },
       issues: {
         getLabels: jest.fn().mockImplementation(() => Promise.resolve([])),
@@ -24,35 +22,6 @@ describe('Settings', () => {
   })
 
   describe('update', () => {
-    it('syncs repository settings', () => {
-      const config = configure(`
-        repository:
-          description: Hello World!
-      `)
-      return config.update().then(() => {
-        expect(github.repos.edit).toHaveBeenCalledWith({
-          owner: 'bkeepers',
-          repo: 'test',
-          name: 'test',
-          description: 'Hello World!'
-        })
-      })
-    })
-
-    it('handles renames', () => {
-      const config = configure(`
-        repository:
-          name: new-name
-      `)
-      return config.update().then(() => {
-        expect(github.repos.edit).toHaveBeenCalledWith({
-          owner: 'bkeepers',
-          repo: 'test',
-          name: 'new-name'
-        })
-      })
-    })
-
     it('syncs labels', () => {
       github.issues.getLabels.mockReturnValueOnce(Promise.resolve({data: [
         {name: 'no-change', color: 'FF0000'},
@@ -206,21 +175,6 @@ describe('Settings', () => {
         })
 
         expect(github.orgs.deleteTeamRepo).toHaveBeenCalledTimes(1)
-      })
-    })
-
-    it('syncs topics', () => {
-      const config = configure(`
-        repository:
-          topics: foo, bar
-      `)
-
-      return config.update().then(() => {
-        expect(github.repos.replaceTopics).toHaveBeenCalledWith({
-          owner: 'bkeepers',
-          repo: 'test',
-          names: ['foo', 'bar']
-        })
       })
     })
   })
