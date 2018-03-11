@@ -1,82 +1,15 @@
 const Settings = require('../lib/settings')
 
 describe('Settings', () => {
-  let github
+  let github = {
+    repos: {}
+  }
 
   function configure (yaml) {
     return new Settings(github, {owner: 'bkeepers', repo: 'test'}, yaml)
   }
 
-  beforeEach(() => {
-    github = {
-      repos: {
-        get: jest.fn().mockImplementation(() => Promise.resolve({}))
-      },
-      issues: {
-        getLabels: jest.fn().mockImplementation(() => Promise.resolve([])),
-        createLabel: jest.fn().mockImplementation(() => Promise.resolve()),
-        deleteLabel: jest.fn().mockImplementation(() => Promise.resolve()),
-        updateLabel: jest.fn().mockImplementation(() => Promise.resolve())
-      }
-    }
-  })
-
   describe('update', () => {
-    it('syncs labels', () => {
-      github.issues.getLabels.mockReturnValueOnce(Promise.resolve({data: [
-        {name: 'no-change', color: 'FF0000'},
-        {name: 'new-color', color: '000000'},
-        {name: 'update-me', color: '0000FF'},
-        {name: 'delete-me', color: '000000'}
-      ]}))
-
-      const config = configure(`
-        labels:
-          - name: no-change
-            color: FF0000
-          - name: new-name
-            oldname: update-me
-            color: FFFFFF
-          - name: new-color
-            color: 999999
-          - name: added
-      `)
-
-      return config.update().then(() => {
-        expect(github.issues.deleteLabel).toHaveBeenCalledWith({
-          owner: 'bkeepers',
-          repo: 'test',
-          name: 'delete-me'
-        })
-
-        expect(github.issues.createLabel).toHaveBeenCalledWith({
-          owner: 'bkeepers',
-          repo: 'test',
-          name: 'added'
-        })
-
-        expect(github.issues.updateLabel).toHaveBeenCalledWith({
-          owner: 'bkeepers',
-          repo: 'test',
-          oldname: 'update-me',
-          name: 'new-name',
-          color: 'FFFFFF'
-        })
-
-        expect(github.issues.updateLabel).toHaveBeenCalledWith({
-          owner: 'bkeepers',
-          repo: 'test',
-          oldname: 'new-color',
-          name: 'new-color',
-          color: '999999'
-        })
-
-        expect(github.issues.deleteLabel).toHaveBeenCalledTimes(1)
-        expect(github.issues.updateLabel).toHaveBeenCalledTimes(2)
-        expect(github.issues.createLabel).toHaveBeenCalledTimes(1)
-      })
-    })
-
     it('syncs collaborators', () => {
       github.repos.getCollaborators = jest.fn().mockImplementation(() => Promise.resolve([]))
       github.repos.removeCollaborator = jest.fn().mockImplementation(() => Promise.resolve())
