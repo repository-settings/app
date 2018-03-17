@@ -88,6 +88,15 @@ teams:
     permission: admin
   - name: docs
     permission: push
+
+# Milestones: define milestones for Issues and Pull Requests
+milestones:
+  - title: milestone-title
+    description: milestone-description
+    # The milestone's due date (timestamp in ISO 8601 format)
+    due_on: YYYY-MM-DDTHH:MM:SSZ
+    # The state of the milestone. Either `open` or `closed`
+    state: open
 ```
 
 **WARNING:** Note that this app inherently _escalates anyone with `push` permissions to the **admin** role_, since they can push config settings to the `master` branch, which will be synced. In a future, we may add restrictions to allow changes to the config file to be merged only by specific people/teams, or those with **admin** access _(via a combination of protected branches, required statuses, and branch restrictions)_. Until then, use caution when merging PRs and adding collaborators.
