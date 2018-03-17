@@ -35,12 +35,22 @@ module.exports = (robot, _, Settings = require('./lib/settings')) => {
         repo: repoName
       }
       const path = '.github'
-      const repoInfo = await context.github.repos.getContent({owner: owner, repo: repoName, path: path})
-      const FILE_NAME = repoInfo.data[0].name
-      if (FILE_NAME === 'settings.yml') {
-        return Settings.sync(context.github, repo)
-      } else {
-        context.log('sorry no file found')
+      try {
+        const repoInfo = await context.github.repos.getContent({owner: owner, repo: repoName, path: path})
+        const FILE_NAME = repoInfo.data.find(file => {
+          if (file.name === 'settings.yml') {
+            return file.name
+          } else {
+            context.log('Please create a settings.yml file')
+          }
+        })
+        if (FILE_NAME !== undefined) {
+          return Settings.sync(context.github, repo)
+        } else {
+          context.log('sorry no file found')
+        }
+      } catch (error) {
+        context.log('sorry wrong path')
       }
     })
   }
