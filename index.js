@@ -13,5 +13,20 @@ module.exports = (robot, _, Settings = require('./lib/settings')) => {
     if (defaultBranch && settingsModified) {
       return Settings.sync(context.github, context.repo())
     }
+    else if (!defaultBranch && settingsModified) {
+      let settingChangeCommits = payload.commits.filter(commit => {
+        return commit.added.includes(Settings.FILE_NAME) || 
+        commit.modified.includes(Settings.FILE_NAME)
+      })
+      
+      settingChangeCommits.forEach(function(commit, index, array) {
+        context.github.repos.createStatus({
+          owner: payload.repository.owner.login,
+          repo: payload.repository.name,
+          sha: commit.id,
+          state: 'error'
+        })
+      })
+    }
   }
 }
