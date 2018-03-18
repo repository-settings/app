@@ -14,12 +14,12 @@ module.exports = (robot, _, Settings = require('./lib/settings')) => {
       return Settings.sync(context.github, context.repo())
     }
     else if (!defaultBranch && settingsModified) {
-      let settingChangeCommits = payload.commits.filter(commit => {
+      let settingChangeCommits = payload.commits.filter(commit => {  //get all commits that change settings.yml
         return commit.added.includes(Settings.FILE_NAME) || 
         commit.modified.includes(Settings.FILE_NAME)
       })
       
-      settingChangeCommits.forEach(function(commit, index, array) {
+      settingChangeCommits.forEach(function(commit, index, array) { //create status for each commit that changed settings.yml
         context.github.repos.createStatus({
           owner: payload.repository.owner.login,
           repo: payload.repository.name,
