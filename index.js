@@ -34,7 +34,7 @@ module.exports = (robot, _, Settings = require('./lib/settings')) => {
         owner: owner,
         repo: repoName
       }
-      //repo should have a .github folder
+      // repo should have a .github folder
       const path = '.github'
       try {
         const repoInfo = await context.github.repos.getContent({owner: owner, repo: repoName, path: path})
