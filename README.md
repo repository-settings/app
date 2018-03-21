@@ -93,8 +93,6 @@ teams:
 milestones:
   - title: milestone-title
     description: milestone-description
-    # The milestone's due date (timestamp in ISO 8601 format)
-    due_on: YYYY-MM-DDTHH:MM:SSZ
     # The state of the milestone. Either `open` or `closed`
     state: open
 ```
