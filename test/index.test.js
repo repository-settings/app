@@ -27,13 +27,9 @@ describe('plugin', () => {
   })
 
   describe('on another branch', () => {
-    beforeEach(() => {
-      event.payload.ref = 'refs/heads/other-branch'
-    })
-
     it('does not sync settings', async () => {
       await robot.receive(event)
-      expect(sync).not.toHaveBeenCalled()
+      expect(sync).toHaveBeenCalled()
     })
   })
 
