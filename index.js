@@ -12,7 +12,7 @@ module.exports = (robot, _, Settings = require('./lib/settings')) => {
 
     if (defaultBranch && settingsModified) {
       return Settings.sync(context.github, context.repo())
-    } else if (!defaultBranch) {
+    } else if (!settingsModified) {
       const getRepo = await context.github.repos.get({owner: context.repo().owner, repo: context.repo().repo})
       const repoInfo = await context.github.repos.getContent({owner: context.repo().owner, repo: context.repo().repo, path: '.github/settings.yml'})
       const sha = repoInfo.data.sha

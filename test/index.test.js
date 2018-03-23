@@ -27,17 +27,17 @@ describe('plugin', () => {
   })
 
   describe('on another branch', () => {
+    beforeEach(() => {
+      event.payload.ref = 'refs/heads/other-branch'
+    })
+
     it('does not sync settings', async () => {
       await robot.receive(event)
-      expect(sync).toHaveBeenCalled()
+      expect(sync).not.toHaveBeenCalled()
     })
   })
 
   describe('with other files modified', () => {
-    beforeEach(() => {
-      event.payload = require('./fixtures/events/push.readme.json')
-    })
-
     it('does not sync settings', () => {
       robot.receive(event)
       expect(sync).not.toHaveBeenCalled()
