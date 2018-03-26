@@ -49,39 +49,16 @@ module.exports = (robot, _, Settings = require('./lib/settings')) => {
               const sha = refData.object.sha
               try {
                 const getRepo = await context.github.repos.get({owner: owner, repo: repoName})
-                await context.github.gitdata.createReference({owner: owner, repo: repoName, ref: 'refs/heads/test2', sha: sha})
+                await context.github.gitdata.createReference({owner: owner, repo: repoName, ref: 'refs/heads/probot', sha: sha})
                 // setting the template of file
-                const string = 'repository: \n' +
-                              '  name: ' + getRepo.data.name + ' \n' +
-                              '  description: ' + getRepo.data.description + ' \n' +
-                              '  homepage: ' + getRepo.data.homepage + ' \n' +
-                              '  topics: github, probot \n' +
-                              '  private: ' + getRepo.data.private + ' \n' +
-                              '  has_issues: ' + getRepo.data.has_issues + ' \n' +
-                              '  has_projects: ' + getRepo.data.has_projects + ' \n' +
-                              '  has_wiki: ' + getRepo.data.has_wiki + ' \n' +
-                              '  has_downloads: ' + getRepo.data.has_downloads + ' \n' +
-                              '  default_branch: ' + getRepo.data.default_branch + ' \n' +
-                              '  allow_squash_merge: ' + getRepo.data.allow_squash_merge + ' \n' +
-                              '  allow_merge_commit: ' + getRepo.data.allow_merge_commit + ' \n' +
-                              '  allow_rebase_merge: ' + getRepo.data.allow_rebase_merge + ' \n\n' +
-                              'labels: \n' +
-                              '  - name: bug \n' +
-                              '    color: CC0000 \n' +
-                              '  - name: feature \n' +
-                              '    color: 336699 \n' +
-                              '  - name: first-timers-only \n' +
-                              '    oldname: bug \n\n' +
-                              'collaborators: \n' +
-                              '  - username: enter any username \n' +
-                              '    permission: push'
+                const template = require('./template')
+                const string = template(getRepo)
 
-                const base64 = require('./encode')
-                const encodedString = base64.encode(string)
+                const encodedString = Buffer.from(string).toString('base64')
                 // creating a file
-                await context.github.repos.createFile({owner: owner, repo: repoName, path: '.github/settings.yml', message: 'adding settings.yml file', content: encodedString, branch: 'test2'})
+                await context.github.repos.createFile({owner: owner, repo: repoName, path: '.github/settings.yml', message: 'adding settings.yml file', content: encodedString, branch: 'probot'})
                 // creating pull request
-                await context.github.pullRequests.create({owner: owner, repo: repoName, head: 'test2', base: 'master', title: 'Settings Bot adding config file', body: 'Merge it to configure the bot'})
+                await context.github.pullRequests.create({owner: owner, repo: repoName, head: 'probot', base: 'master', title: 'Settings Bot adding config file', body: 'Merge it to configure the bot'})
               } catch (error) {
                 context.log(error)
               }
