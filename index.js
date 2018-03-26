@@ -26,8 +26,7 @@ module.exports = (robot, _, Settings = require('./lib/settings')) => {
           const repoInfo = await context.github.repos.getContent({owner: owner, repo: repo, path: path, ref: ref})
           const content = repoInfo.data.content
           const sha = payload.commits[0].id
-          const base64 = require('./encode')
-          const result = base64.decode(content)
+          const result = Buffer.from(content, 'base64').toString('ascii')
           const yaml = require('js-yaml')
           try {
             var doc = yaml.safeLoad(result)
@@ -37,7 +36,8 @@ module.exports = (robot, _, Settings = require('./lib/settings')) => {
               context.log('Sorry')
             }
           } catch (e) {
-            await context.github.repos.createStatus({owner: owner, repo: repo, sha: sha, state: 'error', description: 'Correct settings.yml file'})
+            context.log(e)
+            await context.github.repos.createStatus({owner: owner, repo: repo, sha: sha, state: 'error', description: 'Validate your settings.yml file, it has syntax errors'})
           }
         }
       })
