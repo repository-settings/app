@@ -2,33 +2,44 @@ module.exports = (robot, _, Settings = require('./lib/settings')) => {
   robot.on('push', receive)
 
   async function receive (context) {
+    const yaml = require('js-yaml')
+    const fs = require('fs')
     const payload = context.payload
-    const defaultBranch = payload.ref === 'refs/heads/' + payload.repository.default_branch
+    const defaultBranch =
+      payload.ref === 'refs/heads/' + payload.repository.default_branch
 
     const settingsModified = payload.commits.find(commit => {
-      return commit.added.includes(Settings.FILE_NAME) ||
+      return (
+        commit.added.includes(Settings.FILE_NAME) ||
         commit.modified.includes(Settings.FILE_NAME)
+      )
     })
 
     if (defaultBranch && settingsModified) {
       return Settings.sync(context.github, context.repo())
     } else if (!defaultBranch && settingsModified) {
-      let settingChangeCommits = payload.commits.filter(commit => { // get all commits that change settings.yml
-        return commit.added.includes(Settings.FILE_NAME) ||
-        commit.modified.includes(Settings.FILE_NAME)
-      })
-      settingChangeCommits.forEach(async function (commit, index, array) { // create status for each commit that changed settings.yml
+      try {
+        yaml.safeLoad(fs.readFileSync('/settings/.github/settings.yml', 'utf8'))
+      } catch (e) { // set error status if parsing fails
+        let settingChangeCommit = await payload.commits.reverse().find(commit => {
+          // get latest commit that changed settings.yml
+          return (
+            commit.added.includes(Settings.FILE_NAME) ||
+            commit.modified.includes(Settings.FILE_NAME)
+          )
+        })
         try {
-          await context.github.repos.createStatus({
-            owner: payload.repository.owner.login,
-            repo: payload.repository.name,
-            sha: commit.id,
+          const repo = context.repo()
+          context.github.repos.createStatus({
+            owner: repo.owner,
+            repo: repo.repo,
+            sha: settingChangeCommit.id,
             state: 'error'
           })
-        } catch (err) {
-          console.log(new Error(err))
+        } catch (e) {
+          console.log(e)
         }
-      })
+      }
     }
   }
 }
