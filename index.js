@@ -34,7 +34,8 @@ module.exports = (robot, _, Settings = require('./lib/settings')) => {
             owner: repo.owner,
             repo: repo.repo,
             sha: settingChangeCommit.id,
-            state: 'error'
+            state: 'error',
+            context: 'probot/settings'
           })
         } catch (e) {
           console.log(e)
