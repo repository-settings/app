@@ -52,12 +52,32 @@ describe('Branches', () => {
       })
     })
 
-    describe('when the "protection" config is empty', () => {
+    describe('when the "protection" config is empty object', () => {
       it('removes branch protection', () => {
         const plugin = configure(
           [{
             name: 'master',
             protection: {}
+          }]
+        )
+
+        return plugin.sync().then(() => {
+          expect(github.repos.updateBranchProtection).not.toHaveBeenCalled()
+          expect(github.repos.removeBranchProtection).toHaveBeenCalledWith({
+            owner: 'bkeepers',
+            repo: 'test',
+            branch: 'master'
+          })
+        })
+      })
+    })
+
+    describe('when the "protection" config is set to `null`', () => {
+      it('removes branch protection', () => {
+        const plugin = configure(
+          [{
+            name: 'master',
+            protection: null
           }]
         )
 
