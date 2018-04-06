@@ -90,10 +90,22 @@ teams:
     permission: push
 
 branches:
-  - name: 'master'
+  - name: master
     # https://developer.github.com/v3/repos/branches/#update-branch-protection
-    # Leaving this empty will disable branch protection for this branch.
+    # Branch Protection settings. Set to null to disable
     protection:
+      # Required. Require at least one approving review on a pull request, before merging. Set to null to disable.
+      required_pull_request_reviews:
+        # The number of approvals required. (1-6)
+        required_approving_review_count: 1
+        # Dismiss approved reviews automatically when a new commit is pushed.
+        dismiss_stale_reviews: true
+        # Blocks merge until code owners have reviewed.
+        require_code_owner_reviews: true
+        # Specify which users and teams can dismiss pull request reviews. Pass an empty dismissal_restrictions object to disable. User and team dismissal_restrictions are only available for organization-owned repositories. Omit this parameter for personal repositories.
+        dismissal_restrictions:
+          users: []
+          teams: []
       # Required. Require status checks to pass before merging. Set to null to disable
       required_status_checks:
         # Required. Require branches to be up to date before merging.
@@ -102,16 +114,6 @@ branches:
         contexts: []
       # Required. Enforce all configured restrictions for administrators. Set to true to enforce required status checks for repository administrators. Set to null to disable.
       enforce_admins: true
-      # Required. Require at least one approving review on a pull request, before merging. Set to null to disable.
-      required_pull_request_reviews:
-        # Specify which users and teams can dismiss pull request reviews. Pass an empty dismissal_restrictions object to disable. User and team dismissal_restrictions are only available for organization-owned repositories. Omit this parameter for personal repositories.
-        dismissal_restrictions:
-          users: []
-          teams: []
-        # Dismiss approved reviews automatically when a new commit is pushed.
-        dismiss_stale_reviews: true
-        # Blocks merge until code owners have reviewed.
-        require_code_owner_reviews: true
       # Required. Restrict who can push to this branch. Team and user restrictions are only available for organization-owned repositories. Set to null to disable.
       restrictions:
         users: []
