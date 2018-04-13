@@ -49,6 +49,7 @@ module.exports = (robot, _, Settings = require('./lib/settings')) => {
               const sha = refData.object.sha
               try {
                 const getRepo = await context.github.repos.get({owner: owner, repo: repoName})
+
                 await context.github.gitdata.createReference({owner: owner, repo: repoName, ref: 'refs/heads/probot', sha: sha})
                 // setting the template of file
                 const template = require('./template')
@@ -77,5 +78,14 @@ module.exports = (robot, _, Settings = require('./lib/settings')) => {
         context.log('Wrong path create a .github folder')
       }
     })
+  }
+
+  // deleting the reference when pull request is merged
+  robot.on('pull_request.closed', deleteRef)
+
+  async function deleteRef (context) {
+    if (context.payload.pull_request.head.ref === 'probot') {
+      await context.github.gitdata.deleteReference(context.repo({ref: 'heads/probot'}))
+    }
   }
 }
