@@ -75,7 +75,29 @@ module.exports = (robot, _, Settings = require('./lib/settings')) => {
           context.log('file not found so creating a pull request')
         }
       } catch (error) {
-        context.log('Wrong path create a .github folder')
+        try {
+          const reference = await context.github.gitdata.getReference({owner: owner, repo: repoName, ref: 'heads/master'})
+          const refData = reference.data
+          const sha = refData.object.sha
+          try {
+            const getRepo = await context.github.repos.get({owner: owner, repo: repoName})
+
+            await context.github.gitdata.createReference({owner: owner, repo: repoName, ref: 'refs/heads/probot', sha: sha})
+            // setting the template of file
+            const template = require('./template')
+            const string = template(getRepo)
+
+            const encodedString = Buffer.from(string).toString('base64')
+            // creating a file
+            await context.github.repos.createFile({owner: owner, repo: repoName, path: '.github/settings.yml', message: 'adding settings.yml file', content: encodedString, branch: 'probot'})
+            // creating pull request
+            await context.github.pullRequests.create({owner: owner, repo: repoName, head: 'probot', base: 'master', title: 'Settings Bot adding config file', body: 'Merge it to configure the bot'})
+          } catch (error) {
+            context.log(error)
+          }
+        } catch (error) {
+          context.log(error)
+        }
       }
     })
   }
