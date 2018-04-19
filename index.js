@@ -15,12 +15,12 @@ module.exports = (robot, _, Settings = require('./lib/settings')) => {
     }
   }
 
-  robot.on('installation_repositories.added', installSync)
+  robot.on(['installation.created', 'installation_repositories.added'], installSync)
 
   async function installSync (context) {
     const payload = context.payload
     // getting all the repos that are adding
-    const repoAddedId = await payload.repositories_added
+    const repoAddedId = await (payload.repositories_added || payload.repositories)
     const repoAddedIds = []
     repoAddedId.forEach(async function (value) {
       await repoAddedIds.push(value.id)
@@ -38,28 +38,27 @@ module.exports = (robot, _, Settings = require('./lib/settings')) => {
       const path = '.github'
       try {
         const repoInfo = await context.github.repos.getContent({owner: owner, repo: repoName, path: path})
-
-        const FILE_NAME = repoInfo.data.find(async file => {
+        const FILE_NAME = repoInfo.data.find(file => {
           if (file.name === 'settings.yml') {
             return file.name
           } else {
             try {
-              const reference = await context.github.gitdata.getReference({owner: owner, repo: repoName, ref: 'heads/master'})
+              const reference = context.github.gitdata.getReference({owner: owner, repo: repoName, ref: 'heads/master'})
               const refData = reference.data
               const sha = refData.object.sha
               try {
-                const getRepo = await context.github.repos.get({owner: owner, repo: repoName})
+                const getRepo = context.github.repos.get({owner: owner, repo: repoName})
 
-                await context.github.gitdata.createReference({owner: owner, repo: repoName, ref: 'refs/heads/probot', sha: sha})
+                context.github.gitdata.createReference({owner: owner, repo: repoName, ref: 'refs/heads/probot', sha: sha})
                 // setting the template of file
                 const template = require('./template')
                 const string = template(getRepo)
 
                 const encodedString = Buffer.from(string).toString('base64')
                 // creating a file
-                await context.github.repos.createFile({owner: owner, repo: repoName, path: '.github/settings.yml', message: 'adding settings.yml file', content: encodedString, branch: 'probot'})
+                context.github.repos.createFile({owner: owner, repo: repoName, path: '.github/settings.yml', message: 'adding settings.yml file', content: encodedString, branch: 'probot'})
                 // creating pull request
-                await context.github.pullRequests.create({owner: owner, repo: repoName, head: 'probot', base: 'master', title: 'Settings Bot adding config file', body: 'Merge it to configure the bot'})
+                context.github.pullRequests.create({owner: owner, repo: repoName, head: 'probot', base: 'master', title: 'Settings Bot adding config file', body: 'Merge it to configure the bot'})
               } catch (error) {
                 context.log(error)
               }
@@ -68,6 +67,7 @@ module.exports = (robot, _, Settings = require('./lib/settings')) => {
             }
           }
         })
+
         // syncying the file if present
         if (FILE_NAME.name === 'settings.yml') {
           return Settings.sync(context.github, repo)
