@@ -92,6 +92,46 @@ describe('Branches', () => {
       })
     })
 
+    describe('when the "protection" config is set to an empty array', () => {
+      it('removes branch protection', () => {
+        const plugin = configure(
+          [{
+            name: 'master',
+            protection: []
+          }]
+        )
+
+        return plugin.sync().then(() => {
+          expect(github.repos.updateBranchProtection).not.toHaveBeenCalled()
+          expect(github.repos.removeBranchProtection).toHaveBeenCalledWith({
+            owner: 'bkeepers',
+            repo: 'test',
+            branch: 'master'
+          })
+        })
+      })
+    })
+
+    describe('when the "protection" config is set to `false`', () => {
+      it('removes branch protection', () => {
+        const plugin = configure(
+          [{
+            name: 'master',
+            protection: false
+          }]
+        )
+
+        return plugin.sync().then(() => {
+          expect(github.repos.updateBranchProtection).not.toHaveBeenCalled()
+          expect(github.repos.removeBranchProtection).toHaveBeenCalledWith({
+            owner: 'bkeepers',
+            repo: 'test',
+            branch: 'master'
+          })
+        })
+      })
+    })
+
     describe('when the "protection" key is not present', () => {
       it('makes no change to branch protection', () => {
         const plugin = configure(
