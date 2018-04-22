@@ -12,10 +12,12 @@
   "license": "ISC",
   "dependencies": {
     "js-yaml": "^3.7.0",
-    "probot": "^6.0.0"
+    "probot": "^6.0.0",
+    "probot-repos": "^1.0.5"
   },
   "devDependencies": {
     "jest": "^22.0.0",
+    "nock": "^9.0.22",
     "smee-client": "^1.0.1",
     "standard": "^11.0.0"
   },
