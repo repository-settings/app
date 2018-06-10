@@ -38,10 +38,6 @@ describe('plugin', () => {
   })
 
   describe('with other files modified', () => {
-    beforeEach(() => {
-      event.payload = require('./fixtures/events/push.readme.json')
-    })
-
     it('does not sync settings', () => {
       robot.receive(event)
       expect(sync).not.toHaveBeenCalled()
