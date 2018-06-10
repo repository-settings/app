@@ -22,7 +22,7 @@ describe('Labels', () => {
     it('syncs labels', () => {
       github.issues.getLabels.mockReturnValueOnce(Promise.resolve({data: [
         {name: 'no-change', color: 'FF0000'},
-        {name: 'new-color', color: '000000'},
+        {name: 'new-color', color: 0}, // YAML treats `color: 000000` as an integer
         {name: 'update-me', color: '0000FF'},
         {name: 'delete-me', color: '000000'}
       ]}))
