@@ -1,7 +1,5 @@
 module.exports = (robot, _, Settings = require('./lib/settings')) => {
-  robot.on('push', receive)
-
-  async function receive (context) {
+  robot.on('push', async context => {
     const payload = context.payload
     const defaultBranch = payload.ref === 'refs/heads/' + payload.repository.default_branch
 
@@ -13,5 +11,5 @@ module.exports = (robot, _, Settings = require('./lib/settings')) => {
     if (defaultBranch && settingsModified) {
       return Settings.sync(context.github, context.repo())
     }
-  }
+  })
 }
