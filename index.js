@@ -11,7 +11,7 @@ module.exports = (robot, _, Settings = require('./lib/settings')) => {
     })
 
     if (defaultBranch && settingsModified) {
-      return Settings.sync(context.github, context.repo())
+      return Settings.sync(context)
     }
   }
 }
