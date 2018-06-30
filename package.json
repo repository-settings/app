@@ -13,7 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "js-yaml": "^3.7.0",
-    "probot": "^6.0.0",
+    "probot": "^6.2.0",
     "probot-config": "^0.1.0"
   },
   "devDependencies": {
