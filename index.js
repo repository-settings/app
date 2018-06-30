@@ -1,9 +1,11 @@
-module.exports = (robot, _, Settings = require('./lib/settings')) => {
-  robot.on('push', receive)
+const getConfig = require('probot-config')
 
-  async function receive (context) {
+module.exports = (robot, _, Settings = require('./lib/settings')) => {
+  robot.on('push', async context => {
     const payload = context.payload
     const defaultBranch = payload.ref === 'refs/heads/' + payload.repository.default_branch
+
+    const config = await getConfig(context, 'settings.yml')
 
     const settingsModified = payload.commits.find(commit => {
       return commit.added.includes(Settings.FILE_NAME) ||
@@ -11,7 +13,7 @@ module.exports = (robot, _, Settings = require('./lib/settings')) => {
     })
 
     if (defaultBranch && settingsModified) {
-      return Settings.sync(context.github, context.repo())
+      return Settings.sync(context.github, context.repo(), config)
     }
-  }
+  })
 }

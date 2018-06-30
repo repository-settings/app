@@ -2,13 +2,16 @@ const {createRobot} = require('probot')
 const plugin = require('../index')
 
 describe('plugin', () => {
-  let robot
-  let event
-  let sync
+  let robot, event, sync, github
 
   beforeEach(() => {
     robot = createRobot()
-    robot.auth = () => Promise.resolve({})
+    github = {
+      repos: {
+        getContent: jest.fn(() => Promise.resolve({ data: { content: '' } }))
+      }
+    }
+    robot.auth = () => Promise.resolve(github)
 
     event = {
       event: 'push',
