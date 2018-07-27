@@ -4,6 +4,3 @@ node_modules/
 private-key.pem
 .env
 package-lock.json
-.idea/
-*.iml
-*.pem

@@ -38,13 +38,15 @@ describe('Labels', () => {
         expect(github.issues.deleteLabel).toHaveBeenCalledWith({
           owner: 'bkeepers',
           repo: 'test',
-          name: 'delete-me'
+          name: 'delete-me',
+          headers: {accept: 'application/vnd.github.symmetra-preview+json'}
         })
 
         expect(github.issues.createLabel).toHaveBeenCalledWith({
           owner: 'bkeepers',
           repo: 'test',
-          name: 'added'
+          name: 'added',
+          headers: {accept: 'application/vnd.github.symmetra-preview+json'}
         })
 
         expect(github.issues.updateLabel).toHaveBeenCalledWith({
@@ -52,7 +54,8 @@ describe('Labels', () => {
           repo: 'test',
           oldname: 'update-me',
           name: 'new-name',
-          color: 'FFFFFF'
+          color: 'FFFFFF',
+          headers: {accept: 'application/vnd.github.symmetra-preview+json'}
         })
 
         expect(github.issues.updateLabel).toHaveBeenCalledWith({
@@ -60,7 +63,8 @@ describe('Labels', () => {
           repo: 'test',
           oldname: 'new-color',
           name: 'new-color',
-          color: '999999'
+          color: '999999',
+          headers: {accept: 'application/vnd.github.symmetra-preview+json'}
         })
 
         expect(github.issues.deleteLabel).toHaveBeenCalledTimes(1)
