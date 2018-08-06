@@ -29,5 +29,8 @@
   "engines": {
     "node": ">= 8.3.0",
     "npm": ">= 5.3.0"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
