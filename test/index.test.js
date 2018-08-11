@@ -1,17 +1,17 @@
-const {createRobot} = require('probot')
+const { Application } = require('probot')
 const plugin = require('../index')
 
 describe('plugin', () => {
-  let robot, event, sync, github
+  let app, event, sync, github
 
   beforeEach(() => {
-    robot = createRobot()
+    app = new Application()
     github = {
       repos: {
         getContent: jest.fn(() => Promise.resolve({ data: { content: '' } }))
       }
     }
-    robot.auth = () => Promise.resolve(github)
+    app.auth = () => Promise.resolve(github)
 
     event = {
       event: 'push',
@@ -19,12 +19,12 @@ describe('plugin', () => {
     }
     sync = jest.fn()
 
-    plugin(robot, {}, {sync, FILE_NAME: '.github/settings.yml'})
+    plugin(app, {}, {sync, FILE_NAME: '.github/settings.yml'})
   })
 
   describe('with settings modified on master', () => {
     it('syncs settings', async () => {
-      await robot.receive(event)
+      await app.receive(event)
       expect(sync).toHaveBeenCalled()
     })
   })
@@ -35,7 +35,7 @@ describe('plugin', () => {
     })
 
     it('does not sync settings', async () => {
-      await robot.receive(event)
+      await app.receive(event)
       expect(sync).not.toHaveBeenCalled()
     })
   })
@@ -46,7 +46,7 @@ describe('plugin', () => {
     })
 
     it('does not sync settings', () => {
-      robot.receive(event)
+      app.receive(event)
       expect(sync).not.toHaveBeenCalled()
     })
   })
