@@ -68,6 +68,13 @@ labels:
     # include the old name to rename an existing label
     oldname: Help Wanted
 
+# Milestones: define milestones for Issues and Pull Requests
+milestones:
+  - title: milestone-title
+    description: milestone-description
+    # The state of the milestone. Either `open` or `closed`
+    state: open
+
 # Collaborators: give specific users access to this repository.
 collaborators:
   - username: bkeepers
