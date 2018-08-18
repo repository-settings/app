@@ -19,7 +19,7 @@ describe('Milestones', () => {
   })
 
   describe('sync', () => {
-    it('syncs milestones', () => {
+    it('syncs milestones', async () => {
       github.issues.getMilestones.mockReturnValueOnce(Promise.resolve({data: [
         {title: 'no-change', description: 'no-change-description', due_on: null, state: 'open', number: 5},
         {title: 'new-description', description: 'old-description', due_on: null, state: 'open', number: 2},
@@ -34,39 +34,39 @@ describe('Milestones', () => {
         {title: 'added'}
       ])
 
-      return plugin.sync().then(() => {
-        expect(github.issues.deleteMilestone).toHaveBeenCalledWith({
-          owner: 'bkeepers',
-          repo: 'test',
-          number: 1
-        })
+      await plugin.sync()
 
-        expect(github.issues.createMilestone).toHaveBeenCalledWith({
-          owner: 'bkeepers',
-          repo: 'test',
-          title: 'added'
-        })
-
-        expect(github.issues.updateMilestone).toHaveBeenCalledWith({
-          owner: 'bkeepers',
-          repo: 'test',
-          title: 'new-description',
-          description: 'modified-description',
-          number: 2
-        })
-
-        expect(github.issues.updateMilestone).toHaveBeenCalledWith({
-          owner: 'bkeepers',
-          repo: 'test',
-          title: 'new-state',
-          state: 'closed',
-          number: 4
-        })
-
-        expect(github.issues.deleteMilestone).toHaveBeenCalledTimes(1)
-        expect(github.issues.updateMilestone).toHaveBeenCalledTimes(2)
-        expect(github.issues.createMilestone).toHaveBeenCalledTimes(1)
+      expect(github.issues.deleteMilestone).toHaveBeenCalledWith({
+        owner: 'bkeepers',
+        repo: 'test',
+        number: 1
       })
+
+      expect(github.issues.createMilestone).toHaveBeenCalledWith({
+        owner: 'bkeepers',
+        repo: 'test',
+        title: 'added'
+      })
+
+      expect(github.issues.updateMilestone).toHaveBeenCalledWith({
+        owner: 'bkeepers',
+        repo: 'test',
+        title: 'new-description',
+        description: 'modified-description',
+        number: 2
+      })
+
+      expect(github.issues.updateMilestone).toHaveBeenCalledWith({
+        owner: 'bkeepers',
+        repo: 'test',
+        title: 'new-state',
+        state: 'closed',
+        number: 4
+      })
+
+      expect(github.issues.deleteMilestone).toHaveBeenCalledTimes(1)
+      expect(github.issues.updateMilestone).toHaveBeenCalledTimes(2)
+      expect(github.issues.createMilestone).toHaveBeenCalledTimes(1)
     })
   })
 })
