@@ -47,7 +47,8 @@ describe('Branches', () => {
           enforce_admins: true,
           required_pull_request_reviews: {
             require_code_owner_reviews: true
-          }
+          },
+          headers: { accept: 'application/vnd.github.hellcat-preview+json,application/vnd.github.luke-cage-preview+json,application/vnd.github.zzzax-preview+json' }
         })
       })
     })
@@ -169,7 +170,8 @@ describe('Branches', () => {
             owner: 'bkeepers',
             repo: 'test',
             branch: 'other',
-            enforce_admins: false
+            enforce_admins: false,
+            headers: { accept: 'application/vnd.github.hellcat-preview+json,application/vnd.github.luke-cage-preview+json,application/vnd.github.zzzax-preview+json' }
           })
         })
       })
