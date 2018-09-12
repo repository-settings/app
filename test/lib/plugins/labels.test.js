@@ -4,7 +4,7 @@ describe('Labels', () => {
   let github
 
   function configure (config) {
-    return new Labels(github, {owner: 'bkeepers', repo: 'test'}, config)
+    return new Labels(github, { owner: 'bkeepers', repo: 'test' }, config)
   }
 
   beforeEach(() => {
@@ -20,18 +20,18 @@ describe('Labels', () => {
 
   describe('sync', () => {
     it('syncs labels', () => {
-      github.issues.getLabels.mockReturnValueOnce(Promise.resolve({data: [
-        {name: 'no-change', color: 'FF0000'},
-        {name: 'new-color', color: 0}, // YAML treats `color: 000000` as an integer
-        {name: 'update-me', color: '0000FF'},
-        {name: 'delete-me', color: '000000'}
-      ]}))
+      github.issues.getLabels.mockReturnValueOnce(Promise.resolve({ data: [
+        { name: 'no-change', color: 'FF0000' },
+        { name: 'new-color', color: 0 }, // YAML treats `color: 000000` as an integer
+        { name: 'update-me', color: '0000FF' },
+        { name: 'delete-me', color: '000000' }
+      ] }))
 
       const plugin = configure([
-        {name: 'no-change', color: 'FF0000'},
-        {name: 'new-name', oldname: 'update-me', color: 'FFFFFF'},
-        {name: 'new-color', color: '999999'},
-        {name: 'added'}
+        { name: 'no-change', color: 'FF0000' },
+        { name: 'new-name', oldname: 'update-me', color: 'FFFFFF' },
+        { name: 'new-color', color: '999999' },
+        { name: 'added' }
       ])
 
       return plugin.sync().then(() => {

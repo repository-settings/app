@@ -4,7 +4,7 @@ describe('Repository', () => {
   let github
 
   function configure (config) {
-    return new Repository(github, {owner: 'bkeepers', repo: 'test'}, config)
+    return new Repository(github, { owner: 'bkeepers', repo: 'test' }, config)
   }
 
   beforeEach(() => {
