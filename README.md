@@ -103,8 +103,10 @@ branches:
     protection:
       # Required. Require at least one approving review on a pull request, before merging. Set to null to disable.
       required_pull_request_reviews:
+        # NOTE: The APIs needed for the review count is currently in preview
+        # Uncommenting `required_approving_review_count` will stop the bot from working
         # The number of approvals required. (1-6)
-        required_approving_review_count: 1
+        # required_approving_review_count: 1
         # Dismiss approved reviews automatically when a new commit is pushed.
         dismiss_stale_reviews: true
         # Blocks merge until code owners have reviewed.
