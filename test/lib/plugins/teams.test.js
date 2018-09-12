@@ -4,7 +4,7 @@ describe('Teams', () => {
   let github
 
   function configure (config) {
-    return new Teams(github, {owner: 'bkeepers', repo: 'test'}, config)
+    return new Teams(github, { owner: 'bkeepers', repo: 'test' }, config)
   }
 
   beforeEach(() => {
@@ -12,16 +12,16 @@ describe('Teams', () => {
       orgs: {
         deleteTeamRepo: jest.fn().mockImplementation(() => Promise.resolve()),
         addTeamRepo: jest.fn().mockImplementation(() => Promise.resolve()),
-        getTeams: jest.fn().mockImplementation(() => Promise.resolve({data: [
-          {id: 4, slug: 'added'}
-        ]}))
+        getTeams: jest.fn().mockImplementation(() => Promise.resolve({ data: [
+          { id: 4, slug: 'added' }
+        ] }))
       },
       repos: {
-        getTeams: jest.fn().mockImplementation(() => Promise.resolve({data: [
-          {id: 1, slug: 'unchanged', permission: 'push'},
-          {id: 2, slug: 'removed', permission: 'push'},
-          {id: 3, slug: 'updated-permission', permission: 'pull'}
-        ]}))
+        getTeams: jest.fn().mockImplementation(() => Promise.resolve({ data: [
+          { id: 1, slug: 'unchanged', permission: 'push' },
+          { id: 2, slug: 'removed', permission: 'push' },
+          { id: 3, slug: 'updated-permission', permission: 'pull' }
+        ] }))
       }
     }
   })
@@ -29,9 +29,9 @@ describe('Teams', () => {
   describe('sync', () => {
     it('syncs teams', () => {
       const plugin = configure([
-        {name: 'unchanged', permission: 'push'},
-        {name: 'updated-permission', permission: 'admin'},
-        {name: 'added', permission: 'pull'}
+        { name: 'unchanged', permission: 'push' },
+        { name: 'updated-permission', permission: 'admin' },
+        { name: 'added', permission: 'pull' }
       ])
 
       return plugin.sync().then(() => {

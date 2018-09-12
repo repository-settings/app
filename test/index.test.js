@@ -19,7 +19,7 @@ describe('plugin', () => {
     }
     sync = jest.fn()
 
-    plugin(app, {}, {sync, FILE_NAME: '.github/settings.yml'})
+    plugin(app, {}, { sync, FILE_NAME: '.github/settings.yml' })
   })
 
   describe('with settings modified on master', () => {
