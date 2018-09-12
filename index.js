@@ -1,7 +1,10 @@
 const getConfig = require('probot-config')
 
-module.exports = (robot, _, Settings = require('./lib/settings')) => {
-  robot.on('push', async context => {
+/**
+ * @param {import('probot').Application} app - Probot's Application class.
+ */
+module.exports = async (app, _, Settings = require('./lib/settings')) => {
+  app.on('push', async context => {
     const payload = context.payload
     const defaultBranch = payload.ref === 'refs/heads/' + payload.repository.default_branch
 
@@ -16,4 +19,13 @@ module.exports = (robot, _, Settings = require('./lib/settings')) => {
       return Settings.sync(context.github, context.repo(), config)
     }
   })
+
+  const { data: installations } = await (await app.auth()).apps.getInstallations({})
+  const github = await app.auth(installations[0].id)
+  const repos = await github.apps.getInstallationRepositories({})
+
+  const repository = repos.data.repositories[0]
+  const settings = new Settings(github, {owner: repository.owner.login, repo: repository.name}, {})
+
+  console.log('READ', await settings.read())
 }
