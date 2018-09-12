@@ -5,7 +5,7 @@ describe('Branches', () => {
   let github
 
   function configure (config) {
-    return new Branches(github, {owner: 'bkeepers', repo: 'test'}, config)
+    return new Branches(github, { owner: 'bkeepers', repo: 'test' }, config)
   }
 
   beforeEach(() => {
