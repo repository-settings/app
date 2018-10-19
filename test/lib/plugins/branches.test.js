@@ -176,5 +176,89 @@ describe('Branches', () => {
         })
       })
     })
+
+    describe('when the "dismissal_restrictions" config is null', () => {
+      it('is passed as an empty objecct', () => {
+        const plugin = configure(
+          [{
+            name: 'master',
+            protection: { required_pull_request_reviews: { dismissal_restrictions: null } }
+          }]
+        )
+
+        return plugin.sync().then(() => {
+          expect(github.repos.updateBranchProtection).toHaveBeenCalledWith({
+            owner: 'bkeepers',
+            repo: 'test',
+            branch: 'master',
+            required_pull_request_reviews: { dismissal_restrictions: {} },
+            headers: { accept: 'application/vnd.github.hellcat-preview+json,application/vnd.github.luke-cage-preview+json,application/vnd.github.zzzax-preview+json' }
+          })
+        })
+      })
+    })
+
+    describe('when the "dismissal_restrictions" config is an empty object', () => {
+      it('is passed as an empty object', () => {
+        const plugin = configure(
+          [{
+            name: 'master',
+            protection: { required_pull_request_reviews: { dismissal_restrictions: {} } }
+          }]
+        )
+
+        return plugin.sync().then(() => {
+          expect(github.repos.updateBranchProtection).toHaveBeenCalledWith({
+            owner: 'bkeepers',
+            repo: 'test',
+            branch: 'master',
+            required_pull_request_reviews: { dismissal_restrictions: {} },
+            headers: { accept: 'application/vnd.github.hellcat-preview+json,application/vnd.github.luke-cage-preview+json,application/vnd.github.zzzax-preview+json' }
+          })
+        })
+      })
+    })
+
+    describe('when the "restrictions" config is an empty object', () => {
+      it('is passed as null', () => {
+        const plugin = configure(
+          [{
+            name: 'master',
+            protection: { restrictions: {} }
+          }]
+        )
+
+        return plugin.sync().then(() => {
+          expect(github.repos.updateBranchProtection).toHaveBeenCalledWith({
+            owner: 'bkeepers',
+            repo: 'test',
+            branch: 'master',
+            restrictions: null,
+            headers: { accept: 'application/vnd.github.hellcat-preview+json,application/vnd.github.luke-cage-preview+json,application/vnd.github.zzzax-preview+json' }
+          })
+        })
+      })
+    })
+
+    describe('when the "restrictions" config is null', () => {
+      it('is passed as null', () => {
+        const plugin = configure(
+          [{
+            name: 'master',
+            protection: { restrictions: null }
+          }]
+        )
+
+        return plugin.sync().then(() => {
+          expect(github.repos.updateBranchProtection).toHaveBeenCalledWith({
+            owner: 'bkeepers',
+            repo: 'test',
+            branch: 'master',
+            restrictions: null,
+            headers: { accept: 'application/vnd.github.hellcat-preview+json,application/vnd.github.luke-cage-preview+json,application/vnd.github.zzzax-preview+json' }
+          })
+        })
+      })
+    })
   })
 })
