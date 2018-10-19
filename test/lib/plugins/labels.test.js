@@ -21,16 +21,18 @@ describe('Labels', () => {
   describe('sync', () => {
     it('syncs labels', () => {
       github.issues.getLabels.mockReturnValueOnce(Promise.resolve({ data: [
-        { name: 'no-change', color: 'FF0000' },
-        { name: 'new-color', color: 0 }, // YAML treats `color: 000000` as an integer
-        { name: 'update-me', color: '0000FF' },
-        { name: 'delete-me', color: '000000' }
+        { name: 'no-change', color: 'FF0000', description: '' },
+        { name: 'new-color', color: 0, description: '' }, // YAML treats `color: 000000` as an integer
+        { name: 'new-description', color: '000000', description: '' },
+        { name: 'update-me', color: '0000FF', description: '' },
+        { name: 'delete-me', color: '000000', description: '' }
       ] }))
 
       const plugin = configure([
-        { name: 'no-change', color: 'FF0000' },
-        { name: 'new-name', oldname: 'update-me', color: 'FFFFFF' },
-        { name: 'new-color', color: '999999' },
+        { name: 'no-change', color: 'FF0000', description: '' },
+        { name: 'new-name', oldname: 'update-me', color: 'FFFFFF', description: '' },
+        { name: 'new-color', color: '999999', description: '' },
+        { name: 'new-description', color: '000000', description: 'Hello world' },
         { name: 'added' }
       ])
 
@@ -55,6 +57,7 @@ describe('Labels', () => {
           oldname: 'update-me',
           name: 'new-name',
           color: 'FFFFFF',
+          description: '',
           headers: { accept: 'application/vnd.github.symmetra-preview+json' }
         })
 
@@ -64,11 +67,22 @@ describe('Labels', () => {
           oldname: 'new-color',
           name: 'new-color',
           color: '999999',
+          description: '',
+          headers: { accept: 'application/vnd.github.symmetra-preview+json' }
+        })
+
+        expect(github.issues.updateLabel).toHaveBeenCalledWith({
+          owner: 'bkeepers',
+          repo: 'test',
+          oldname: 'new-description',
+          name: 'new-description',
+          color: '000000',
+          description: 'Hello world',
           headers: { accept: 'application/vnd.github.symmetra-preview+json' }
         })
 
         expect(github.issues.deleteLabel).toHaveBeenCalledTimes(1)
-        expect(github.issues.updateLabel).toHaveBeenCalledTimes(2)
+        expect(github.issues.updateLabel).toHaveBeenCalledTimes(3)
         expect(github.issues.createLabel).toHaveBeenCalledTimes(1)
       })
     })
