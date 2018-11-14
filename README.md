@@ -7,7 +7,7 @@ This GitHub App syncs repository settings defined in `.github/settings.yml` to G
 1. **[Install the app](https://github.com/apps/settings)**.
 2. Create a `.github/settings.yml` file in your repository. Changes to this file on the default branch will be synced to GitHub.
 
-All settings are optional.
+All top-level settings are optional. Some plugins do have required fields.
 
 ```yaml
 # These settings are synced to GitHub by https://probot.github.io/apps/settings/
@@ -126,6 +126,15 @@ branches:
         users: []
         teams: []
 ```
+
+### Inheritance
+
+This app uses [probot-config](https://github.com/probot/probot-config). This means you can inherit settings from another repo, and only override what you want to change.
+
+Individual settings in the arrays listed under `labels`, `teams` (once it is supported) and `branches` will be merged with the base repo if the `name` of an element in the array matches the `name` of an element in the corresponding array in the base repo. A possible future enhancement would be to make that work for the other settings arrays based on `username`, or `title`. This is not currently supported. 
+
+To further clarify: Inheritance within the Protected Branches plugin allows you to override specific settings per branch. For example, your `.github` repo may set default protection on the `master` branch. You can then include `master` in your `branches` array, and only override the `required_approving_review_count`.
+Alternatively, you might only have a branch like `develop` in your `branches` array, and would still get `master` protection from your base repo.
 
 **WARNING:** Note that this app inherently _escalates anyone with `push` permissions to the **admin** role_, since they can push config settings to the `master` branch, which will be synced. In a future, we may add restrictions to allow changes to the config file to be merged only by specific people/teams, or those with **admin** access _(via a combination of protected branches, required statuses, and branch restrictions)_. Until then, use caution when merging PRs and adding collaborators.
 

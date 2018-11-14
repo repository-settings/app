@@ -14,7 +14,7 @@ describe('plugin', () => {
     app.auth = () => Promise.resolve(github)
 
     event = {
-      event: 'push',
+      name: 'push',
       payload: JSON.parse(JSON.stringify(require('./fixtures/events/push.settings.json')))
     }
     sync = jest.fn()
