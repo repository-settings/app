@@ -12,12 +12,12 @@ describe('Teams', () => {
       orgs: {
         deleteTeamRepo: jest.fn().mockImplementation(() => Promise.resolve()),
         addTeamRepo: jest.fn().mockImplementation(() => Promise.resolve()),
-        getTeams: jest.fn().mockImplementation(() => Promise.resolve({ data: [
+        listTeams: jest.fn().mockImplementation(() => Promise.resolve({ data: [
           { id: 4, slug: 'added' }
         ] }))
       },
       repos: {
-        getTeams: jest.fn().mockImplementation(() => Promise.resolve({ data: [
+        listTeams: jest.fn().mockImplementation(() => Promise.resolve({ data: [
           { id: 1, slug: 'unchanged', permission: 'push' },
           { id: 2, slug: 'removed', permission: 'push' },
           { id: 3, slug: 'updated-permission', permission: 'pull' }
