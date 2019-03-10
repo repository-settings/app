@@ -10,7 +10,7 @@ describe('Labels', () => {
   beforeEach(() => {
     github = {
       issues: {
-        getLabels: jest.fn().mockImplementation(() => Promise.resolve([])),
+        listLabelsForRepo: jest.fn().mockImplementation(() => Promise.resolve([])),
         createLabel: jest.fn().mockImplementation(() => Promise.resolve()),
         deleteLabel: jest.fn().mockImplementation(() => Promise.resolve()),
         updateLabel: jest.fn().mockImplementation(() => Promise.resolve())
@@ -20,7 +20,7 @@ describe('Labels', () => {
 
   describe('sync', () => {
     it('syncs labels', () => {
-      github.issues.getLabels.mockReturnValueOnce(Promise.resolve({ data: [
+      github.issues.listLabelsForRepo.mockReturnValueOnce(Promise.resolve({ data: [
         { name: 'no-change', color: 'FF0000' },
         { name: 'new-color', color: 0 }, // YAML treats `color: 000000` as an integer
         { name: 'update-me', color: '0000FF' },
