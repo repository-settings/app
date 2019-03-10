@@ -25,7 +25,7 @@ describe('Labels', () => {
         { name: 'new-color', color: 0, description: '' }, // YAML treats `color: 000000` as an integer
         { name: 'new-description', color: '000000', description: '' },
         { name: 'update-me', color: '0000FF', description: '' },
-        { name: 'delete-me', color: '000000', description: '' 
+        { name: 'delete-me', color: '000000', description: '' }
       ] }))
 
       const plugin = configure([
