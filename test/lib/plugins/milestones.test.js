@@ -10,7 +10,7 @@ describe('Milestones', () => {
   beforeEach(() => {
     github = {
       issues: {
-        getMilestones: jest.fn().mockImplementation(() => Promise.resolve([])),
+        listMilestonesForRepo: jest.fn().mockImplementation(() => Promise.resolve([])),
         createMilestone: jest.fn().mockImplementation(() => Promise.resolve()),
         deleteMilestone: jest.fn().mockImplementation(() => Promise.resolve()),
         updateMilestone: jest.fn().mockImplementation(() => Promise.resolve())
@@ -20,7 +20,7 @@ describe('Milestones', () => {
 
   describe('sync', () => {
     it('syncs milestones', async () => {
-      github.issues.getMilestones.mockReturnValueOnce(Promise.resolve({ data: [
+      github.issues.listMilestonesForRepo.mockReturnValueOnce(Promise.resolve({ data: [
         { title: 'no-change', description: 'no-change-description', due_on: null, state: 'open', number: 5 },
         { title: 'new-description', description: 'old-description', due_on: null, state: 'open', number: 2 },
         { title: 'new-state', description: 'FF0000', due_on: null, state: 'open', number: 4 },
