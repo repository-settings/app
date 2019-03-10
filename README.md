@@ -62,8 +62,12 @@ repository:
 labels:
   - name: bug
     color: CC0000
+    description: An issue with the system 🐛.
+    
   - name: feature
     color: 336699
+    description: New functionality.
+    
   - name: first-timers-only
     # include the old name to rename an existing label
     oldname: Help Wanted
