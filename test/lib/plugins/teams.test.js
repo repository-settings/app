@@ -16,7 +16,7 @@ describe('Teams', () => {
       },
       teams: {
         removeRepo: jest.fn().mockImplementation(() => Promise.resolve()),
-        addTeamRepo: jest.fn().mockImplementation(() => Promise.resolve())
+        addOrUpdateRepo: jest.fn().mockImplementation(() => Promise.resolve())
       },
       repos: {
         listTeams: jest.fn().mockImplementation(() => Promise.resolve({ data: [
