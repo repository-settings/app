@@ -11,7 +11,7 @@ describe('Repository', () => {
     github = {
       repos: {
         get: jest.fn().mockImplementation(() => Promise.resolve({})),
-        edit: jest.fn().mockImplementation(() => Promise.resolve()),
+        update: jest.fn().mockImplementation(() => Promise.resolve()),
         replaceTopics: jest.fn().mockImplementation(() => Promise.resolve())
       }
     }
