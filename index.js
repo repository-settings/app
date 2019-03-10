@@ -1,8 +1,8 @@
 const getConfig = require('probot-config')
 const mergeArrayByName = require('./lib/mergeArrayByName')
 
-module.exports = (robot, _, Settings = require('./lib/settings')) => {
-  robot.on('push', async context => {
+module.exports = (app, _, Settings = require('./lib/settings')) => {
+  app.on('push', async context => {
     const payload = context.payload
     const defaultBranch = payload.ref === 'refs/heads/' + payload.repository.default_branch
 
