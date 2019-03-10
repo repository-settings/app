@@ -10,11 +10,13 @@ describe('Teams', () => {
   beforeEach(() => {
     github = {
       orgs: {
-        deleteTeamRepo: jest.fn().mockImplementation(() => Promise.resolve()),
-        addTeamRepo: jest.fn().mockImplementation(() => Promise.resolve()),
         listTeams: jest.fn().mockImplementation(() => Promise.resolve({ data: [
           { id: 4, slug: 'added' }
         ] }))
+      },
+      teams: {
+        removeRepo: jest.fn().mockImplementation(() => Promise.resolve()),
+        addTeamRepo: jest.fn().mockImplementation(() => Promise.resolve())
       },
       repos: {
         listTeams: jest.fn().mockImplementation(() => Promise.resolve({ data: [
@@ -35,29 +37,29 @@ describe('Teams', () => {
       ])
 
       return plugin.sync().then(() => {
-        expect(github.orgs.addTeamRepo).toHaveBeenCalledWith({
+        expect(github.teams.addOrUpdateRepo).toHaveBeenCalledWith({
           org: 'bkeepers',
           repo: 'test',
           id: 3,
           permission: 'admin'
         })
 
-        expect(github.orgs.addTeamRepo).toHaveBeenCalledWith({
+        expect(github.teams.addOrUpdateRepo).toHaveBeenCalledWith({
           org: 'bkeepers',
           repo: 'test',
           id: 4,
           permission: 'pull'
         })
 
-        expect(github.orgs.addTeamRepo).toHaveBeenCalledTimes(2)
+        expect(github.teams.addOrUpdateRepo).toHaveBeenCalledTimes(2)
 
-        expect(github.orgs.deleteTeamRepo).toHaveBeenCalledWith({
+        expect(github.teams.removeRepo).toHaveBeenCalledWith({
           owner: 'bkeepers',
           repo: 'test',
           id: 2
         })
 
-        expect(github.orgs.deleteTeamRepo).toHaveBeenCalledTimes(1)
+        expect(github.teams.removeRepo).toHaveBeenCalledTimes(1)
       })
     })
   })
