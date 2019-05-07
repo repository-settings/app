@@ -62,7 +62,7 @@ repository:
 labels:
   - name: bug
     color: CC0000
-    description: An issue with the system 🐛.
+    description: An issue with the system.
     
   - name: feature
     color: 336699
