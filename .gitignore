@@ -3,5 +3,4 @@ npm-debug.log
 node_modules/
 private-key.pem
 .env
-package-lock.json
 *.pem
