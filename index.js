@@ -6,15 +6,15 @@ module.exports = (robot, _, Settings = require('./lib/settings')) => {
     const payload = context.payload
     const defaultBranch = payload.ref === 'refs/heads/' + payload.repository.default_branch
 
-    const config = await getConfig(context, 'settings.yml', {}, { arrayMerge: mergeArrayByName })
+    if (!defaultBranch) {
+      // Not the defualt branch, nothing to see here!
+      return;
+    }
 
-    const settingsModified = payload.commits.find(commit => {
-      return commit.added.includes(Settings.FILE_NAME) ||
-        commit.modified.includes(Settings.FILE_NAME)
+    const config = await getConfig(context, '/settings.yml', {}, {
+      arrayMerge: mergeArrayByName
     })
 
-    if (defaultBranch && settingsModified) {
-      return Settings.sync(context.github, context.repo(), config)
-    }
+    return Settings.sync(context.github, context.repo(), config)
   })
 }
