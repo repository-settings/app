@@ -10,7 +10,7 @@ describe('Collaborators', () => {
   beforeEach(() => {
     github = {
       repos: {
-        getCollaborators: jest.fn().mockImplementation(() => Promise.resolve([])),
+        listCollaborators: jest.fn().mockImplementation(() => Promise.resolve([])),
         removeCollaborator: jest.fn().mockImplementation(() => Promise.resolve()),
         addCollaborator: jest.fn().mockImplementation(() => Promise.resolve())
       }
@@ -26,7 +26,7 @@ describe('Collaborators', () => {
         { username: 'DIFFERENTcase', permission: 'push' }
       ])
 
-      github.repos.getCollaborators.mockReturnValueOnce(Promise.resolve({ data: [
+      github.repos.listCollaborators.mockReturnValueOnce(Promise.resolve({ data: [
         { login: 'bkeepers', permissions: { admin: true, push: true, pull: true } },
         { login: 'updated-permission', permissions: { admin: false, push: false, pull: true } },
         { login: 'removed-user', permissions: { admin: false, push: true, pull: true } },
