@@ -55,7 +55,10 @@ describe('Repository', () => {
         expect(github.repos.replaceTopics).toHaveBeenCalledWith({
           owner: 'bkeepers',
           repo: 'test',
-          names: ['foo', 'bar']
+          names: ['foo', 'bar'],
+          mediaType: {
+            previews: ['mercy']
+          }
         })
       })
     })
