@@ -1,15 +1,15 @@
 {
-  "name": "probot-settings",
-  "version": "1.0.0",
+  "name": "codeowners-permissions-sync",
+  "version": "0.1.0",
   "description": "",
-  "repository": "https://github.com/probot/settings.git",
+  "repository": "https://github.com/ebsco/codeowners-permissions-sync.git",
   "main": "index.js",
   "scripts": {
     "start": "probot run ./index.js",
     "test": "jest && standard",
     "test:watch": "jest --watch"
   },
-  "author": "Brandon Keepers",
+  "author": "Leopoldo Fu",
   "license": "ISC",
   "dependencies": {
     "deepmerge": "^2.2.1",
