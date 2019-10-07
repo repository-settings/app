@@ -12,7 +12,7 @@
   "author": "Brandon Keepers",
   "license": "ISC",
   "dependencies": {
-    "deepmerge": "^2.2.1",
+    "deepmerge": "^4.1.0",
     "js-yaml": "^3.12.0",
     "probot": "^9.5.0"
   },
