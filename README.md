@@ -62,11 +62,15 @@ repository:
 labels:
   - name: bug
     color: CC0000
+    description: An issue with the system 🐛.
+
   - name: feature
     color: 336699
+    description: New functionality.
+
   - name: first-timers-only
     # include the old name to rename an existing label
-    oldname: Help Wanted
+    current_name: Help Wanted
 
 # Milestones: define milestones for Issues and Pull Requests
 milestones:
@@ -131,7 +135,7 @@ branches:
 
 This app uses [probot-config](https://github.com/probot/probot-config). This means you can inherit settings from another repo, and only override what you want to change.
 
-Individual settings in the arrays listed under `labels`, `teams` (once it is supported) and `branches` will be merged with the base repo if the `name` of an element in the array matches the `name` of an element in the corresponding array in the base repo. A possible future enhancement would be to make that work for the other settings arrays based on `username`, or `title`. This is not currently supported. 
+Individual settings in the arrays listed under `labels`, `teams` (once it is supported) and `branches` will be merged with the base repo if the `name` of an element in the array matches the `name` of an element in the corresponding array in the base repo. A possible future enhancement would be to make that work for the other settings arrays based on `username`, or `title`. This is not currently supported.
 
 To further clarify: Inheritance within the Protected Branches plugin allows you to override specific settings per branch. For example, your `.github` repo may set default protection on the `master` branch. You can then include `master` in your `branches` array, and only override the `required_approving_review_count`.
 Alternatively, you might only have a branch like `develop` in your `branches` array, and would still get `master` protection from your base repo.
