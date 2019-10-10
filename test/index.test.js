@@ -8,7 +8,7 @@ describe('plugin', () => {
     app = new Application()
     github = {
       repos: {
-        getContent: jest.fn(() => Promise.resolve({ data: { content: '' } }))
+        getContents: jest.fn(() => Promise.resolve({ data: { content: '' } }))
       }
     }
     app.auth = () => Promise.resolve(github)

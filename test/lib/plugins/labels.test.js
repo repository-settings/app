@@ -82,7 +82,7 @@ describe('Labels', () => {
         })
 
         expect(github.issues.deleteLabel).toHaveBeenCalledTimes(1)
-        expect(github.issues.updateLabel).toHaveBeenCalledTimes(2)
+        expect(github.issues.updateLabel).toHaveBeenCalledTimes(3)
         expect(github.issues.createLabel).toHaveBeenCalledTimes(1)
       })
     })

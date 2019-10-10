@@ -11,7 +11,7 @@ describe('Repository', () => {
     github = {
       repos: {
         get: jest.fn().mockImplementation(() => Promise.resolve({})),
-        edit: jest.fn().mockImplementation(() => Promise.resolve()),
+        update: jest.fn().mockImplementation(() => Promise.resolve()),
         replaceTopics: jest.fn().mockImplementation(() => Promise.resolve())
       }
     }
@@ -24,7 +24,7 @@ describe('Repository', () => {
         description: 'Hello World!'
       })
       return plugin.sync().then(() => {
-        expect(github.repos.edit).toHaveBeenCalledWith({
+        expect(github.repos.update).toHaveBeenCalledWith({
           owner: 'bkeepers',
           repo: 'test',
           name: 'test',
@@ -38,7 +38,7 @@ describe('Repository', () => {
         name: 'new-name'
       })
       return plugin.sync().then(() => {
-        expect(github.repos.edit).toHaveBeenCalledWith({
+        expect(github.repos.update).toHaveBeenCalledWith({
           owner: 'bkeepers',
           repo: 'test',
           name: 'new-name'
