@@ -131,6 +131,21 @@ branches:
         teams: []
 ```
 
+Note: each top-level element under branch protection must be filled (eg: `required_pull_request_reviews`, `required_status_checks`, `enforce_admins` and `restrictions`). If you don't want to use one of them you should set it to `null`. Otherwise, none of the settings will be applied. For example:
+
+```yml
+branches:
+  - name: master
+    protection:
+      required_pull_request_reviews:
+        required_approving_review_count: 1
+      required_status_checks: null
+      enforce_admins: null
+      restrictions: null
+```
+
+
+
 ### Inheritance
 
 This app uses [probot-config](https://github.com/probot/probot-config). This means you can inherit settings from another repo, and only override what you want to change.
