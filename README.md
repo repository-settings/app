@@ -132,7 +132,8 @@ branches:
         teams: []
 ```
 
-**Note:** Label color can also starts with `#`, e.g. `color: '#F341B2'`. Make sure to wrap it with qoutes!
+> **Note:** Label color can also starts with `#`, e.g. `color: '#F341B2'`. Make sure to wrap it with qoutes!
+> **Note:** Each top-level element under branch protection must be filled (eg: `required_pull_request_reviews`, `required_status_checks`, `enforce_admins` and `restrictions`). If you don't want to use one of them you must set it to `null` (see comments in the example above). Otherwise, none of the settings will be applied.
 
 ### Inheritance
 
