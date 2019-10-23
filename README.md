@@ -65,7 +65,7 @@ labels:
     description: An issue with the system 🐛.
 
   - name: feature
-    # If including a `#`, make sure to wrap it with qoutes!
+    # If including a `#`, make sure to wrap it with quotes!
     color: '#336699'
     description: New functionality.
 
