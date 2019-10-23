@@ -32,7 +32,7 @@ describe('Labels', () => {
         { name: 'no-change', color: 'FF0000', description: '' },
         { name: 'new-name', oldname: 'update-me', color: 'FFFFFF', description: '' },
         { name: 'new-color', color: '999999', description: '' },
-        { name: 'new-description', color: '000000', description: 'Hello world' },
+        { name: 'new-description', color: '#000000', description: 'Hello world' },
         { name: 'added' }
       ])
 
