@@ -76,7 +76,7 @@ describe('Labels', () => {
           repo: 'test',
           oldname: 'new-description',
           name: 'new-description',
-          color: '#000000',
+          color: '000000',
           description: 'Hello world',
           headers: { accept: 'application/vnd.github.symmetra-preview+json' }
         })
