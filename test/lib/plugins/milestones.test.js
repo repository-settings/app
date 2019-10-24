@@ -9,8 +9,13 @@ describe('Milestones', () => {
 
   beforeEach(() => {
     github = {
+      paginate: jest.fn().mockImplementation(() => Promise.resolve()),
       issues: {
-        getMilestones: jest.fn().mockImplementation(() => Promise.resolve([])),
+        listMilestonesForRepo: {
+          endpoint: {
+            merge: jest.fn().mockImplementation(() => {})
+          }
+        },
         createMilestone: jest.fn().mockImplementation(() => Promise.resolve()),
         deleteMilestone: jest.fn().mockImplementation(() => Promise.resolve()),
         updateMilestone: jest.fn().mockImplementation(() => Promise.resolve())
@@ -20,12 +25,12 @@ describe('Milestones', () => {
 
   describe('sync', () => {
     it('syncs milestones', async () => {
-      github.issues.getMilestones.mockReturnValueOnce(Promise.resolve({ data: [
+      github.paginate.mockReturnValueOnce(Promise.resolve([
         { title: 'no-change', description: 'no-change-description', due_on: null, state: 'open', number: 5 },
         { title: 'new-description', description: 'old-description', due_on: null, state: 'open', number: 2 },
         { title: 'new-state', description: 'FF0000', due_on: null, state: 'open', number: 4 },
         { title: 'remove-milestone', description: 'old-description', due_on: null, state: 'open', number: 1 }
-      ] }))
+      ]))
 
       const plugin = configure([
         { title: 'no-change', description: 'no-change-description', due_on: '2019-03-29T07:00:00Z', state: 'open' },
@@ -39,7 +44,7 @@ describe('Milestones', () => {
       expect(github.issues.deleteMilestone).toHaveBeenCalledWith({
         owner: 'bkeepers',
         repo: 'test',
-        number: 1
+        milestone_number: 1
       })
 
       expect(github.issues.createMilestone).toHaveBeenCalledWith({
@@ -53,7 +58,7 @@ describe('Milestones', () => {
         repo: 'test',
         title: 'new-description',
         description: 'modified-description',
-        number: 2
+        milestone_number: 2
       })
 
       expect(github.issues.updateMilestone).toHaveBeenCalledWith({
@@ -61,7 +66,7 @@ describe('Milestones', () => {
         repo: 'test',
         title: 'new-state',
         state: 'closed',
-        number: 4
+        milestone_number: 4
       })
 
       expect(github.issues.deleteMilestone).toHaveBeenCalledTimes(1)
