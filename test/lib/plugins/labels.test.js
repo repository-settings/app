@@ -30,7 +30,7 @@ describe('Labels', () => {
 
       const plugin = configure([
         { name: 'no-change', color: 'FF0000', description: '' },
-        { name: 'new-name', current_name: 'update-me', color: 'FFFFFF', description: '' },
+        { name: 'new-name', oldname: 'update-me', color: 'FFFFFF', description: '' },
         { name: 'new-color', color: '999999', description: '' },
         { name: 'new-description', color: '000000', description: 'Hello world' },
         { name: 'added' }
@@ -55,6 +55,7 @@ describe('Labels', () => {
           owner: 'bkeepers',
           repo: 'test',
           current_name: 'update-me',
+          // oldname: 'update-me',
           name: 'new-name',
           color: 'FFFFFF',
           description: '',
@@ -65,6 +66,7 @@ describe('Labels', () => {
           owner: 'bkeepers',
           repo: 'test',
           current_name: 'new-color',
+          // oldname: 'new-color',
           name: 'new-color',
           color: '999999',
           description: '',
@@ -75,6 +77,7 @@ describe('Labels', () => {
           owner: 'bkeepers',
           repo: 'test',
           current_name: 'new-description',
+          // oldname: 'new-description',
           name: 'new-description',
           color: '000000',
           description: 'Hello world',

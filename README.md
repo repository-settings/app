@@ -70,7 +70,7 @@ labels:
 
   - name: first-timers-only
     # include the old name to rename an existing label
-    current_name: Help Wanted
+    oldname: Help Wanted
 
 # Milestones: define milestones for Issues and Pull Requests
 milestones:
