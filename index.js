@@ -24,4 +24,19 @@ module.exports = (robot, _, Settings = require('./lib/settings')) => {
     const config = await context.config('settings.yml', {}, { arrayMerge: mergeArrayByName })
     return Settings.sync(context.github, context.repo(), config)
   })
+
+  robot.on('repository.edited', async context => {
+    const { payload } = context
+    const { changes, repository } = payload
+
+    if (!changes.hasOwnProperty('default_branch')) {
+      robot.log.debug('Repository configuration was edited but the default branch was not affected, returning...')
+      return
+    }
+
+    robot.log.debug(`Default branch changed from '${changes.default_branch.from}' to '${repository.default_branch}'`)
+
+    const config = await context.config('settings.yml', {}, { arrayMerge: mergeArrayByName })
+    return Settings.sync(context.github, context.repo(), config)
+  })
 }
