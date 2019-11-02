@@ -7,7 +7,7 @@ module.exports = (robot, _, Settings = require('./lib/settings')) => {
 
     const defaultBranch = payload.ref === 'refs/heads/' + repository.default_branch
     if (!defaultBranch) {
-      robot.log.debug('Not the default branch, nothing to see here!')
+      robot.log.debug('Not working on the default branch, returning...')
       return
     }
 
@@ -16,9 +16,12 @@ module.exports = (robot, _, Settings = require('./lib/settings')) => {
         commit.modified.includes(Settings.FILE_NAME)
     })
 
-    if (settingsModified) {
-      const config = await context.config('settings.yml', {}, { arrayMerge: mergeArrayByName })
-      return Settings.sync(context.github, context.repo(), config)
+    if (!settingsModified) {
+      robot.log.debug(`No changes in '${Settings.FILE_NAME}' detected, returning...`)
+      return
     }
+
+    const config = await context.config('settings.yml', {}, { arrayMerge: mergeArrayByName })
+    return Settings.sync(context.github, context.repo(), config)
   })
 }
