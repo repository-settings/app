@@ -49,10 +49,12 @@ describe('Labels', () => {
           headers: { accept: 'application/vnd.github.symmetra-preview+json' }
         })
 
+        expect(github.issues.createLabel.mock.calls[0][0]).toHaveProperty('color')
         expect(github.issues.createLabel).toHaveBeenCalledWith({
           owner: 'bkeepers',
           repo: 'test',
           name: 'added',
+          color: github.issues.createLabel.mock.calls[0][0].color,
           headers: { accept: 'application/vnd.github.symmetra-preview+json' }
         })
 
