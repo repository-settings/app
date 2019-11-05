@@ -36,16 +36,16 @@ describe('Teams', () => {
 
       return plugin.sync().then(() => {
         expect(github.teams.addOrUpdateRepo).toHaveBeenCalledWith({
-          org: 'bkeepers',
+          owner: 'bkeepers',
           repo: 'test',
-          id: 3,
+          team_id: 3,
           permission: 'admin'
         })
 
         expect(github.teams.addOrUpdateRepo).toHaveBeenCalledWith({
-          org: 'bkeepers',
+          owner: 'bkeepers',
           repo: 'test',
-          id: 4,
+          team_id: 4,
           permission: 'pull'
         })
 
