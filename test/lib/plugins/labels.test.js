@@ -9,8 +9,13 @@ describe('Labels', () => {
 
   beforeEach(() => {
     github = {
+      paginate: jest.fn().mockImplementation(() => Promise.resolve()),
       issues: {
-        listLabelsForRepo: jest.fn().mockImplementation(() => Promise.resolve([])),
+        listLabelsForRepo: {
+          endpoint: {
+            merge: jest.fn().mockImplementation(() => {})
+          }
+        },
         createLabel: jest.fn().mockImplementation(() => Promise.resolve()),
         deleteLabel: jest.fn().mockImplementation(() => Promise.resolve()),
         updateLabel: jest.fn().mockImplementation(() => Promise.resolve())
@@ -20,13 +25,13 @@ describe('Labels', () => {
 
   describe('sync', () => {
     it('syncs labels', () => {
-      github.issues.listLabelsForRepo.mockReturnValueOnce(Promise.resolve({ data: [
+      github.paginate.mockReturnValueOnce(Promise.resolve([
         { name: 'no-change', color: 'FF0000', description: '' },
         { name: 'new-color', color: 0, description: '' }, // YAML treats `color: 000000` as an integer
         { name: 'new-description', color: '000000', description: '' },
         { name: 'update-me', color: '0000FF', description: '' },
         { name: 'delete-me', color: '000000', description: '' }
-      ] }))
+      ]))
 
       const plugin = configure([
         { name: 'no-change', color: 'FF0000', description: '' },
