@@ -10,17 +10,21 @@ describe('Teams', () => {
   beforeEach(() => {
     github = {
       repos: {
-        listTeams: jest.fn().mockImplementation(() => Promise.resolve({ data: [
-          { id: 1, slug: 'unchanged', permission: 'push' },
-          { id: 2, slug: 'removed', permission: 'push' },
-          { id: 3, slug: 'updated-permission', permission: 'pull' }
-        ] }))
+        listTeams: jest.fn().mockImplementation(() => Promise.resolve({
+          data: [
+            { id: 1, slug: 'unchanged', permission: 'push' },
+            { id: 2, slug: 'removed', permission: 'push' },
+            { id: 3, slug: 'updated-permission', permission: 'pull' }
+          ]
+        }))
       },
       teams: {
         addOrUpdateRepo: jest.fn().mockImplementation(() => Promise.resolve()),
-        list: jest.fn().mockImplementation(() => Promise.resolve({ data: [
-          { id: 4, slug: 'added' }
-        ] })),
+        list: jest.fn().mockImplementation(() => Promise.resolve({
+          data: [
+            { id: 4, slug: 'added' }
+          ]
+        })),
         removeRepo: jest.fn().mockImplementation(() => Promise.resolve())
       }
     }

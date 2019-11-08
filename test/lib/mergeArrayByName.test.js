@@ -59,14 +59,18 @@ describe('mergeArrayByName', () => {
     const expected = [{
       name: 'master',
       protection:
-       { required_pull_request_reviews:
-          { required_approving_review_count: 2,
+       {
+         required_pull_request_reviews:
+          {
+            required_approving_review_count: 2,
             dismiss_stale_reviews: false,
             require_code_owner_reviews: true,
-            dismissal_restrictions: {} },
-       required_status_checks: { strict: true, contexts: [] },
-       enforce_admins: false,
-       restrictions: null }
+            dismissal_restrictions: {}
+          },
+         required_status_checks: { strict: true, contexts: [] },
+         enforce_admins: false,
+         restrictions: null
+       }
     }]
 
     const merged = branchArrayMerge(target.branches, source.branches)
