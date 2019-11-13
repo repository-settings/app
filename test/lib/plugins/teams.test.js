@@ -62,7 +62,7 @@ describe('Teams', () => {
         expect(github.teams.removeRepo).toHaveBeenCalledWith({
           owner: 'bkeepers',
           repo: 'test',
-          id: 2
+          team_id: 2
         })
 
         expect(github.teams.removeRepo).toHaveBeenCalledTimes(1)
