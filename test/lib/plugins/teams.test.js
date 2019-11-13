@@ -11,11 +11,13 @@ describe('Teams', () => {
     github = {
       paginate: jest.fn().mockImplementation(() => Promise.resolve()),
       repos: {
-        listTeams: jest.fn().mockImplementation(() => Promise.resolve({ data: [
-          { id: 1, slug: 'unchanged', permission: 'push' },
-          { id: 2, slug: 'removed', permission: 'push' },
-          { id: 3, slug: 'updated-permission', permission: 'pull' }
-        ] }))
+        listTeams: jest.fn().mockImplementation(() => Promise.resolve({
+          data: [
+            { id: 1, slug: 'unchanged', permission: 'push' },
+            { id: 2, slug: 'removed', permission: 'push' },
+            { id: 3, slug: 'updated-permission', permission: 'pull' }
+          ]
+        }))
       },
       teams: {
         addOrUpdateRepo: jest.fn().mockImplementation(() => Promise.resolve()),

@@ -17,9 +17,9 @@
     "probot": "^9.5.0"
   },
   "devDependencies": {
-    "jest": "^22.4.4",
+    "jest": "^24.9.0",
     "smee-client": "^1.0.2",
-    "standard": "^12.0.0"
+    "standard": "^14.3.1"
   },
   "standard": {
     "env": [
