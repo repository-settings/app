@@ -9,6 +9,7 @@ describe('Teams', () => {
 
   beforeEach(() => {
     github = {
+      paginate: jest.fn().mockImplementation(() => Promise.resolve()),
       repos: {
         listTeams: jest.fn().mockImplementation(() => Promise.resolve({ data: [
           { id: 1, slug: 'unchanged', permission: 'push' },
@@ -18,9 +19,11 @@ describe('Teams', () => {
       },
       teams: {
         addOrUpdateRepo: jest.fn().mockImplementation(() => Promise.resolve()),
-        list: jest.fn().mockImplementation(() => Promise.resolve({ data: [
-          { id: 4, slug: 'added' }
-        ] })),
+        list: {
+          endpoint: {
+            merge: jest.fn().mockImplementation(() => {})
+          }
+        },
         removeRepo: jest.fn().mockImplementation(() => Promise.resolve())
       }
     }
@@ -28,6 +31,9 @@ describe('Teams', () => {
 
   describe('sync', () => {
     it('syncs teams', () => {
+      github.paginate.mockReturnValueOnce(Promise.resolve([
+        { id: 4, slug: 'added' }
+      ]))
       const plugin = configure([
         { name: 'unchanged', permission: 'push' },
         { name: 'updated-permission', permission: 'admin' },
