@@ -12,8 +12,8 @@
   "author": "Brandon Keepers",
   "license": "ISC",
   "dependencies": {
-    "deepmerge": "^4.1.0",
-    "js-yaml": "^3.12.0",
+    "deepmerge": "^4.2.2",
+    "js-yaml": "^3.13.1",
     "probot": "^9.5.0"
   },
   "devDependencies": {
