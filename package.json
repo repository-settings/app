@@ -7,8 +7,12 @@
   "scripts": {
     "dev": "nodemon",
     "start": "probot run ./index.js",
-    "test": "jest && standard",
-    "test:watch": "jest --watch"
+    "test": "npm-run-all --print-label --parallel lint:* --parallel test:*",
+    "lint:js": "standard",
+    "lint:lockfile": "lockfile-lint --path package-lock.json --type npm --validate-https --allowed-hosts npm",
+    "lint:engines": "check-engine",
+    "test:unit": "jest",
+    "test:unit:watch": "jest --watch"
   },
   "author": "Brandon Keepers",
   "license": "ISC",
@@ -18,8 +22,11 @@
     "probot": "^9.5.0"
   },
   "devDependencies": {
+    "check-engine": "^1.8.1",
     "jest": "^24.9.0",
+    "lockfile-lint": "^2.2.0",
     "nodemon": "^1.19.4",
+    "npm-run-all": "^4.1.5",
     "smee-client": "^1.0.2",
     "standard": "^14.3.1"
   },
