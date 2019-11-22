@@ -5,6 +5,7 @@
   "repository": "https://github.com/probot/settings.git",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon",
     "start": "probot run ./index.js",
     "test": "npm-run-all --print-label --parallel lint:* --parallel test:*",
     "lint:js": "standard",
@@ -24,6 +25,7 @@
     "check-engine": "^1.8.1",
     "jest": "^24.9.0",
     "lockfile-lint": "^2.2.0",
+    "nodemon": "^2.0.0",
     "npm-run-all": "^4.1.5",
     "smee-client": "^1.0.2",
     "standard": "^14.3.1"
@@ -39,5 +41,12 @@
   },
   "jest": {
     "testEnvironment": "node"
+  },
+  "nodemonConfig": {
+    "exec": "npm start",
+    "watch": [
+      ".env",
+      "."
+    ]
   }
 }
