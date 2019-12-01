@@ -45,9 +45,23 @@ describe('plugin', () => {
       event.payload = require('./fixtures/events/push.readme.json')
     })
 
-    it('does not sync settings', () => {
-      app.receive(event)
+    it('does not sync settings', async () => {
+      await app.receive(event)
       expect(sync).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('default branch changed', () => {
+    beforeEach(() => {
+      event = {
+        name: 'repository',
+        payload: require('./fixtures/events/repository.edited.json')
+      }
+    })
+
+    it('does sync settings', async () => {
+      await app.receive(event)
+      expect(sync).toHaveBeenCalled()
     })
   })
 })
