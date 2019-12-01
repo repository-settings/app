@@ -1,6 +1,11 @@
 const mergeArrayByName = require('./lib/mergeArrayByName')
 
 module.exports = (robot, _, Settings = require('./lib/settings')) => {
+  async function syncSettings (context, repo = context.repo()) {
+    const config = await context.config('settings.yml', {}, { arrayMerge: mergeArrayByName })
+    return Settings.sync(context.github, repo, config)
+  }
+
   robot.on('push', async context => {
     const { payload } = context
     const { repository } = payload
@@ -21,8 +26,7 @@ module.exports = (robot, _, Settings = require('./lib/settings')) => {
       return
     }
 
-    const config = await context.config('settings.yml', {}, { arrayMerge: mergeArrayByName })
-    return Settings.sync(context.github, context.repo(), config)
+    return syncSettings(context)
   })
 
   robot.on('repository.edited', async context => {
@@ -36,7 +40,6 @@ module.exports = (robot, _, Settings = require('./lib/settings')) => {
 
     robot.log.debug(`Default branch changed from '${changes.default_branch.from}' to '${repository.default_branch}'`)
 
-    const config = await context.config('settings.yml', {}, { arrayMerge: mergeArrayByName })
-    return Settings.sync(context.github, context.repo(), config)
+    return syncSettings(context)
   })
 }
