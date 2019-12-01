@@ -33,7 +33,7 @@ module.exports = (robot, _, Settings = require('./lib/settings')) => {
     const { payload } = context
     const { changes, repository } = payload
 
-    if (!changes.hasOwnProperty('default_branch')) {
+    if (!Object.prototype.hasOwnProperty.call(changes, 'default_branch')) {
       robot.log.debug('Repository configuration was edited but the default branch was not affected, returning...')
       return
     }
