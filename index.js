@@ -1,4 +1,3 @@
-const yaml = require('js-yaml')
 const mergeArrayByName = require('./lib/mergeArrayByName')
 
 module.exports = (robot, _, Settings = require('./lib/settings')) => {
@@ -7,39 +6,64 @@ module.exports = (robot, _, Settings = require('./lib/settings')) => {
     return Settings.sync(context.github, repo, config)
   }
 
-  robot.on('installation', async context => {
-    const { github, payload } = context
-    const { action, repositories, installation } = payload
+  async function triggerRepositoryUpdate (_context, { owner, repo }) {
+    /* Clone context without reference */
+    const context = Object.assign(Object.create(Object.getPrototypeOf(_context)), _context)
+
+    /* Change context to target repository */
+    const { repository } = context.payload
+    context.payload.repository = Object.assign(repository || {}, {
+      owner: {
+        login: owner
+      },
+      name: repo
+    })
+
+    return syncSettings(context, { owner, repo })
+  }
+
+  robot.on([
+    'installation.created',
+    'installation.new_permissions_accepted'
+  ], async context => {
+    const { payload } = context
+    const { repositories, installation } = payload
     const { account } = installation
     const { login: repositoryOwner } = account
 
-    if (action === 'deleted') {
-      robot.log.debug('Integration deleted, returning...')
+    if (!repositories) {
+      robot.log.debug('No new repositories found in the installation event, returning...')
       return
     }
 
     await Promise.all(repositories.map(async (repository) => {
       const { name: repositoryName } = repository
 
-      const repo = {
+      return triggerRepositoryUpdate(context, {
         owner: repositoryOwner,
         repo: repositoryName
-      }
+      })
+    }))
+  })
 
-      var res
-      try {
-        res = await github.repos.getContents(Object.assign(repo, { path: Settings.FILE_NAME }))
-      } catch (error) {
-        if (error.status !== 404) {
-          robot.log.warn(`Unknown error ${error.status} occurred when fetching '${Settings.FILE_NAME}' in '${repositoryOwner}/${repositoryName}', returning...`)
-        } else {
-          robot.log.debug(`File '${Settings.FILE_NAME}' not found in '${repositoryOwner}/${repositoryName}', returning...`)
-        }
-        return
-      }
+  robot.on('installation_repositories.added', async context => {
+    const { payload } = context
+    const { repositories_added: repositories, installation } = payload
+    const { account } = installation
+    const { login: repositoryOwner } = account
 
-      const config = yaml.safeLoad(Buffer.from(res.data.content, 'base64').toString()) || {}
-      return Settings.sync(context.github, repo, config)
+    if (!repositories) {
+      robot.log.debug('No new repositories found in the installation event, returning...')
+      return
+    }
+
+    await Promise.all(repositories.map(async (repository) => {
+      const { name: repositoryName } = repository
+
+      return triggerRepositoryUpdate(context, {
+        owner: repositoryOwner,
+        repo: repositoryName
+      })
     }))
   })
 
