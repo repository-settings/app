@@ -1,4 +1,4 @@
-# GitHub Settings - Lambda Serverless
+# GitHub Settings - Lambda Serverless
 
 This is a fork of [Probot Settings](https://github.com/probot/settings) configured for [serverless](https://github.com/probot/serverless-lambda) execution in AWS Lambda. It's basically an implementation of the deployment instructions found [here](https://probot.github.io/docs/serverless-deployment/).
 
