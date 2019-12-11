@@ -17,9 +17,10 @@
   "author": "Brandon Keepers",
   "license": "ISC",
   "dependencies": {
+    "@probot/serverless-lambda": "^0.4.0",
     "deepmerge": "^4.1.0",
     "js-yaml": "^3.12.0",
-    "probot": "^9.5.0"
+    "probot": "^9.6.6"
   },
   "devDependencies": {
     "check-engine": "^1.8.1",
