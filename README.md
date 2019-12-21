@@ -130,6 +130,7 @@ branches:
       enforce_admins: true
       # Required. Restrict who can push to this branch. Team and user restrictions are only available for organization-owned repositories. Set to null to disable.
       restrictions:
+        apps: []
         users: []
         teams: []
 ```
