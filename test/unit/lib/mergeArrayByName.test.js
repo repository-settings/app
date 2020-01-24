@@ -1,4 +1,4 @@
-const branchArrayMerge = require('../../lib/mergeArrayByName')
+const branchArrayMerge = require('../../../lib/mergeArrayByName')
 const YAML = require('js-yaml')
 
 describe('mergeArrayByName', () => {

@@ -1,4 +1,4 @@
-const Teams = require('../../../lib/plugins/teams')
+const Teams = require('../../../../lib/plugins/teams')
 
 describe('Teams', () => {
   let github

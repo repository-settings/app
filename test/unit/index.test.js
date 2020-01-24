@@ -1,5 +1,5 @@
 const { Application } = require('probot')
-const plugin = require('../index')
+const plugin = require('../../index')
 
 describe('plugin', () => {
   let app, event, sync, github
@@ -15,7 +15,7 @@ describe('plugin', () => {
 
     event = {
       name: 'push',
-      payload: JSON.parse(JSON.stringify(require('./fixtures/events/push.settings.json')))
+      payload: JSON.parse(JSON.stringify(require('../fixtures/events/push.settings.json')))
     }
     sync = jest.fn()
 
@@ -42,7 +42,7 @@ describe('plugin', () => {
 
   describe('with other files modified', () => {
     beforeEach(() => {
-      event.payload = require('./fixtures/events/push.readme.json')
+      event.payload = require('../fixtures/events/push.readme.json')
     })
 
     it('does not sync settings', async () => {
@@ -55,7 +55,7 @@ describe('plugin', () => {
     beforeEach(() => {
       event = {
         name: 'repository',
-        payload: require('./fixtures/events/repository.edited.json')
+        payload: require('../fixtures/events/repository.edited.json')
       }
     })
 

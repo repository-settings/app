@@ -1,4 +1,4 @@
-const Milestones = require('../../../lib/plugins/milestones')
+const Milestones = require('../../../../lib/plugins/milestones')
 
 describe('Milestones', () => {
   let github
