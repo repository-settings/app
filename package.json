@@ -20,7 +20,7 @@
   "dependencies": {
     "deepmerge": "^4.1.0",
     "js-yaml": "^3.12.0",
-    "probot": "^9.5.0"
+    "probot": "^9.9.1"
   },
   "devDependencies": {
     "check-engine": "^1.8.1",
