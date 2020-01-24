@@ -11,8 +11,9 @@
     "lint:js": "standard",
     "lint:lockfile": "lockfile-lint --path package-lock.json --type npm --validate-https --allowed-hosts npm",
     "lint:engines": "check-engine",
-    "test:unit": "jest",
-    "test:unit:watch": "jest --watch"
+    "test:unit": "jest 'test/unit/'",
+    "test:unit:watch": "npm run test:unit -- --watch",
+    "test:integration": "LOG_LEVEL=debug jest 'test/integration/'"
   },
   "author": "Brandon Keepers",
   "license": "ISC",
@@ -25,6 +26,7 @@
     "check-engine": "^1.8.1",
     "jest": "^24.9.0",
     "lockfile-lint": "^3.0.0",
+    "nock": "^11.7.0",
     "nodemon": "^2.0.0",
     "npm-run-all": "^4.1.5",
     "smee-client": "^1.0.2",
