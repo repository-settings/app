@@ -1,4 +1,4 @@
-const Collaborators = require('../../../lib/plugins/collaborators')
+const Collaborators = require('../../../../lib/plugins/collaborators')
 
 describe('Collaborators', () => {
   let github

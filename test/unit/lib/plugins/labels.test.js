@@ -1,4 +1,4 @@
-const Labels = require('../../../lib/plugins/labels')
+const Labels = require('../../../../lib/plugins/labels')
 
 describe('Labels', () => {
   let github

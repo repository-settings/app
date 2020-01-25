@@ -1,5 +1,5 @@
 
-const Branches = require('../../../lib/plugins/branches')
+const Branches = require('../../../../lib/plugins/branches')
 
 describe('Branches', () => {
   let github

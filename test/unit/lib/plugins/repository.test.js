@@ -1,4 +1,4 @@
-const Repository = require('../../../lib/plugins/repository')
+const Repository = require('../../../../lib/plugins/repository')
 
 describe('Repository', () => {
   let github
