@@ -1,5 +1,7 @@
 # GitHub Settings
 
+
+[![Build Status](https://img.shields.io/travis/probot/settings.svg)](https://travis-ci.com/probot/settings)
 [![Greenkeeper badge](https://badges.greenkeeper.io/probot/settings.svg)](https://greenkeeper.io/)
 
 This GitHub App syncs repository settings defined in `.github/settings.yml` to GitHub, enabling Pull Requests for repository settings.
