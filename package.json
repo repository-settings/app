@@ -10,6 +10,7 @@
     "test": "npm-run-all --print-label --parallel lint:* --parallel test:*",
     "lint:js": "standard",
     "lint:lockfile": "lockfile-lint --path package-lock.json --type npm --validate-https --allowed-hosts npm",
+    "lint:engines": "check-engine",
     "test:unit": "jest 'test/unit/'",
     "test:unit:watch": "npm run test:unit -- --watch",
     "test:integration": "jest 'test/integration/'",
@@ -23,6 +24,7 @@
     "probot": "^9.9.1"
   },
   "devDependencies": {
+    "check-engine": "^1.8.1",
     "jest": "^24.9.0",
     "lockfile-lint": "^3.0.0",
     "nock": "^11.7.0",
@@ -35,6 +37,9 @@
     "env": [
       "jest"
     ]
+  },
+  "engines": {
+    "node": ">= 12.14.1"
   },
   "jest": {
     "testEnvironment": "node"
