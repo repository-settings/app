@@ -1,5 +1,6 @@
 ---
 name: Feature Request
+about: Suggestion for new or different behavior
 labels: enhancement
 ---
 
