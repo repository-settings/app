@@ -7,8 +7,10 @@ labels: enhancement
 
 * Is the functionality available in the GitHub UI? If so, please provide a link to information about the feature.
 
-# For awareness, this must be available before probot/settings can manage the setting. However, we are happy to track
-# progress toward API availability in an issue before it is made available.
+<!--
+  For awareness, this must be available before probot/settings can manage the setting. However, we are happy to track
+  progress toward API availability in an issue before it is made available.
+-->
 * Is the functionality available through the GitHub API? If the functionality is available, please provide links to the
   API documentation (https://developer.github.com/v3/) as well as the Octokit documentation (https://octokit.github.io/).
 
