@@ -46,9 +46,6 @@ describe('push', function () {
       .get(`/repos/${repository.owner.name}/${repository.name}/contents/${settings.FILE_NAME}`)
       .reply(200, { content: encodedConfig, name: 'settings.yml', type: 'file' })
     githubScope
-      .get('/app')
-      .reply(200, { events: ['push', 'repository'] })
-    githubScope
       .patch(`/repos/${repository.owner.name}/${repository.name}`, body => {
         expect(body).toMatchObject(config.repository)
         return true
