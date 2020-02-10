@@ -28,7 +28,8 @@ describe('Repository', () => {
           owner: 'bkeepers',
           repo: 'test',
           name: 'test',
-          description: 'Hello World!'
+          description: 'Hello World!',
+          mediaType: { previews: ['baptiste'] }
         })
       })
     })
@@ -41,7 +42,8 @@ describe('Repository', () => {
         expect(github.repos.update).toHaveBeenCalledWith({
           owner: 'bkeepers',
           repo: 'test',
-          name: 'new-name'
+          name: 'new-name',
+          mediaType: { previews: ['baptiste'] }
         })
       })
     })

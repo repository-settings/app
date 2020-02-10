@@ -50,6 +50,7 @@ describe('push', function () {
         expect(body).toMatchObject(config.repository)
         return true
       })
+      .matchHeader('accept', ['application/vnd.github.baptiste-preview+json'])
       .reply(200)
 
     await probot.receive({
