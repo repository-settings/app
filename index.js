@@ -3,7 +3,44 @@ const mergeArrayByName = require('./lib/mergeArrayByName')
 module.exports = (robot, _, Settings = require('./lib/settings')) => {
   async function syncSettings (context, repo = context.repo()) {
     const config = await context.config('settings.yml', {}, { arrayMerge: mergeArrayByName })
-    return Settings.sync(context.github, repo, config)
+    const payload = context.payload
+    const checkOptions = {
+      owner: repo.owner,
+      repo: repo.repo,
+      name: 'Settings',
+      head_sha: payload.after,
+      status: 'queued'
+    }
+
+    return context.github.apps.getInstallation({ installation_id: payload.installation.id }).then((response) => {
+      if (response.data.permissions.checks === 'write') {
+        return context.github.checks.create(checkOptions).then(() => {
+          return Settings.sync(context.github, repo, config).then(() => {
+            checkOptions.conclusion = 'success'
+          }).catch(res => {
+            checkOptions.conclusion = 'failure'
+            const summary = `
+    There was an error while updating the repository settings.
+  
+    <details><summary>Failed response</summary>
+    <pre>
+    ${JSON.stringify(JSON.parse(res.message), null, 2)}
+    </pre>
+    </details>
+    `
+            checkOptions.output = {
+              title: 'Settings Probot',
+              summary: summary
+            }
+          }).then(() => {
+            checkOptions.status = 'completed'
+            return context.github.checks.create(checkOptions)
+          })
+        })
+      } else {
+        return Settings.sync(context.github, repo, config)
+      }
+    })
   }
 
   robot.on('push', async context => {
@@ -25,7 +62,6 @@ module.exports = (robot, _, Settings = require('./lib/settings')) => {
       robot.log.debug(`No changes in '${Settings.FILE_NAME}' detected, returning...`)
       return
     }
-
     return syncSettings(context)
   })
 

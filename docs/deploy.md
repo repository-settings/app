@@ -5,6 +5,7 @@ If you would like to run your own instance of this plugin, see the [docs for dep
 This plugin requires these **Permissions & events** for the GitHub Integration:
 
 - Repository administration: **Read & Write**
+- Checks api: **Read & Write**
 - Repository contents: **Read only**
   - [x] Check the box for **Push** events
 - Single file: **Read & Write**

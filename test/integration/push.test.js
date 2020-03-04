@@ -34,6 +34,9 @@ describe('push', function () {
         email: null
       }
     }
+    const installation = {
+      id: '1'
+    }
 
     const pathToConfig = path.resolve(__dirname, '..', 'fixtures', 'config.yml')
     const configFile = Buffer.from(fs.readFileSync(pathToConfig, 'utf8'))
@@ -52,12 +55,21 @@ describe('push', function () {
       })
       .matchHeader('accept', ['application/vnd.github.baptiste-preview+json'])
       .reply(200)
-
+    githubScope
+      .post(`/repos/${repository.owner.name}/${repository.name}/check-runs`)
+      .twice()
+      .reply(201)
+    githubScope
+      .get(`/app/installations/${installation.id}`)
+      .matchHeader('accept', ['application/vnd.github.machine-man-preview+json'])
+      .reply(200, { permissions: { checks: 'write' } })
     await probot.receive({
       name: 'push',
       payload: {
         ref: 'refs/heads/master',
         repository,
+        installation,
+        after: 'head_sha',
         commits: [{ modified: [settings.FILE_NAME], added: [] }]
       }
     })
