@@ -65,15 +65,15 @@ describe('push', function () {
       .matchHeader('accept', ['application/vnd.github.machine-man-preview+json'])
       .reply(200, { permissions: { checks: 'write' } })
     await probot.receive({
-        name: 'push',
-        payload: {
-          ref: 'refs/heads/master',
-          repository,
-          installation,
-          after: 'head_sha',
-          commits: [{ modified: [settings.FILE_NAME], added: [] }]
-        }
-      })
+      name: 'push',
+      payload: {
+        ref: 'refs/heads/master',
+        repository,
+        installation,
+        after: 'head_sha',
+        commits: [{ modified: [settings.FILE_NAME], added: [] }]
+      }
+    })
   })
 
   it('syncs collaborators', async () => {
@@ -118,6 +118,6 @@ describe('push', function () {
         after: 'head_sha',
         commits: [{ modified: [settings.FILE_NAME], added: [] }]
       }
-    })    
+    })
   })
 })
