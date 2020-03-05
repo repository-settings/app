@@ -20,22 +20,14 @@ describe('Teams', () => {
         }))
       },
       teams: {
-        addOrUpdateRepo: jest.fn().mockImplementation(() => Promise.resolve()),
-        list: {
-          endpoint: {
-            merge: jest.fn().mockImplementation(() => {})
-          }
-        },
-        removeRepo: jest.fn().mockImplementation(() => Promise.resolve())
+        addOrUpdateRepoInOrg: jest.fn().mockImplementation(() => Promise.resolve()),
+        removeRepoInOrg: jest.fn().mockImplementation(() => Promise.resolve())
       }
     }
   })
 
   describe('sync', () => {
     it('syncs teams', () => {
-      github.paginate.mockReturnValueOnce(Promise.resolve([
-        { id: 4, slug: 'added' }
-      ]))
       const plugin = configure([
         { name: 'unchanged', permission: 'push' },
         { name: 'updated-permission', permission: 'admin' },
@@ -43,29 +35,32 @@ describe('Teams', () => {
       ])
 
       return plugin.sync().then(() => {
-        expect(github.teams.addOrUpdateRepo).toHaveBeenCalledWith({
+        expect(github.teams.addOrUpdateRepoInOrg).toHaveBeenCalledWith({
+          org: 'bkeepers',
           owner: 'bkeepers',
           repo: 'test',
-          team_id: 3,
+          team_slug: 'updated-permission',
           permission: 'admin'
         })
 
-        expect(github.teams.addOrUpdateRepo).toHaveBeenCalledWith({
+        expect(github.teams.addOrUpdateRepoInOrg).toHaveBeenCalledWith({
+          org: 'bkeepers',
           owner: 'bkeepers',
           repo: 'test',
-          team_id: 4,
+          team_slug: 'added',
           permission: 'pull'
         })
 
-        expect(github.teams.addOrUpdateRepo).toHaveBeenCalledTimes(2)
+        expect(github.teams.addOrUpdateRepoInOrg).toHaveBeenCalledTimes(2)
 
-        expect(github.teams.removeRepo).toHaveBeenCalledWith({
+        expect(github.teams.removeRepoInOrg).toHaveBeenCalledWith({
+          org: 'bkeepers',
           owner: 'bkeepers',
           repo: 'test',
-          team_id: 2
+          team_slug: 'removed'
         })
 
-        expect(github.teams.removeRepo).toHaveBeenCalledTimes(1)
+        expect(github.teams.removeRepoInOrg).toHaveBeenCalledTimes(1)
       })
     })
   })
