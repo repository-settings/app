@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "check-engine": "^1.8.1",
+    "http-status-codes": "^1.4.0",
     "jest": "^24.9.0",
     "lockfile-lint": "^4.0.0",
     "nock": "^12.0.0",
