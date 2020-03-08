@@ -97,8 +97,6 @@ collaborators:
   - username: hubot
     permission: pull
 
-# NOTE: The APIs needed for teams are not supported yet by GitHub Apps
-# https://developer.github.com/v3/apps/available-endpoints/
 teams:
   - name: core
     permission: admin

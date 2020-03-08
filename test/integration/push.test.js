@@ -102,4 +102,49 @@ describe('push', function () {
       }
     })
   })
+
+  it('syncs teams', async () => {
+    const pathToConfig = path.resolve(__dirname, '..', 'fixtures', 'teams-config.yml')
+    const configFile = Buffer.from(fs.readFileSync(pathToConfig, 'utf8'))
+    const encodedConfig = configFile.toString('base64')
+    githubScope
+      .get(`/repos/${repository.owner.name}/${repository.name}/contents/${settings.FILE_NAME}`)
+      .reply(OK, { content: encodedConfig, name: 'settings.yml', type: 'file' })
+    githubScope
+      .get(`/repos/${repository.owner.name}/${repository.name}/contents/${settings.FILE_NAME}`)
+      .reply(OK, { content: encodedConfig, name: 'settings.yml', type: 'file' })
+    githubScope
+      .get(`/repos/${repository.owner.name}/${repository.name}/teams`)
+      .reply(
+        OK,
+        [
+          { slug: 'greenkeeper-keeper', permission: 'pull' },
+          { slug: 'form8ion', permission: 'push' }
+        ]
+      )
+    githubScope
+      .put(`/orgs/${repository.owner.name}/teams/probot/repos/${repository.owner.name}/${repository.name}`, body => {
+        expect(body).toMatchObject({ permission: 'admin' })
+        return true
+      })
+      .reply(CREATED)
+    githubScope
+      .put(`/orgs/${repository.owner.name}/teams/greenkeeper-keeper/repos/${repository.owner.name}/${repository.name}`, body => {
+        expect(body).toMatchObject({ permission: 'push' })
+        return true
+      })
+      .reply(OK)
+    githubScope
+      .delete(`/orgs/${repository.owner.name}/teams/form8ion/repos/${repository.owner.name}/${repository.name}`)
+      .reply(NO_CONTENT)
+
+    await probot.receive({
+      name: 'push',
+      payload: {
+        ref: 'refs/heads/master',
+        repository,
+        commits: [{ modified: [settings.FILE_NAME], added: [] }]
+      }
+    })
+  })
 })
