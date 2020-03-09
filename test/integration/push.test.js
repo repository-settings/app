@@ -75,7 +75,7 @@ describe('push', function () {
       .get(`/repos/${repository.owner.name}/${repository.name}/contents/${settings.FILE_NAME}`)
       .reply(OK, { content: encodedConfig, name: 'settings.yml', type: 'file' })
     githubScope
-      .get(`/repos/${repository.owner.name}/${repository.name}/collaborators`)
+      .get(`/repos/${repository.owner.name}/${repository.name}/collaborators?affiliation=direct`)
       .reply(
         OK,
         [
