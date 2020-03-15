@@ -44,9 +44,6 @@ describe('push', function () {
       .get(`/repos/${repository.owner.name}/${repository.name}/contents/${settings.FILE_NAME}`)
       .reply(200, { content: encodedConfig, name: 'settings.yml', type: 'file' })
     githubScope
-      .get(`/repos/${repository.owner.name}/${repository.name}/contents/${settings.FILE_NAME}`)
-      .reply(200, { content: encodedConfig, name: 'settings.yml', type: 'file' })
-    githubScope
       .patch(`/repos/${repository.owner.name}/${repository.name}`, body => {
         expect(body).toMatchObject(config.repository)
         return true
@@ -68,9 +65,6 @@ describe('push', function () {
     const pathToConfig = path.resolve(__dirname, '..', 'fixtures', 'collaborators-config.yml')
     const configFile = Buffer.from(fs.readFileSync(pathToConfig, 'utf8'))
     const encodedConfig = configFile.toString('base64')
-    githubScope
-      .get(`/repos/${repository.owner.name}/${repository.name}/contents/${settings.FILE_NAME}`)
-      .reply(OK, { content: encodedConfig, name: 'settings.yml', type: 'file' })
     githubScope
       .get(`/repos/${repository.owner.name}/${repository.name}/contents/${settings.FILE_NAME}`)
       .reply(OK, { content: encodedConfig, name: 'settings.yml', type: 'file' })
@@ -107,9 +101,6 @@ describe('push', function () {
     const pathToConfig = path.resolve(__dirname, '..', 'fixtures', 'teams-config.yml')
     const configFile = Buffer.from(fs.readFileSync(pathToConfig, 'utf8'))
     const encodedConfig = configFile.toString('base64')
-    githubScope
-      .get(`/repos/${repository.owner.name}/${repository.name}/contents/${settings.FILE_NAME}`)
-      .reply(OK, { content: encodedConfig, name: 'settings.yml', type: 'file' })
     githubScope
       .get(`/repos/${repository.owner.name}/${repository.name}/contents/${settings.FILE_NAME}`)
       .reply(OK, { content: encodedConfig, name: 'settings.yml', type: 'file' })
