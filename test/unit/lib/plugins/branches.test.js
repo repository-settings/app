@@ -11,8 +11,8 @@ describe('Branches', () => {
   beforeEach(() => {
     github = {
       repos: {
-        updateBranchProtection: jest.fn().mockImplementation(() => Promise.resolve()),
-        removeBranchProtection: jest.fn().mockImplementation(() => Promise.resolve())
+        updateBranchProtection: jest.fn().mockImplementation(() => Promise.resolve('updateBranchProtection')),
+        removeBranchProtection: jest.fn().mockImplementation(() => Promise.resolve('removeBranchProtection'))
       }
     }
   })
@@ -174,6 +174,35 @@ describe('Branches', () => {
             headers: { accept: 'application/vnd.github.hellcat-preview+json,application/vnd.github.luke-cage-preview+json,application/vnd.github.zzzax-preview+json' }
           })
         })
+      })
+    })
+  })
+
+  describe('return values', () => {
+    it('returns updateBranchProtection Promise', () => {
+      const plugin = configure(
+        [{
+          name: 'master',
+          protection: { enforce_admins: true }
+        }]
+      )
+
+      return plugin.sync().then(result => {
+        expect(result.length).toBe(1)
+        expect(result[0]).toBe('updateBranchProtection')
+      })
+    })
+    it('returns removeBranchProtection Promise', () => {
+      const plugin = configure(
+        [{
+          name: 'master',
+          protection: null
+        }]
+      )
+
+      return plugin.sync().then(result => {
+        expect(result.length).toBe(1)
+        expect(result[0]).toBe('removeBranchProtection')
       })
     })
   })
