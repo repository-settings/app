@@ -147,6 +147,9 @@ describe('push', function () {
       .get(`/repos/${repository.owner.name}/${repository.name}/contents/${settings.FILE_NAME}`)
       .reply(OK, { content: encodedConfig, name: 'settings.yml', type: 'file' })
     githubScope
+      .patch(`/repos/${repository.owner.name}/${repository.name}`)
+      .reply(200)
+    githubScope
       .get(`/repos/${repository.owner.name}/${repository.name}/milestones?per_page=100&state=all`)
       .reply(
         OK,
