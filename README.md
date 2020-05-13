@@ -1,6 +1,7 @@
 # GitHub Settings
 
 [![Build Status](https://img.shields.io/travis/probot/settings.svg)](https://travis-ci.com/probot/settings)
+[![Dependabot][dependabot-badge]][dependabot-link]
 
 This GitHub App syncs repository settings defined in `.github/settings.yml` to GitHub, enabling Pull Requests for repository settings.
 
@@ -166,3 +167,7 @@ Until restrictions are added in this app, one way to preserve admin/push permiss
 ## Deployment
 
 See [docs/deploy.md](docs/deploy.md) if you would like to run your own instance of this plugin.
+
+[dependabot-link]: https://dependabot.com/
+
+[dependabot-badge]: https://badgen.net/dependabot/probot/settings/?icon=dependabot
