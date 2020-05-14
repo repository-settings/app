@@ -1,15 +1,14 @@
 # GitHub Settings
 
-
 [![Build Status](https://img.shields.io/travis/probot/settings.svg)](https://travis-ci.com/probot/settings)
-[![Greenkeeper badge](https://badges.greenkeeper.io/probot/settings.svg)](https://greenkeeper.io/)
+[![Dependabot][dependabot-badge]][dependabot-link]
 
 This GitHub App syncs repository settings defined in `.github/settings.yml` to GitHub, enabling Pull Requests for repository settings.
 
 ## Usage
 
-1. **[Install the app](https://github.com/apps/settings)**.
-2. Create a `.github/settings.yml` file in your repository. Changes to this file on the default branch will be synced to GitHub.
+1. __[Install the app](https://github.com/apps/settings)__.
+1. Create a `.github/settings.yml` file in your repository. Changes to this file on the default branch will be synced to GitHub.
 
 All top-level settings are optional. Some plugins do have required fields.
 
@@ -148,7 +147,7 @@ branches:
 ### Notes
 
 1. Label color can also start with `#`, e.g. `color: '#F341B2'`. Make sure to wrap it with quotes!
-2. Each top-level element under branch protection must be filled (eg: `required_pull_request_reviews`, `required_status_checks`, `enforce_admins` and `restrictions`). If you don't want to use one of them you must set it to `null` (see comments in the example above). Otherwise, none of the settings will be applied.
+1. Each top-level element under branch protection must be filled (eg: `required_pull_request_reviews`, `required_status_checks`, `enforce_admins` and `restrictions`). If you don't want to use one of them you must set it to `null` (see comments in the example above). Otherwise, none of the settings will be applied.
 
 ### Inheritance
 
@@ -161,10 +160,14 @@ Alternatively, you might only have a branch like `develop` in your `branches` ar
 
 ## Security Implications
 
-**WARNING:** Note that this app inherently _escalates anyone with `push` permissions to the **admin** role_, since they can push config settings to the `master` branch, which will be synced. In a future, we may add restrictions to allow changes to the config file to be merged only by specific people/teams, or those with **admin** access _(via a combination of protected branches, required statuses, and branch restrictions)_. Until then, use caution when merging PRs and adding collaborators.
+__WARNING:__ Note that this app inherently _escalates anyone with `push` permissions to the __admin__ role_, since they can push config settings to the `master` branch, which will be synced. In a future, we may add restrictions to allow changes to the config file to be merged only by specific people/teams, or those with __admin__ access _(via a combination of protected branches, required statuses, and branch restrictions)_. Until then, use caution when merging PRs and adding collaborators.
 
 Until restrictions are added in this app, one way to preserve admin/push permissions is to utilize the [GitHub CodeOwners feature](https://help.github.com/articles/about-codeowners/) to set one or more administrative users as the code owner of the `.github/settings.yml` file, and turn on "require code owner review" for the master branch. This does have the side effect of requiring code owner review for the entire branch, but helps preserve permission levels.
 
 ## Deployment
 
 See [docs/deploy.md](docs/deploy.md) if you would like to run your own instance of this plugin.
+
+[dependabot-link]: https://dependabot.com/
+
+[dependabot-badge]: https://badgen.net/dependabot/probot/settings/?icon=dependabot
