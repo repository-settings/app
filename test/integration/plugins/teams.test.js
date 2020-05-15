@@ -46,6 +46,12 @@ describe('teams plugin', function () {
       })
       .reply(CREATED)
     githubScope
+      .put(`/orgs/${repository.owner.name}/teams/github/repos/${repository.owner.name}/${repository.name}`, body => {
+        expect(body).toMatchObject({ permission: 'maintain' })
+        return true
+      })
+      .reply(CREATED)
+    githubScope
       .put(`/teams/${greenkeeperKeeperTeamId}/repos/${repository.owner.name}/${repository.name}`, body => {
         expect(body).toMatchObject({ permission: 'push' })
         return true
