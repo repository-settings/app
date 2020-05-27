@@ -1,7 +1,18 @@
+const { when } = require('jest-when')
+const any = require('@travi/any')
 const Teams = require('../../../../lib/plugins/teams')
 
 describe('Teams', () => {
   let github
+  const addedTeamName = 'added'
+  const addedTeamId = any.integer()
+  const updatedTeamName = 'updated-permission'
+  const updatedTeamId = any.integer()
+  const removedTeamName = 'removed'
+  const removedTeamId = any.integer()
+  const unchangedTeamName = 'unchanged'
+  const unchangedTeamId = any.integer()
+  const org = 'bkeepers'
 
   function configure (config) {
     return new Teams(github, { owner: 'bkeepers', repo: 'test' }, config)
@@ -13,55 +24,60 @@ describe('Teams', () => {
       repos: {
         listTeams: jest.fn().mockImplementation(() => Promise.resolve({
           data: [
-            { id: 1, slug: 'unchanged', permission: 'push' },
-            { id: 2, slug: 'removed', permission: 'push' },
-            { id: 3, slug: 'updated-permission', permission: 'pull' }
+            { id: unchangedTeamId, slug: unchangedTeamName, permission: 'push' },
+            { id: removedTeamId, slug: removedTeamName, permission: 'push' },
+            { id: updatedTeamId, slug: updatedTeamName, permission: 'pull' }
           ]
         }))
       },
-      teams: {
-        addOrUpdateRepoInOrg: jest.fn().mockImplementation(() => Promise.resolve()),
-        removeRepoInOrg: jest.fn().mockImplementation(() => Promise.resolve())
-      }
+      request: jest.fn()
     }
   })
 
   describe('sync', () => {
-    it('syncs teams', () => {
+    it('syncs teams', async () => {
       const plugin = configure([
-        { name: 'unchanged', permission: 'push' },
-        { name: 'updated-permission', permission: 'admin' },
-        { name: 'added', permission: 'pull' }
+        { name: unchangedTeamName, permission: 'push' },
+        { name: updatedTeamName, permission: 'admin' },
+        { name: addedTeamName, permission: 'pull' }
       ])
+      when(github.request)
+        .calledWith('GET /orgs/:org/teams/:team_slug', { org, team_slug: addedTeamName })
+        .mockResolvedValue({ data: { id: addedTeamId } })
 
-      return plugin.sync().then(() => {
-        expect(github.teams.addOrUpdateRepoInOrg).toHaveBeenCalledWith({
-          org: 'bkeepers',
-          owner: 'bkeepers',
+      await plugin.sync()
+
+      expect(github.request).toHaveBeenCalledWith(
+        'PUT /teams/:team_id/repos/:owner/:repo',
+        {
+          org,
+          owner: org,
           repo: 'test',
-          team_slug: 'updated-permission',
+          team_id: updatedTeamId,
           permission: 'admin'
-        })
+        }
+      )
 
-        expect(github.teams.addOrUpdateRepoInOrg).toHaveBeenCalledWith({
-          org: 'bkeepers',
-          owner: 'bkeepers',
+      expect(github.request).toHaveBeenCalledWith(
+        'PUT /teams/:team_id/repos/:owner/:repo',
+        {
+          org,
+          owner: org,
           repo: 'test',
-          team_slug: 'added',
+          team_id: addedTeamId,
           permission: 'pull'
-        })
+        }
+      )
 
-        expect(github.teams.addOrUpdateRepoInOrg).toHaveBeenCalledTimes(2)
-
-        expect(github.teams.removeRepoInOrg).toHaveBeenCalledWith({
-          org: 'bkeepers',
-          owner: 'bkeepers',
+      expect(github.request).toHaveBeenCalledWith(
+        'DELETE /teams/:team_id/repos/:owner/:repo',
+        {
+          org,
+          owner: org,
           repo: 'test',
-          team_slug: 'removed'
-        })
-
-        expect(github.teams.removeRepoInOrg).toHaveBeenCalledTimes(1)
-      })
+          team_id: removedTeamId
+        }
+      )
     })
   })
 })

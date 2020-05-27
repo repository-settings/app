@@ -25,9 +25,11 @@
     "probot": "9.11.3"
   },
   "devDependencies": {
+    "@travi/any": "^2.0.9",
     "check-engine": "^1.8.1",
     "http-status-codes": "^1.4.0",
     "jest": "^26.0.1",
+    "jest-when": "^2.7.1",
     "lockfile-lint": "^4.3.6",
     "nock": "^12.0.3",
     "nodemon": "^2.0.4",
