@@ -1,4 +1,0 @@
-sudo: false
-language: node_js
-notifications:
-  disabled: true
