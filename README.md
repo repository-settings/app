@@ -1,6 +1,6 @@
 # GitHub Settings
 
-[![Build Status](https://img.shields.io/travis/probot/settings.svg)](https://travis-ci.com/probot/settings)
+[![Node CI Workflow Status][github-actions-ci-badge]][github-actions-ci-link]
 [![Dependabot][dependabot-badge]][dependabot-link]
 
 This GitHub App syncs repository settings defined in `.github/settings.yml` to GitHub, enabling Pull Requests for repository settings.
@@ -167,3 +167,7 @@ See [docs/deploy.md](docs/deploy.md) if you would like to run your own instance 
 [dependabot-link]: https://dependabot.com/
 
 [dependabot-badge]: https://badgen.net/dependabot/probot/settings/?icon=dependabot
+
+[github-actions-ci-link]: https://github.com/probot/settings/actions?query=workflow%3A%22Node.js+CI%22+branch%3Amaster
+
+[github-actions-ci-badge]: https://github.com/probot/settings/workflows/Node.js%20CI/badge.svg
