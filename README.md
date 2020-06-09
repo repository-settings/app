@@ -168,6 +168,6 @@ See [docs/deploy.md](docs/deploy.md) if you would like to run your own instance 
 
 [dependabot-badge]: https://badgen.net/dependabot/probot/settings/?icon=dependabot
 
-[github-actions-ci-link]: https://github.com/probot/settings/actions?query=workflow%3A%22Node.js+CI%22
+[github-actions-ci-link]: https://github.com/probot/settings/actions?query=workflow%3A%22Node.js+CI%22+branch%3Amaster
 
 [github-actions-ci-badge]: https://github.com/probot/settings/workflows/Node.js%20CI/badge.svg
