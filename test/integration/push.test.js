@@ -1,208 +1,26 @@
-const { createProbot } = require('probot')
-const { CREATED, NO_CONTENT, OK } = require('http-status-codes')
-const path = require('path')
-const fs = require('fs')
-const yaml = require('js-yaml')
 const nock = require('nock')
-const any = require('@travi/any')
-const debugNock = require('debug')('nock')
 const settings = require('../../lib/settings')
-const settingsBot = require('../../')
+const { initializeNock, loadInstance, repository, teardownNock } = require('./common')
 
 nock.disableNetConnect()
-
-const repository = {
-  default_branch: 'master',
-  name: 'botland',
-  owner: {
-    name: 'bkeepers-inc',
-    email: null
-  }
-}
 
 describe('push', function () {
   let probot, githubScope
 
   beforeEach(() => {
-    githubScope = nock('https://api.github.com').log(debugNock)
-
-    probot = createProbot({ id: 1, cert: 'test', githubToken: 'test' })
-    probot.load(settingsBot)
+    githubScope = initializeNock()
+    probot = loadInstance()
   })
 
   afterEach(() => {
-    expect(githubScope.isDone()).toBe(true)
-
-    nock.cleanAll()
+    teardownNock(githubScope)
   })
 
-  it('syncs repo settings', async () => {
-    const pathToConfig = path.resolve(__dirname, '..', 'fixtures', 'repository-config.yml')
-    const configFile = Buffer.from(fs.readFileSync(pathToConfig, 'utf8'))
-    const config = yaml.safeLoad(configFile, 'utf8')
-    const encodedConfig = configFile.toString('base64')
-    githubScope
-      .get(`/repos/${repository.owner.name}/${repository.name}/contents/${settings.FILE_NAME}`)
-      .reply(200, { content: encodedConfig, name: 'settings.yml', type: 'file' })
-    githubScope
-      .patch(`/repos/${repository.owner.name}/${repository.name}`, body => {
-        expect(body).toMatchObject(config.repository)
-        return true
-      })
-      .matchHeader('accept', ['application/vnd.github.baptiste-preview+json'])
-      .reply(200)
-
+  it('does not apply configuration when not on the default branch', async () => {
     await probot.receive({
       name: 'push',
       payload: {
-        ref: 'refs/heads/master',
-        repository,
-        commits: [{ modified: [settings.FILE_NAME], added: [] }]
-      }
-    })
-  })
-
-  it('syncs collaborators', async () => {
-    const pathToConfig = path.resolve(__dirname, '..', 'fixtures', 'collaborators-config.yml')
-    const configFile = Buffer.from(fs.readFileSync(pathToConfig, 'utf8'))
-    const encodedConfig = configFile.toString('base64')
-    githubScope
-      .get(`/repos/${repository.owner.name}/${repository.name}/contents/${settings.FILE_NAME}`)
-      .reply(OK, { content: encodedConfig, name: 'settings.yml', type: 'file' })
-    githubScope
-      .get(`/repos/${repository.owner.name}/${repository.name}/collaborators?affiliation=direct`)
-      .reply(
-        OK,
-        [
-          { login: 'travi', permissions: { admin: true } },
-          { login: 'bkeepers', permissions: { push: true } }
-        ]
-      )
-    githubScope
-      .put(`/repos/${repository.owner.name}/${repository.name}/collaborators/hubot`, body => {
-        expect(body).toMatchObject({ permission: 'pull' })
-        return true
-      })
-      .reply(CREATED)
-    githubScope
-      .delete(`/repos/${repository.owner.name}/${repository.name}/collaborators/travi`)
-      .reply(NO_CONTENT)
-
-    await probot.receive({
-      name: 'push',
-      payload: {
-        ref: 'refs/heads/master',
-        repository,
-        commits: [{ modified: [settings.FILE_NAME], added: [] }]
-      }
-    })
-  })
-
-  it('syncs teams', async () => {
-    const pathToConfig = path.resolve(__dirname, '..', 'fixtures', 'teams-config.yml')
-    const configFile = Buffer.from(fs.readFileSync(pathToConfig, 'utf8'))
-    const encodedConfig = configFile.toString('base64')
-    const probotTeamId = any.integer()
-    const greenkeeperKeeperTeamId = any.integer()
-    const formationTeamId = any.integer()
-    githubScope
-      .get(`/repos/${repository.owner.name}/${repository.name}/contents/${settings.FILE_NAME}`)
-      .reply(OK, { content: encodedConfig, name: 'settings.yml', type: 'file' })
-    githubScope
-      .get(`/repos/${repository.owner.name}/${repository.name}/teams`)
-      .reply(
-        OK,
-        [
-          { slug: 'greenkeeper-keeper', id: greenkeeperKeeperTeamId, permission: 'pull' },
-          { slug: 'form8ion', id: formationTeamId, permission: 'push' }
-        ]
-      )
-    githubScope
-      .get(`/orgs/${repository.owner.name}/teams/probot`)
-      .reply(OK, { id: probotTeamId })
-    githubScope
-      .put(`/teams/${probotTeamId}/repos/${repository.owner.name}/${repository.name}`, body => {
-        expect(body).toMatchObject({ permission: 'admin' })
-        return true
-      })
-      .reply(CREATED)
-    githubScope
-      .put(`/teams/${greenkeeperKeeperTeamId}/repos/${repository.owner.name}/${repository.name}`, body => {
-        expect(body).toMatchObject({ permission: 'push' })
-        return true
-      })
-      .reply(OK)
-    githubScope
-      .delete(`/teams/${formationTeamId}/repos/${repository.owner.name}/${repository.name}`)
-      .reply(NO_CONTENT)
-
-    await probot.receive({
-      name: 'push',
-      payload: {
-        ref: 'refs/heads/master',
-        repository,
-        commits: [{ modified: [settings.FILE_NAME], added: [] }]
-      }
-    })
-  })
-
-  it('syncs milestones', async () => {
-    const pathToConfig = path.resolve(__dirname, '..', 'fixtures', 'milestones-config.yml')
-    const configFile = Buffer.from(fs.readFileSync(pathToConfig, 'utf8'))
-    const encodedConfig = configFile.toString('base64')
-    githubScope
-      .get(`/repos/${repository.owner.name}/${repository.name}/contents/${settings.FILE_NAME}`)
-      .reply(OK, { content: encodedConfig, name: 'settings.yml', type: 'file' })
-    githubScope
-      .patch(`/repos/${repository.owner.name}/${repository.name}`)
-      .reply(200)
-    githubScope
-      .get(`/repos/${repository.owner.name}/${repository.name}/milestones?per_page=100&state=all`)
-      .reply(
-        OK,
-        [
-          {
-            number: 42,
-            title: 'existing-milestone',
-            description: 'this milestone should get updated',
-            state: 'open'
-          },
-          {
-            number: 8,
-            title: 'old-milestone',
-            description: 'this milestone should get deleted',
-            state: 'closed'
-          }
-        ]
-      )
-    githubScope
-      .post(`/repos/${repository.owner.name}/${repository.name}/milestones`, body => {
-        expect(body).toMatchObject({
-          title: 'new-milestone',
-          description: 'this milestone should get added',
-          state: 'open'
-        })
-        return true
-      })
-      .reply(CREATED)
-    githubScope
-      .patch(`/repos/${repository.owner.name}/${repository.name}/milestones/42`, body => {
-        expect(body).toMatchObject({
-          title: 'existing-milestone',
-          description: 'this milestone should get updated',
-          state: 'closed'
-        })
-        return true
-      })
-      .reply(OK)
-    githubScope
-      .delete(`/repos/${repository.owner.name}/${repository.name}/milestones/8`)
-      .reply(NO_CONTENT)
-
-    await probot.receive({
-      name: 'push',
-      payload: {
-        ref: 'refs/heads/master',
+        ref: 'refs/heads/wip',
         repository,
         commits: [{ modified: [settings.FILE_NAME], added: [] }]
       }
