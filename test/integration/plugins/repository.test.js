@@ -2,7 +2,7 @@ const path = require('path')
 const fs = require('fs')
 const yaml = require('js-yaml')
 const settings = require('../../../lib/settings')
-const { initializeNock, loadInstance, repository, teardownNock } = require('../common')
+const { buildTriggerEvent, initializeNock, loadInstance, repository, teardownNock } = require('../common')
 
 describe('repository plugin', function () {
   let probot, githubScope
@@ -32,13 +32,6 @@ describe('repository plugin', function () {
       .matchHeader('accept', ['application/vnd.github.baptiste-preview+json'])
       .reply(200)
 
-    await probot.receive({
-      name: 'push',
-      payload: {
-        ref: 'refs/heads/master',
-        repository,
-        commits: [{ modified: [settings.FILE_NAME], added: [] }]
-      }
-    })
+    await probot.receive(buildTriggerEvent())
   })
 })

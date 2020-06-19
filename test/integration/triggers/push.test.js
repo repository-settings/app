@@ -1,8 +1,5 @@
-const nock = require('nock')
 const settings = require('../../../lib/settings')
 const { initializeNock, loadInstance, repository, teardownNock } = require('../common')
-
-nock.disableNetConnect()
 
 describe('push trigger', function () {
   let probot, githubScope

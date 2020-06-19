@@ -3,7 +3,7 @@ const fs = require('fs')
 const { CREATED, NO_CONTENT, OK } = require('http-status-codes')
 const any = require('@travi/any')
 const settings = require('../../../lib/settings')
-const { initializeNock, loadInstance, repository, teardownNock } = require('../common')
+const { buildTriggerEvent, initializeNock, loadInstance, repository, teardownNock } = require('../common')
 
 describe('teams plugin', function () {
   let probot, githubScope
@@ -55,13 +55,6 @@ describe('teams plugin', function () {
       .delete(`/teams/${formationTeamId}/repos/${repository.owner.name}/${repository.name}`)
       .reply(NO_CONTENT)
 
-    await probot.receive({
-      name: 'push',
-      payload: {
-        ref: 'refs/heads/master',
-        repository,
-        commits: [{ modified: [settings.FILE_NAME], added: [] }]
-      }
-    })
+    await probot.receive(buildTriggerEvent())
   })
 })

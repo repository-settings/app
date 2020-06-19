@@ -2,7 +2,7 @@ const path = require('path')
 const fs = require('fs')
 const { CREATED, NO_CONTENT, OK } = require('http-status-codes')
 const settings = require('../../../lib/settings')
-const { initializeNock, loadInstance, repository, teardownNock } = require('../common')
+const { buildTriggerEvent, initializeNock, loadInstance, repository, teardownNock } = require('../common')
 
 describe('collaborators plugin', function () {
   let probot, githubScope
@@ -42,13 +42,6 @@ describe('collaborators plugin', function () {
       .delete(`/repos/${repository.owner.name}/${repository.name}/collaborators/travi`)
       .reply(NO_CONTENT)
 
-    await probot.receive({
-      name: 'push',
-      payload: {
-        ref: 'refs/heads/master',
-        repository,
-        commits: [{ modified: [settings.FILE_NAME], added: [] }]
-      }
-    })
+    await probot.receive(buildTriggerEvent())
   })
 })
