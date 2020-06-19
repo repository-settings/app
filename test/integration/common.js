@@ -1,7 +1,7 @@
 const { createProbot } = require('probot')
 const nock = require('nock')
 const debugNock = require('debug')('nock')
-const settingsBot = require('../../')
+const settingsBot = require('../../index')
 
 function loadInstance () {
   const probot = createProbot({ id: 1, cert: 'test', githubToken: 'test' })

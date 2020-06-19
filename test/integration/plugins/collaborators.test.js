@@ -1,10 +1,10 @@
 const path = require('path')
 const fs = require('fs')
 const { CREATED, NO_CONTENT, OK } = require('http-status-codes')
-const settings = require('../../lib/settings')
-const { initializeNock, loadInstance, repository, teardownNock } = require('./common')
+const settings = require('../../../lib/settings')
+const { initializeNock, loadInstance, repository, teardownNock } = require('../common')
 
-describe('collaborators', function () {
+describe('collaborators plugin', function () {
   let probot, githubScope
 
   beforeEach(() => {
@@ -17,7 +17,7 @@ describe('collaborators', function () {
   })
 
   it('syncs collaborators', async () => {
-    const pathToConfig = path.resolve(__dirname, '..', 'fixtures', 'collaborators-config.yml')
+    const pathToConfig = path.resolve(__dirname, '..', '..', 'fixtures', 'collaborators-config.yml')
     const configFile = Buffer.from(fs.readFileSync(pathToConfig, 'utf8'))
     const encodedConfig = configFile.toString('base64')
     githubScope
