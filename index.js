@@ -42,4 +42,8 @@ module.exports = (robot, _, Settings = require('./lib/settings')) => {
 
     return syncSettings(context)
   })
+
+  robot.on('repository.created', async context => {
+    return syncSettings(context)
+  })
 }

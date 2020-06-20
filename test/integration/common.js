@@ -54,8 +54,15 @@ function buildRepositoryEditedEvent () {
   }
 }
 
+function buildRepositoryCreatedEvent () {
+  return {
+    name: 'repository.created',
+    payload: { repository }
+  }
+}
+
 function buildTriggerEvent () {
-  return any.fromList([buildPushEvent(), buildRepositoryEditedEvent()])
+  return any.fromList([buildPushEvent(), buildRepositoryCreatedEvent(), buildRepositoryEditedEvent()])
 }
 
 module.exports = {
@@ -63,6 +70,7 @@ module.exports = {
   initializeNock,
   teardownNock,
   buildTriggerEvent,
+  buildRepositoryCreatedEvent,
   buildRepositoryEditedEvent,
   repository
 }
