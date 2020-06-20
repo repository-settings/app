@@ -63,5 +63,6 @@ module.exports = {
   initializeNock,
   teardownNock,
   buildTriggerEvent,
+  buildRepositoryEditedEvent,
   repository
 }
