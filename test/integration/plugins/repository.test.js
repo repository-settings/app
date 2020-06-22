@@ -1,10 +1,10 @@
 const path = require('path')
 const fs = require('fs')
 const yaml = require('js-yaml')
-const settings = require('../../lib/settings')
-const { initializeNock, loadInstance, repository, teardownNock } = require('./common')
+const settings = require('../../../lib/settings')
+const { buildTriggerEvent, initializeNock, loadInstance, repository, teardownNock } = require('../common')
 
-describe('repository', function () {
+describe('repository plugin', function () {
   let probot, githubScope
 
   beforeEach(() => {
@@ -17,7 +17,7 @@ describe('repository', function () {
   })
 
   it('syncs repo settings', async () => {
-    const pathToConfig = path.resolve(__dirname, '..', 'fixtures', 'repository-config.yml')
+    const pathToConfig = path.resolve(__dirname, '..', '..', 'fixtures', 'repository-config.yml')
     const configFile = Buffer.from(fs.readFileSync(pathToConfig, 'utf8'))
     const config = yaml.safeLoad(configFile, 'utf8')
     const encodedConfig = configFile.toString('base64')
@@ -32,13 +32,6 @@ describe('repository', function () {
       .matchHeader('accept', ['application/vnd.github.baptiste-preview+json'])
       .reply(200)
 
-    await probot.receive({
-      name: 'push',
-      payload: {
-        ref: 'refs/heads/master',
-        repository,
-        commits: [{ modified: [settings.FILE_NAME], added: [] }]
-      }
-    })
+    await probot.receive(buildTriggerEvent())
   })
 })

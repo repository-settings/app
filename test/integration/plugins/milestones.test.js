@@ -1,10 +1,10 @@
 const path = require('path')
 const fs = require('fs')
 const { CREATED, NO_CONTENT, OK } = require('http-status-codes')
-const settings = require('../../lib/settings')
-const { initializeNock, loadInstance, repository, teardownNock } = require('./common')
+const settings = require('../../../lib/settings')
+const { buildTriggerEvent, initializeNock, loadInstance, repository, teardownNock } = require('../common')
 
-describe('milestones', function () {
+describe('milestones plugin', function () {
   let probot, githubScope
 
   beforeEach(() => {
@@ -17,7 +17,7 @@ describe('milestones', function () {
   })
 
   it('syncs milestones', async () => {
-    const pathToConfig = path.resolve(__dirname, '..', 'fixtures', 'milestones-config.yml')
+    const pathToConfig = path.resolve(__dirname, '..', '..', 'fixtures', 'milestones-config.yml')
     const configFile = Buffer.from(fs.readFileSync(pathToConfig, 'utf8'))
     const encodedConfig = configFile.toString('base64')
     githubScope
@@ -69,13 +69,6 @@ describe('milestones', function () {
       .delete(`/repos/${repository.owner.name}/${repository.name}/milestones/8`)
       .reply(NO_CONTENT)
 
-    await probot.receive({
-      name: 'push',
-      payload: {
-        ref: 'refs/heads/master',
-        repository,
-        commits: [{ modified: [settings.FILE_NAME], added: [] }]
-      }
-    })
+    await probot.receive(buildTriggerEvent())
   })
 })

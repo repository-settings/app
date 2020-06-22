@@ -2,10 +2,10 @@ const path = require('path')
 const fs = require('fs')
 const { CREATED, NO_CONTENT, OK } = require('http-status-codes')
 const any = require('@travi/any')
-const settings = require('../../lib/settings')
-const { initializeNock, loadInstance, repository, teardownNock } = require('./common')
+const settings = require('../../../lib/settings')
+const { buildTriggerEvent, initializeNock, loadInstance, repository, teardownNock } = require('../common')
 
-describe('teams', function () {
+describe('teams plugin', function () {
   let probot, githubScope
 
   beforeEach(() => {
@@ -18,7 +18,7 @@ describe('teams', function () {
   })
 
   it('syncs teams', async () => {
-    const pathToConfig = path.resolve(__dirname, '..', 'fixtures', 'teams-config.yml')
+    const pathToConfig = path.resolve(__dirname, '..', '..', 'fixtures', 'teams-config.yml')
     const configFile = Buffer.from(fs.readFileSync(pathToConfig, 'utf8'))
     const encodedConfig = configFile.toString('base64')
     const probotTeamId = any.integer()
@@ -55,13 +55,6 @@ describe('teams', function () {
       .delete(`/teams/${formationTeamId}/repos/${repository.owner.name}/${repository.name}`)
       .reply(NO_CONTENT)
 
-    await probot.receive({
-      name: 'push',
-      payload: {
-        ref: 'refs/heads/master',
-        repository,
-        commits: [{ modified: [settings.FILE_NAME], added: [] }]
-      }
-    })
+    await probot.receive(buildTriggerEvent())
   })
 })
