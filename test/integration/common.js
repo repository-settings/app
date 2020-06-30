@@ -1,7 +1,6 @@
 const { createProbot } = require('probot')
 const nock = require('nock')
 const any = require('@travi/any')
-const debugNock = require('debug')('nock')
 const settingsBot = require('../../index')
 const settings = require('../../lib/settings')
 
@@ -24,7 +23,7 @@ function loadInstance () {
 }
 
 function initializeNock () {
-  return nock('https://api.github.com').log(debugNock)
+  return nock('https://api.github.com')
 }
 
 function teardownNock (githubScope) {
