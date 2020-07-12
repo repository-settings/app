@@ -22,7 +22,7 @@
   "dependencies": {
     "deepmerge": "^4.2.2",
     "js-yaml": "^3.14.0",
-    "probot": "9.11.6"
+    "probot": "9.11.7"
   },
   "devDependencies": {
     "@travi/any": "^2.0.10",
