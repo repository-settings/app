@@ -37,10 +37,10 @@ describe('repository.edited trigger', function () {
         message: 'Not Found',
         documentation_url: 'https://developer.github.com/v3/repos/contents/#get-contents'
       })
-      githubScope
-        .get(`/app/installations/${installation.id}`)
-        .matchHeader('accept', ['application/vnd.github.machine-man-preview+json'])
-        .reply(200, { permissions: { checks: 'read' } })
+    githubScope
+      .get(`/app/installations/${installation.id}`)
+      .matchHeader('accept', ['application/vnd.github.machine-man-preview+json'])
+      .reply(200, { permissions: { checks: 'read' } })
 
     await probot.receive(buildRepositoryEditedEvent())
   })

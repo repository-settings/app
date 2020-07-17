@@ -64,10 +64,10 @@ function buildRepositoryEditedEvent () {
 function buildRepositoryCreatedEvent () {
   return {
     name: 'repository.created',
-    payload: { 
+    payload: {
       repository,
       after: 'head_sha',
-      installation 
+      installation
     }
   }
 }

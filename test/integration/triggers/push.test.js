@@ -1,5 +1,5 @@
 const settings = require('../../../lib/settings')
-const { initializeNock, loadInstance, repository, installation, teardownNock } = require('../common')
+const { initializeNock, loadInstance, repository, teardownNock } = require('../common')
 
 describe('push trigger', function () {
   let probot, githubScope
