@@ -84,8 +84,22 @@ describe('plugin', () => {
   describe('default branch changed', () => {
     beforeEach(() => {
       event = {
-        name: 'repository',
+        name: 'repository.edited',
         payload: require('../fixtures/events/repository.edited.json')
+      }
+    })
+
+    it('does sync settings', async () => {
+      await app.receive(event)
+      expect(sync).toHaveBeenCalled()
+    })
+  })
+
+  describe('repository created', () => {
+    beforeEach(() => {
+      event = {
+        name: 'repository.created',
+        payload: require('../fixtures/events/push.settings.json')
       }
     })
 

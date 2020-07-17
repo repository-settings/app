@@ -1,0 +1,12 @@
+repository:
+  name: bar
+  delete_branch_on_merge: true
+  is_template: true
+
+milestones:
+  - title: new-milestone
+    description: this milestone should get added
+    state: open
+  - title: existing-milestone
+    description: this milestone should get updated
+    state: closed

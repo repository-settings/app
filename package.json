@@ -11,6 +11,7 @@
     "lint:js": "standard",
     "lint:lockfile": "lockfile-lint --path package-lock.json --type npm --validate-https --allowed-hosts npm",
     "lint:engines": "check-engine",
+    "lint:peer": "npm ls >/dev/null",
     "test:unit": "jest 'test/unit/'",
     "test:unit:watch": "npm run test:unit -- --watch",
     "test:integration": "jest 'test/integration/'",
@@ -19,20 +20,22 @@
   "author": "Brandon Keepers",
   "license": "ISC",
   "dependencies": {
-    "deepmerge": "^4.1.0",
-    "js-yaml": "^3.13.1",
-    "probot": "9.9.6"
+    "deepmerge": "^4.2.2",
+    "js-yaml": "^3.14.0",
+    "probot": "9.11.7"
   },
   "devDependencies": {
+    "@travi/any": "^2.0.10",
     "check-engine": "^1.8.1",
     "http-status-codes": "^1.4.0",
-    "jest": "^24.9.0",
-    "lockfile-lint": "^4.0.0",
-    "nock": "^12.0.0",
-    "nodemon": "^2.0.0",
+    "jest": "^26.1.0",
+    "jest-when": "^2.7.2",
+    "lockfile-lint": "^4.3.7",
+    "nock": "^13.0.2",
+    "nodemon": "^2.0.4",
     "npm-run-all": "^4.1.5",
     "smee-client": "^1.0.2",
-    "standard": "^14.3.1"
+    "standard": "^14.3.4"
   },
   "standard": {
     "env": [

@@ -1,0 +1,5 @@
+teams:
+  - name: probot
+    permission: admin
+  - name: greenkeeper-keeper
+    permission: push
