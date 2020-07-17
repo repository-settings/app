@@ -62,7 +62,7 @@ module.exports = (robot, _, Settings = require('./lib/settings')) => {
       robot.log.debug(`No changes in '${Settings.FILE_NAME}' detected, returning...`)
       return
     }
-    
+
     return syncSettings(context)
   })
 
