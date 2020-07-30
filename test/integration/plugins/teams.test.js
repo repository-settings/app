@@ -25,7 +25,7 @@ describe('teams plugin', function () {
     const greenkeeperKeeperTeamId = any.integer()
     const formationTeamId = any.integer()
     githubScope
-      .get(`/repos/${repository.owner.name}/${repository.name}/contents/${settings.FILE_NAME}`)
+      .get(`/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(settings.FILE_NAME)}`)
       .reply(OK, { content: encodedConfig, name: 'settings.yml', type: 'file' })
     githubScope
       .get(`/repos/${repository.owner.name}/${repository.name}/teams`)
