@@ -39,6 +39,12 @@ describe('collaborators plugin', function () {
       })
       .reply(CREATED)
     githubScope
+      .put(`/repos/${repository.owner.name}/${repository.name}/collaborators/octokit-bot`, body => {
+        expect(body).toMatchObject({ permission: 'triage' })
+        return true
+      })
+      .reply(CREATED)
+    githubScope
       .delete(`/repos/${repository.owner.name}/${repository.name}/collaborators/travi`)
       .reply(NO_CONTENT)
 

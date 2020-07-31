@@ -11,6 +11,7 @@ const repository = {
   name: 'botland',
   owner: {
     name: 'bkeepers-inc',
+    login: 'bkeepers-inc',
     email: null
   }
 }

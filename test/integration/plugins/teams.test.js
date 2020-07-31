@@ -22,6 +22,7 @@ describe('teams plugin', function () {
     const configFile = Buffer.from(fs.readFileSync(pathToConfig, 'utf8'))
     const encodedConfig = configFile.toString('base64')
     const probotTeamId = any.integer()
+    const githubTeamId = any.integer()
     const greenkeeperKeeperTeamId = any.integer()
     const formationTeamId = any.integer()
     githubScope
@@ -40,8 +41,17 @@ describe('teams plugin', function () {
       .get(`/orgs/${repository.owner.name}/teams/probot`)
       .reply(OK, { id: probotTeamId })
     githubScope
+      .get(`/orgs/${repository.owner.name}/teams/github`)
+      .reply(OK, { id: githubTeamId })
+    githubScope
       .put(`/teams/${probotTeamId}/repos/${repository.owner.name}/${repository.name}`, body => {
         expect(body).toMatchObject({ permission: 'admin' })
+        return true
+      })
+      .reply(CREATED)
+    githubScope
+      .put(`/teams/${githubTeamId}/repos/${repository.owner.name}/${repository.name}`, body => {
+        expect(body).toMatchObject({ permission: 'maintain' })
         return true
       })
       .reply(CREATED)
