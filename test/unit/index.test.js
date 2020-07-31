@@ -63,13 +63,23 @@ describe('plugin', () => {
     })
   })
 
-  describe('repository created', async () => {
-    event = {
-      name: 'repository.created',
-      payload: {}
-    }
+  describe('repository created', () => {
+    beforeEach(() => {
+      event = {
+        name: 'repository.created',
+        payload: {
+          repository: {
+            owner: {
+              login: 'Martijn-Workspace'
+            }
+          }
+        }
+      }
+    })
 
-    await app.receive(event)
-    expect(sync).toHaveBeenCalled()
+    it('does sync settings', async () => {
+      await app.receive(event)
+      expect(sync).toHaveBeenCalled()
+    })
   })
 })
