@@ -21,7 +21,7 @@ describe('collaborators plugin', function () {
     const configFile = Buffer.from(fs.readFileSync(pathToConfig, 'utf8'))
     const encodedConfig = configFile.toString('base64')
     githubScope
-      .get(`/repos/${repository.owner.name}/${repository.name}/contents/${settings.FILE_NAME}`)
+      .get(`/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(settings.FILE_NAME)}`)
       .reply(OK, { content: encodedConfig, name: 'settings.yml', type: 'file' })
     githubScope
       .get(`/repos/${repository.owner.name}/${repository.name}/collaborators?affiliation=direct`)
@@ -35,6 +35,12 @@ describe('collaborators plugin', function () {
     githubScope
       .put(`/repos/${repository.owner.name}/${repository.name}/collaborators/hubot`, body => {
         expect(body).toMatchObject({ permission: 'pull' })
+        return true
+      })
+      .reply(CREATED)
+    githubScope
+      .put(`/repos/${repository.owner.name}/${repository.name}/collaborators/octokit-bot`, body => {
+        expect(body).toMatchObject({ permission: 'triage' })
         return true
       })
       .reply(CREATED)

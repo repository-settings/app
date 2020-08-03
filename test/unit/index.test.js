@@ -15,7 +15,8 @@ describe('plugin', () => {
       },
       apps: {
         getInstallation: jest.fn(() => Promise.resolve({ data: { permissions: { checks: 'write' } } }))
-      }
+      },
+      request: jest.fn(() => Promise.resolve({ data: { content: '' } }))
     }
     app.auth = () => Promise.resolve(github)
 
