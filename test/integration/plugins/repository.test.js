@@ -22,8 +22,12 @@ describe('repository plugin', function () {
     const config = yaml.safeLoad(configFile, 'utf8')
     const configContent = configFile.toString()
     const repoSettings = Object.assign({}, config.repository)
+
     const enableVulnerabilityAlert = repoSettings.enable_vulnerability_alerts
     delete repoSettings.enable_vulnerability_alerts
+
+    const enableAutomatedSecurityFixes = repoSettings.enable_automated_security_fixes
+    delete repoSettings.enable_automated_security_fixes
 
     githubScope
       .get(`/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(settings.FILE_NAME)}`)
@@ -40,6 +44,13 @@ describe('repository plugin', function () {
       const httpMethod = enableVulnerabilityAlert ? 'put' : 'delete'
       githubScope[httpMethod](`/repos/${repository.owner.name}/${repository.name}/vulnerability-alerts`, body => true)
         .matchHeader('accept', ['application/vnd.github.dorian-preview+json'])
+        .reply(200)
+    }
+
+    if (enableAutomatedSecurityFixes) {
+      const httpMethod = enableAutomatedSecurityFixes ? 'put' : 'delete'
+      githubScope[httpMethod](`/repos/${repository.owner.name}/${repository.name}/automated-security-fixes`, body => true)
+        .matchHeader('accept', ['application/vnd.github.london-preview+json'])
         .reply(200)
     }
 
