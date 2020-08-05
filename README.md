@@ -61,6 +61,10 @@ repository:
   # rebase-merging.
   allow_rebase_merge: true
 
+  # Either `true` to enable vulnerability alerts, or `false` to disable
+  # vulnerability alerts.
+  enable_vulnerability_alerts: true
+
 # Labels: define labels for Issues and Pull Requests
 labels:
   - name: bug
