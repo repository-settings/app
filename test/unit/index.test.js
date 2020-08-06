@@ -1,11 +1,12 @@
 const { Application } = require('probot')
+const any = require('@travi/any')
 const plugin = require('../../index')
 
 describe('plugin', () => {
   let app, event, sync, github
 
   beforeEach(() => {
-    app = new Application()
+    app = new Application({ secret: any.string() })
     github = {
       request: jest.fn(() => Promise.resolve({ data: { content: '' } }))
     }
