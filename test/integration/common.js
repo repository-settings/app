@@ -28,7 +28,7 @@ function initializeNock () {
 }
 
 function teardownNock (githubScope) {
-  expect(githubScope.isDone()).toBe(true)
+  expect(githubScope.pendingMocks()).toStrictEqual([])
 
   nock.cleanAll()
 }
