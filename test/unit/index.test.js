@@ -3,9 +3,12 @@ const any = require('@travi/any')
 const plugin = require('../../index')
 
 describe('plugin', () => {
-  let app, event, sync
+  let app, event, sync, checks
 
   beforeEach(() => {
+    checks = {
+      create: jest.fn(() => Promise.resolve())
+    }
     class Octokit {
       static defaults () {
         return Octokit
@@ -16,9 +19,7 @@ describe('plugin', () => {
         this.repos = {
           getContents: jest.fn(() => Promise.resolve({ data: { content: '' } }))
         }
-        this.checks = {
-          create: jest.fn(() => Promise.resolve())
-        }
+        this.checks = checks
         this.apps = {
           getInstallation: jest.fn(() => Promise.resolve({ data: { permissions: { checks: 'write' } } }))
         }
@@ -45,7 +46,7 @@ describe('plugin', () => {
     describe('the settings are synced successfully', () => {
       it('creates a check as a success', async () => {
         await app.receive(event)
-        expect(app.state.octokit.checks.create).toHaveBeenCalledWith(expect.objectContaining({
+        expect(checks.create).toHaveBeenCalledWith(expect.objectContaining({
           conclusion: 'success'
         }))
       })
@@ -60,7 +61,7 @@ describe('plugin', () => {
       })
       it('creates a check as a failure', async () => {
         await app.receive(event)
-        expect(app.state.octokit.checks.create).toHaveBeenCalledWith(expect.objectContaining({
+        expect(checks.create).toHaveBeenCalledWith(expect.objectContaining({
           conclusion: 'failure'
         }))
       })
