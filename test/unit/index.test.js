@@ -1,15 +1,22 @@
 const { Application } = require('probot')
+const any = require('@travi/any')
 const plugin = require('../../index')
 
 describe('plugin', () => {
-  let app, event, sync, github
+  let app, event, sync
 
   beforeEach(() => {
-    app = new Application()
-    github = {
-      request: jest.fn(() => Promise.resolve({ data: { content: '' } }))
+    class Octokit {
+      static defaults () {
+        return Octokit
+      }
+
+      constructor () {
+        this.request = jest.fn(() => Promise.resolve({ data: { content: '' } }))
+      }
     }
-    app.auth = () => Promise.resolve(github)
+
+    app = new Application({ secret: any.string(), Octokit })
 
     event = {
       name: 'push',
