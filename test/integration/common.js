@@ -1,4 +1,4 @@
-const { createProbot } = require('probot')
+const { Probot } = require('probot')
 const nock = require('nock')
 const any = require('@travi/any')
 const settingsBot = require('../../index')
@@ -21,7 +21,7 @@ const installation = {
 }
 
 function loadInstance () {
-  const probot = createProbot({ id: 1, cert: 'test', githubToken: 'test' })
+  const probot = new Probot({ id: 1, privateKey: 'test', githubToken: 'test' })
   probot.load(settingsBot)
 
   return probot
@@ -32,7 +32,7 @@ function initializeNock () {
 }
 
 function teardownNock (githubScope) {
-  expect(githubScope.isDone()).toBe(true)
+  expect(githubScope.pendingMocks()).toStrictEqual([])
 
   nock.cleanAll()
 }

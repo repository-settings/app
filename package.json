@@ -22,13 +22,13 @@
   "dependencies": {
     "deepmerge": "^4.2.2",
     "js-yaml": "^3.14.0",
-    "probot": "10.0.0-beta.15"
+    "probot": "10.0.0-beta.17"
   },
   "devDependencies": {
     "@travi/any": "^2.0.10",
     "check-engine": "^1.8.1",
     "http-status-codes": "^1.4.0",
-    "jest": "^26.2.2",
+    "jest": "^26.3.0",
     "jest-when": "^2.7.2",
     "lockfile-lint": "^4.3.7",
     "nock": "^13.0.3",

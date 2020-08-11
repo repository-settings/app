@@ -1,24 +1,31 @@
 const { Application } = require('probot')
+const any = require('@travi/any')
 const plugin = require('../../index')
 
 describe('plugin', () => {
-  let app, event, sync, github
+  let app, event, sync
 
   beforeEach(() => {
-    app = new Application()
-    github = {
-      repos: {
-        getContents: jest.fn(() => Promise.resolve({ data: { content: '' } }))
-      },
-      checks: {
-        create: jest.fn(() => Promise.resolve())
-      },
-      apps: {
-        getInstallation: jest.fn(() => Promise.resolve({ data: { permissions: { checks: 'write' } } }))
-      },
-      request: jest.fn(() => Promise.resolve({ data: { content: '' } }))
+    class Octokit {
+      static defaults () {
+        return Octokit
+      }
+
+      constructor () {
+        this.request = jest.fn(() => Promise.resolve({ data: { content: '' } }))
+        this.repos = {
+          getContents: jest.fn(() => Promise.resolve({ data: { content: '' } }))
+        }
+        this.checks = {
+          create: jest.fn(() => Promise.resolve())
+        }
+        this.apps = {
+          getInstallation: jest.fn(() => Promise.resolve({ data: { permissions: { checks: 'write' } } }))
+        }
+      }
     }
-    app.auth = () => Promise.resolve(github)
+
+    app = new Application({ secret: any.string(), Octokit })
 
     event = {
       name: 'push',
@@ -38,7 +45,7 @@ describe('plugin', () => {
     describe('the settings are synced successfully', () => {
       it('creates a check as a success', async () => {
         await app.receive(event)
-        expect(github.checks.create).toHaveBeenCalledWith(expect.objectContaining({
+        expect(app.state.octokit.checks.create).toHaveBeenCalledWith(expect.objectContaining({
           conclusion: 'success'
         }))
       })
@@ -53,7 +60,7 @@ describe('plugin', () => {
       })
       it('creates a check as a failure', async () => {
         await app.receive(event)
-        expect(github.checks.create).toHaveBeenCalledWith(expect.objectContaining({
+        expect(app.state.octokit.checks.create).toHaveBeenCalledWith(expect.objectContaining({
           conclusion: 'failure'
         }))
       })
