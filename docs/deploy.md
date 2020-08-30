@@ -14,6 +14,10 @@ This plugin requires these **Permissions & events** for the GitHub Integration:
 - Single file: **Read & Write**
   - Path: `.github/settings.yml`
 
+### Organization Permissions
+
+- Members: **Read & Write**
+
 ### Events
 
 - Push
