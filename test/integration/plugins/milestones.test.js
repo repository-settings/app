@@ -19,10 +19,10 @@ describe('milestones plugin', function () {
   it('syncs milestones', async () => {
     const pathToConfig = path.resolve(__dirname, '..', '..', 'fixtures', 'milestones-config.yml')
     const configFile = Buffer.from(fs.readFileSync(pathToConfig, 'utf8'))
-    const encodedConfig = configFile.toString('base64')
+    const config = configFile.toString()
     githubScope
       .get(`/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(settings.FILE_NAME)}`)
-      .reply(OK, { content: encodedConfig, name: 'settings.yml', type: 'file' })
+      .reply(OK, config)
     githubScope
       .patch(`/repos/${repository.owner.name}/${repository.name}`)
       .reply(200)
