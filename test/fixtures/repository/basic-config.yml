@@ -1,0 +1,4 @@
+repository:
+  name: bar
+  delete_branch_on_merge: true
+  is_template: true
