@@ -12,7 +12,9 @@ describe('plugin', () => {
       }
 
       constructor () {
-        this.request = jest.fn(() => Promise.resolve({ data: { content: '' } }))
+        this.config = {
+          get: jest.fn().mockReturnValue({})
+        }
       }
     }
 
