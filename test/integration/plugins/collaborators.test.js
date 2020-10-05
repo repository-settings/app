@@ -19,10 +19,10 @@ describe('collaborators plugin', function () {
   it('syncs collaborators', async () => {
     const pathToConfig = path.resolve(__dirname, '..', '..', 'fixtures', 'collaborators-config.yml')
     const configFile = Buffer.from(fs.readFileSync(pathToConfig, 'utf8'))
-    const encodedConfig = configFile.toString('base64')
+    const config = configFile.toString()
     githubScope
       .get(`/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(settings.FILE_NAME)}`)
-      .reply(OK, { content: encodedConfig, name: 'settings.yml', type: 'file' })
+      .reply(OK, config)
     githubScope
       .get(`/repos/${repository.owner.name}/${repository.name}/collaborators?affiliation=direct`)
       .reply(

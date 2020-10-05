@@ -20,14 +20,14 @@ describe('teams plugin', function () {
   it('syncs teams', async () => {
     const pathToConfig = path.resolve(__dirname, '..', '..', 'fixtures', 'teams-config.yml')
     const configFile = Buffer.from(fs.readFileSync(pathToConfig, 'utf8'))
-    const encodedConfig = configFile.toString('base64')
+    const config = configFile.toString()
     const probotTeamId = any.integer()
     const githubTeamId = any.integer()
     const greenkeeperKeeperTeamId = any.integer()
     const formationTeamId = any.integer()
     githubScope
       .get(`/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(settings.FILE_NAME)}`)
-      .reply(OK, { content: encodedConfig, name: 'settings.yml', type: 'file' })
+      .reply(OK, config)
     githubScope
       .get(`/repos/${repository.owner.name}/${repository.name}/teams`)
       .reply(
