@@ -28,7 +28,7 @@
     "@travi/any": "^2.0.13",
     "check-engine": "^1.8.1",
     "http-status-codes": "^2.1.4",
-    "jest": "^26.5.3",
+    "jest": "^26.6.0",
     "jest-when": "^2.7.2",
     "lockfile-lint": "^4.3.7",
     "nock": "^13.0.4",
