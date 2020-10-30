@@ -26,7 +26,7 @@
   },
   "devDependencies": {
     "@travi/any": "^2.0.13",
-    "check-engine": "^1.9.0",
+    "check-engine": "^1.10.0",
     "http-status-codes": "^2.1.4",
     "jest": "^26.6.1",
     "jest-when": "^3.0.0",
