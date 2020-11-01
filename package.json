@@ -29,7 +29,7 @@
     "check-engine": "^1.10.0",
     "http-status-codes": "^2.1.4",
     "jest": "^26.6.1",
-    "jest-when": "^3.0.0",
+    "jest-when": "^3.0.1",
     "lockfile-lint": "^4.3.7",
     "nock": "^13.0.4",
     "nodemon": "^2.0.6",
