@@ -16,6 +16,10 @@ describe('plugin', () => {
           get: jest.fn().mockReturnValue({})
         }
       }
+
+      auth () {
+        return this
+      }
     }
 
     app = new Application({ secret: any.string(), Octokit })
