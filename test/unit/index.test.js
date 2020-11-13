@@ -1,4 +1,4 @@
-const { Application } = require('probot')
+const { Probot } = require('probot')
 const any = require('@travi/any')
 const plugin = require('../../index')
 
@@ -22,7 +22,7 @@ describe('plugin', () => {
       }
     }
 
-    app = new Application({ secret: any.string(), Octokit })
+    app = new Probot({ secret: any.string(), Octokit })
 
     event = {
       name: 'push',
@@ -30,7 +30,7 @@ describe('plugin', () => {
     }
     sync = jest.fn()
 
-    plugin(app, {}, { sync, FILE_NAME: '.github/settings.yml' })
+    plugin({ app }, {}, { sync, FILE_NAME: '.github/settings.yml' })
   })
 
   describe('with settings modified on master', () => {
