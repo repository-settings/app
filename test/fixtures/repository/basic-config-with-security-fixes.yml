@@ -1,0 +1,5 @@
+repository:
+  name: bar
+  delete_branch_on_merge: true
+  is_template: true
+  enable_automated_security_fixes: true
