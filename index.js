@@ -3,7 +3,7 @@ const mergeArrayByName = require('./lib/mergeArrayByName')
 module.exports = ({ app: robot }, _, Settings = require('./lib/settings')) => {
   async function syncSettings (context, repo = context.repo()) {
     const config = await context.config('settings.yml', {}, { arrayMerge: mergeArrayByName })
-    return Settings.sync(context.github, repo, config)
+    return Settings.sync(context.octokit, repo, config)
   }
 
   robot.on('push', async context => {
