@@ -145,6 +145,8 @@ branches:
         contexts: []
       # Required. Enforce all configured restrictions for administrators. Set to true to enforce required status checks for repository administrators. Set to null to disable.
       enforce_admins: true
+      # Prevent merge commits from being pushed to matching branches
+      required_linear_history: true
       # Required. Restrict who can push to this branch. Team and user restrictions are only available for organization-owned repositories. Set to null to disable.
       restrictions:
         apps: []
