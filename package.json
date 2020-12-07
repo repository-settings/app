@@ -21,7 +21,7 @@
   "license": "ISC",
   "dependencies": {
     "deepmerge": "^4.2.2",
-    "js-yaml": "^3.14.0",
+    "js-yaml": "^3.14.1",
     "probot": "10.17.2"
   },
   "devDependencies": {
