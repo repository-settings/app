@@ -17,7 +17,7 @@ const repository = {
 }
 
 function loadInstance () {
-  const probot = new Probot({ id: 1, privateKey: 'test', githubToken: 'test' })
+  const probot = new Probot({ appId: 1, privateKey: 'test', githubToken: 'test' })
   probot.load(settingsBot)
 
   return probot

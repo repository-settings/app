@@ -11,7 +11,7 @@ describe('Milestones', () => {
     github = {
       paginate: jest.fn().mockImplementation(() => Promise.resolve()),
       issues: {
-        listMilestonesForRepo: {
+        listMilestones: {
           endpoint: {
             merge: jest.fn().mockImplementation(() => {})
           }
