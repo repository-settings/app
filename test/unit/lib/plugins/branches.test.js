@@ -12,7 +12,7 @@ describe('Branches', () => {
     github = {
       repos: {
         updateBranchProtection: jest.fn().mockImplementation(() => Promise.resolve('updateBranchProtection')),
-        removeBranchProtection: jest.fn().mockImplementation(() => Promise.resolve('removeBranchProtection'))
+        deleteBranchProtection: jest.fn().mockImplementation(() => Promise.resolve('deleteBranchProtection'))
       }
     }
   })
@@ -64,7 +64,7 @@ describe('Branches', () => {
 
         return plugin.sync().then(() => {
           expect(github.repos.updateBranchProtection).not.toHaveBeenCalled()
-          expect(github.repos.removeBranchProtection).toHaveBeenCalledWith({
+          expect(github.repos.deleteBranchProtection).toHaveBeenCalledWith({
             owner: 'bkeepers',
             repo: 'test',
             branch: 'master'
@@ -84,7 +84,7 @@ describe('Branches', () => {
 
         return plugin.sync().then(() => {
           expect(github.repos.updateBranchProtection).not.toHaveBeenCalled()
-          expect(github.repos.removeBranchProtection).toHaveBeenCalledWith({
+          expect(github.repos.deleteBranchProtection).toHaveBeenCalledWith({
             owner: 'bkeepers',
             repo: 'test',
             branch: 'master'
@@ -104,7 +104,7 @@ describe('Branches', () => {
 
         return plugin.sync().then(() => {
           expect(github.repos.updateBranchProtection).not.toHaveBeenCalled()
-          expect(github.repos.removeBranchProtection).toHaveBeenCalledWith({
+          expect(github.repos.deleteBranchProtection).toHaveBeenCalledWith({
             owner: 'bkeepers',
             repo: 'test',
             branch: 'master'
@@ -124,7 +124,7 @@ describe('Branches', () => {
 
         return plugin.sync().then(() => {
           expect(github.repos.updateBranchProtection).not.toHaveBeenCalled()
-          expect(github.repos.removeBranchProtection).toHaveBeenCalledWith({
+          expect(github.repos.deleteBranchProtection).toHaveBeenCalledWith({
             owner: 'bkeepers',
             repo: 'test',
             branch: 'master'
@@ -143,7 +143,7 @@ describe('Branches', () => {
 
         return plugin.sync().then(() => {
           expect(github.repos.updateBranchProtection).not.toHaveBeenCalled()
-          expect(github.repos.removeBranchProtection).not.toHaveBeenCalled()
+          expect(github.repos.deleteBranchProtection).not.toHaveBeenCalled()
         })
       })
     })
@@ -192,7 +192,7 @@ describe('Branches', () => {
         expect(result[0]).toBe('updateBranchProtection')
       })
     })
-    it('returns removeBranchProtection Promise', () => {
+    it('returns deleteBranchProtection Promise', () => {
       const plugin = configure(
         [{
           name: 'master',
@@ -202,7 +202,7 @@ describe('Branches', () => {
 
       return plugin.sync().then(result => {
         expect(result.length).toBe(1)
-        expect(result[0]).toBe('removeBranchProtection')
+        expect(result[0]).toBe('deleteBranchProtection')
       })
     })
   })
