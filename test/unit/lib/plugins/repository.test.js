@@ -12,7 +12,7 @@ describe('Repository', () => {
       repos: {
         get: jest.fn().mockImplementation(() => Promise.resolve({})),
         update: jest.fn().mockImplementation(() => Promise.resolve()),
-        replaceTopics: jest.fn().mockImplementation(() => Promise.resolve()),
+        replaceAllTopics: jest.fn().mockImplementation(() => Promise.resolve()),
         enableVulnerabilityAlerts: jest.fn().mockImplementation(() => Promise.resolve()),
         disableVulnerabilityAlerts: jest.fn().mockImplementation(() => Promise.resolve()),
         enableAutomatedSecurityFixes: jest.fn().mockImplementation(() => Promise.resolve()),
@@ -58,7 +58,7 @@ describe('Repository', () => {
       })
 
       return plugin.sync().then(() => {
-        expect(github.repos.replaceTopics).toHaveBeenCalledWith({
+        expect(github.repos.replaceAllTopics).toHaveBeenCalledWith({
           owner: 'bkeepers',
           repo: 'test',
           names: ['foo', 'bar'],
