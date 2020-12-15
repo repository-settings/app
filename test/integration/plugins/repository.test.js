@@ -40,6 +40,31 @@ describe('repository plugin', function () {
     await probot.receive(buildTriggerEvent())
   })
 
+  it('replaces topics, when provided', async () => {
+    const config = loadConfig('basic-config-with-topics.yml')
+    const repoSettings = Object.assign({}, config.repository)
+
+    githubScope
+      .get(`/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(settings.FILE_NAME)}`)
+      .reply(200, config)
+    githubScope
+      .patch(`/repos/${repository.owner.name}/${repository.name}`, body => {
+        expect(body).toMatchObject(repoSettings)
+        return true
+      })
+      .matchHeader('accept', ['application/vnd.github.baptiste-preview+json'])
+      .reply(200)
+    githubScope
+      .put(`/repos/${repository.owner.name}/${repository.name}/topics`, body => {
+        expect(body).toMatchObject({ names: ['github', 'probot'] })
+        return true
+      })
+      .matchHeader('accept', ['application/vnd.github.mercy-preview+json'])
+      .reply(200)
+
+    await probot.receive(buildTriggerEvent())
+  })
+
   it('syncs repo with basic settings and vulnerability alerts enabled', async () => {
     const config = loadConfig('basic-config-with-vulnerability-alerts.yml')
     const repoSettings = Object.assign({}, config.repository)
