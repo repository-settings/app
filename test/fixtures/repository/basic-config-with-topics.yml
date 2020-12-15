@@ -1,0 +1,5 @@
+repository:
+  name: bar
+  topics: github, probot
+  delete_branch_on_merge: true
+  is_template: true
