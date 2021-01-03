@@ -32,7 +32,7 @@ describe('mergeArrayByName', () => {
   })
 
   it('works in a realistic scenario', () => {
-    const target = YAML.safeLoad(`
+    const target = YAML.load(`
   branches:
     - name: master
       protection:
@@ -48,7 +48,7 @@ describe('mergeArrayByName', () => {
         restrictions:
   `)
 
-    const source = YAML.safeLoad(`
+    const source = YAML.load(`
   branches:
     - name: master
       protection:
