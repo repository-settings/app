@@ -20,8 +20,15 @@ module.exports = (robot, _, Settings = require('./lib/settings')) => {
     }
 
     const settingsModified = payload.commits.find(commit => {
-      return commit.added.includes(Settings.FILE_NAME) ||
+      // If run from a GitHub action, commits lack these properties, see
+      // https://github.blog/changelog/2019-10-16-changes-in-github-actions-push-event-payload/
+      // So act like settings have changed if we run from an action
+      if ('added' in commit || 'modified' in commit) {
+        return commit.added.includes(Settings.FILE_NAME) ||
         commit.modified.includes(Settings.FILE_NAME)
+      } else {
+        return true
+      }
     })
 
     if (!settingsModified) {
