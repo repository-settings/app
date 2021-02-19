@@ -30,7 +30,7 @@
     "http-status-codes": "^2.1.4",
     "jest": "^26.6.3",
     "jest-when": "^3.2.0",
-    "lockfile-lint": "^4.3.7",
+    "lockfile-lint": "^4.6.0",
     "nock": "^13.0.7",
     "nodemon": "^2.0.7",
     "npm-run-all": "^4.1.5",
