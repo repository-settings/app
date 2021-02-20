@@ -25,7 +25,7 @@
     "probot": "11.0.6"
   },
   "devDependencies": {
-    "@travi/any": "^2.0.15",
+    "@travi/any": "^2.0.16",
     "check-engine": "^1.10.0",
     "http-status-codes": "^2.1.4",
     "jest": "^26.6.3",
