@@ -80,9 +80,9 @@ labels:
     color: '#336699'
     description: New functionality.
 
-  - name: first-timers-only
-    # include the old name to rename an existing label
-    oldname: Help Wanted
+  - name: Help Wanted
+    # Provide a new name to rename an existing label
+    new_name: first-timers-only
 
 # Milestones: define milestones for Issues and Pull Requests
 milestones:
