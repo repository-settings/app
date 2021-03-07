@@ -94,18 +94,18 @@ milestones:
 # Collaborators: give specific users access to this repository.
 # See https://developer.github.com/v3/repos/collaborators/#add-user-as-a-collaborator for available options
 collaborators:
-  - username: bkeepers
-    # Note: Only valid on organization-owned repositories.
-    # The permission to grant the collaborator. Can be one of:
-    # * `pull` - can pull, but not push to or administer this repository.
-    # * `push` - can pull and push, but not administer this repository.
-    # * `admin` - can pull, push and administer this repository.
-    # * `maintain` - Recommended for project managers who need to manage the repository without access to sensitive or destructive actions.
-    # * `triage` - Recommended for contributors who need to proactively manage issues and pull requests without write access.
-    permission: push
+  # - username: bkeepers
+  #   permission: push
+  # - username: hubot
+  #   permission: pull
 
-  - username: hubot
-    permission: pull
+  # Note: `permission` is only valid on organization-owned repositories.
+  # The permission to grant the collaborator. Can be one of:
+  # * `pull` - can pull, but not push to or administer this repository.
+  # * `push` - can pull and push, but not administer this repository.
+  # * `admin` - can pull, push and administer this repository.
+  # * `maintain` - Recommended for project managers who need to manage the repository without access to sensitive or destructive actions.
+  # * `triage` - Recommended for contributors who need to proactively manage issues and pull requests without write access.
 
 # See https://developer.github.com/v3/teams/#add-or-update-team-repository for available options
 teams:
