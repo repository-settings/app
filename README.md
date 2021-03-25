@@ -61,6 +61,9 @@ repository:
   # rebase-merging.
   allow_rebase_merge: true
 
+  # Either `true` to enable automatic deletion of branches on merge, or `false` to disable
+  delete_branch_on_merge: true
+
   # Either `true` to enable automated security fixes, or `false` to disable
   # automated security fixes.
   enable_automated_security_fixes: true
