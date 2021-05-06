@@ -164,7 +164,7 @@ branches:
 
 ### Inheritance
 
-This app uses [probot-config](https://github.com/probot/probot-config). This means you can inherit settings from another repo, and only override what you want to change.
+This app is built with [probot](https://github.com/probot/probot), and thus uses the [octokit-plugin-config](https://github.com/probot/octokit-plugin-config). This means you can inherit settings from another repo, and only override what you want to change.
 
 Individual settings in the arrays listed under `labels`, `teams` (once it is supported) and `branches` will be merged with the base repo if the `name` of an element in the array matches the `name` of an element in the corresponding array in the base repo. A possible future enhancement would be to make that work for the other settings arrays based on `username`, or `title`. This is not currently supported.
 
