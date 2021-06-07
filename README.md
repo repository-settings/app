@@ -16,7 +16,7 @@ All top-level settings are optional. Some plugins do have required fields.
 # These settings are synced to GitHub by https://probot.github.io/apps/settings/
 
 repository:
-  # See https://developer.github.com/v3/repos/#edit for all available settings.
+  # See https://docs.github.com/en/rest/reference/repos#update-a-repository for all available settings.
 
   # The name of the repository. Changing this will rename the repository
   name: repo-name
@@ -95,7 +95,7 @@ milestones:
     state: open
 
 # Collaborators: give specific users access to this repository.
-# See https://developer.github.com/v3/repos/collaborators/#add-user-as-a-collaborator for available options
+# See https://docs.github.com/en/rest/reference/repos#add-a-repository-collaborator for available options
 collaborators:
   # - username: bkeepers
   #   permission: push
@@ -110,7 +110,7 @@ collaborators:
   # * `maintain` - Recommended for project managers who need to manage the repository without access to sensitive or destructive actions.
   # * `triage` - Recommended for contributors who need to proactively manage issues and pull requests without write access.
 
-# See https://developer.github.com/v3/teams/#add-or-update-team-repository for available options
+# See https://docs.github.com/en/rest/reference/teams#add-or-update-team-repository-permissions for available options
 teams:
   - name: core
     # The permission to grant the team. Can be one of:
@@ -125,7 +125,7 @@ teams:
 
 branches:
   - name: master
-    # https://developer.github.com/v3/repos/branches/#update-branch-protection
+    # https://docs.github.com/en/rest/reference/repos#update-branch-protection
     # Branch Protection settings. Set to null to disable
     protection:
       # Required. Require at least one approving review on a pull request, before merging. Set to null to disable.
