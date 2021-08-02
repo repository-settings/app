@@ -155,6 +155,12 @@ branches:
         apps: []
         users: []
         teams: []
+      # Permits force pushes for all users with push access. Set to null to disable.
+      # allow_force_pushes:
+      # Allows users with push access to delete matching branches. Set to false to disable.
+      # allow_deletions: false
+      # Ensure all review conversations are seen and addressed prior to merging
+      # required_conversation_resolution: true
 ```
 
 ### Notes
