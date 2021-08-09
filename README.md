@@ -79,7 +79,7 @@ repository:
   # Note: You cannot unarchive repositories through the API. `true` to archive this repository. 
   archived: false
 
-  # Can be `public`, `private` or `internal`
+  # Can be `public` or `private`. If your organization is associated with an enterprise account using GitHub Enterprise Cloud or GitHub Enterprise Server 2.20+, visibility can also be `internal`. The visibility parameter overrides the private parameter when you use both along with the nebula-preview preview header
   visibility: public
 
 
