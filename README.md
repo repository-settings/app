@@ -158,7 +158,7 @@ branches:
         strict: true
         # Required. The list of status checks to require in order to merge into this branch
         contexts: []
-      # Commits pushed to matching branches must have verified signatures. Set to false to disable.
+      # Commits pushed to matching branches must have verified signatures. Set to `false` to disable.
       required_signatures: true
       # Required. Enforce all configured restrictions for administrators. Set to true to enforce required status checks for repository administrators. Set to null to disable.
       enforce_admins: true
