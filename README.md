@@ -73,7 +73,7 @@ repository:
   enable_vulnerability_alerts: true
 
   # Either `true` to make this repo available as a template repository or `false` to prevent it.
-  # is_template: false
+  is_template: false
   # template_repository: false
 
   # Note: You cannot unarchive repositories through the API. `true` to archive this repository. 
