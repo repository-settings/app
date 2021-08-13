@@ -146,6 +146,8 @@ branches:
         strict: true
         # Required. The list of status checks to require in order to merge into this branch
         contexts: []
+      # When enabled, all conversations on code must be resolved before a pull request can be merged.
+      required_conversation_resolution: true
       # Commits pushed to matching branches must have verified signatures. Set to false to disable.
       required_signatures: true
       # Required. Enforce all configured restrictions for administrators. Set to true to enforce required status checks for repository administrators. Set to null to disable.
