@@ -60,6 +60,9 @@ repository:
   # Either `true` to allow rebase-merging pull requests, or `false` to prevent
   # rebase-merging.
   allow_rebase_merge: true
+  
+  # Either `true` to allow auto-merge on pull requests, or `false` to disallow auto-merge
+  allow_auto_merge: false
 
   # Either `true` to enable automatic deletion of branches on merge, or `false` to disable
   delete_branch_on_merge: true
