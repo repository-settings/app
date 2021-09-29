@@ -10,7 +10,7 @@ function findMatchingIndex (sourceItem, target) {
   }
 }
 
-function mergeByName (target, source, options) {
+function foo.bar (target, source, options) {
   const destination = target.slice()
 
   source.forEach(sourceItem => {
@@ -25,4 +25,4 @@ function mergeByName (target, source, options) {
   return destination
 }
 
-module.exports = mergeByName
+module.exports = foo.bar
