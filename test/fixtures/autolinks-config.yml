@@ -1,0 +1,11 @@
+repository:
+  name: bar
+  delete_branch_on_merge: true
+  is_template: true
+
+autolinks:
+  - key_prefix: ASDF-
+    url_template: https://jira.company.com/browse/ASDF-<num>
+
+  - key_prefix: BOLIGRAFO-
+    url_template: https://jira.company.com/browse/BOLIGRAFO-<num>

@@ -7,7 +7,7 @@ This GitHub App syncs repository settings defined in `.github/settings.yml` to G
 
 ## Usage
 
-1. __[Install the app](https://github.com/apps/settings)__.
+1. **[Install the app](https://github.com/apps/settings)**.
 1. Create a `.github/settings.yml` file in your repository. Changes to this file on the default branch will be synced to GitHub.
 
 All top-level settings are optional. Some plugins do have required fields.
@@ -71,6 +71,13 @@ repository:
   # Either `true` to enable vulnerability alerts, or `false` to disable
   # vulnerability alerts.
   enable_vulnerability_alerts: true
+
+# Autolinks
+autolinks:
+  - key_prefix: ASDF-
+    url_template: https://jira.company.com/browse/ASDF-<num>
+  - key_prefix: BOLIGRAFO-
+    url_template: https://jira.company.com/browse/BOLIGRAFO-<num>
 
 # Labels: define labels for Issues and Pull Requests
 labels:
