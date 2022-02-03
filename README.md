@@ -144,8 +144,10 @@ branches:
       required_status_checks:
         # Required. Require branches to be up to date before merging.
         strict: true
-        # Required. The list of status checks to require in order to merge into this branch
+        # Required. Deprecated. The list of status checks to require in order to merge into this branch. If any of these checks have recently been set by a particular GitHub App, they will be required to come from that app in future for the branch to merge. Use checks instead of contexts for more fine-grained control.
         contexts: []
+        # The list of status checks to require in order to merge into this branch
+        checks: []
       # Required. Enforce all configured restrictions for administrators. Set to true to enforce required status checks for repository administrators. Set to null to disable.
       enforce_admins: true
       # Prevent merge commits from being pushed to matching branches

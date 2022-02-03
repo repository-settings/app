@@ -44,6 +44,7 @@ describe('mergeArrayByName', () => {
         required_status_checks:
           strict: true
           contexts: []
+          checks: []
         enforce_admins: false
         restrictions:
   `)
@@ -67,7 +68,11 @@ describe('mergeArrayByName', () => {
             require_code_owner_reviews: true,
             dismissal_restrictions: {}
           },
-         required_status_checks: { strict: true, contexts: [] },
+         required_status_checks: {
+           strict: true,
+           contexts: [],
+           checks: []
+         },
          enforce_admins: false,
          restrictions: null
        }
