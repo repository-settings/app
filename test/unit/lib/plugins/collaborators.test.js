@@ -26,14 +26,16 @@ describe('Collaborators', () => {
         { username: 'DIFFERENTcase', permission: 'push' }
       ])
 
-      github.repos.listCollaborators.mockReturnValueOnce(Promise.resolve({
-        data: [
-          { login: 'bkeepers', permissions: { admin: true, push: true, pull: true } },
-          { login: 'updated-permission', permissions: { admin: false, push: false, pull: true } },
-          { login: 'removed-user', permissions: { admin: false, push: true, pull: true } },
-          { login: 'differentCase', permissions: { admin: false, push: true, pull: true } }
-        ]
-      }))
+      github.repos.listCollaborators.mockReturnValueOnce(
+        Promise.resolve({
+          data: [
+            { login: 'bkeepers', permissions: { admin: true, push: true, pull: true } },
+            { login: 'updated-permission', permissions: { admin: false, push: false, pull: true } },
+            { login: 'removed-user', permissions: { admin: false, push: true, pull: true } },
+            { login: 'differentCase', permissions: { admin: false, push: true, pull: true } }
+          ]
+        })
+      )
 
       return plugin.sync().then(() => {
         expect(github.repos.addCollaborator).toHaveBeenCalledWith({

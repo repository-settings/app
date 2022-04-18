@@ -23,28 +23,21 @@ describe('milestones plugin', function () {
     githubScope
       .get(`/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(settings.FILE_NAME)}`)
       .reply(OK, config)
-    githubScope
-      .patch(`/repos/${repository.owner.name}/${repository.name}`)
-      .reply(200)
-    githubScope
-      .get(`/repos/${repository.owner.name}/${repository.name}/milestones?per_page=100&state=all`)
-      .reply(
-        OK,
-        [
-          {
-            number: 42,
-            title: 'existing-milestone',
-            description: 'this milestone should get updated',
-            state: 'open'
-          },
-          {
-            number: 8,
-            title: 'old-milestone',
-            description: 'this milestone should get deleted',
-            state: 'closed'
-          }
-        ]
-      )
+    githubScope.patch(`/repos/${repository.owner.name}/${repository.name}`).reply(200)
+    githubScope.get(`/repos/${repository.owner.name}/${repository.name}/milestones?per_page=100&state=all`).reply(OK, [
+      {
+        number: 42,
+        title: 'existing-milestone',
+        description: 'this milestone should get updated',
+        state: 'open'
+      },
+      {
+        number: 8,
+        title: 'old-milestone',
+        description: 'this milestone should get deleted',
+        state: 'closed'
+      }
+    ])
     githubScope
       .post(`/repos/${repository.owner.name}/${repository.name}/milestones`, body => {
         expect(body).toMatchObject({
@@ -65,9 +58,7 @@ describe('milestones plugin', function () {
         return true
       })
       .reply(OK)
-    githubScope
-      .delete(`/repos/${repository.owner.name}/${repository.name}/milestones/8`)
-      .reply(NO_CONTENT)
+    githubScope.delete(`/repos/${repository.owner.name}/${repository.name}/milestones/8`).reply(NO_CONTENT)
 
     await probot.receive(buildTriggerEvent())
   })

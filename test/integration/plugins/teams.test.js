@@ -28,21 +28,12 @@ describe('teams plugin', function () {
     githubScope
       .get(`/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(settings.FILE_NAME)}`)
       .reply(OK, config)
-    githubScope
-      .get(`/repos/${repository.owner.name}/${repository.name}/teams`)
-      .reply(
-        OK,
-        [
-          { slug: 'greenkeeper-keeper', id: greenkeeperKeeperTeamId, permission: 'pull' },
-          { slug: 'form8ion', id: formationTeamId, permission: 'push' }
-        ]
-      )
-    githubScope
-      .get(`/orgs/${repository.owner.name}/teams/probot`)
-      .reply(OK, { id: probotTeamId })
-    githubScope
-      .get(`/orgs/${repository.owner.name}/teams/github`)
-      .reply(OK, { id: githubTeamId })
+    githubScope.get(`/repos/${repository.owner.name}/${repository.name}/teams`).reply(OK, [
+      { slug: 'greenkeeper-keeper', id: greenkeeperKeeperTeamId, permission: 'pull' },
+      { slug: 'form8ion', id: formationTeamId, permission: 'push' }
+    ])
+    githubScope.get(`/orgs/${repository.owner.name}/teams/probot`).reply(OK, { id: probotTeamId })
+    githubScope.get(`/orgs/${repository.owner.name}/teams/github`).reply(OK, { id: githubTeamId })
     githubScope
       .put(`/teams/${probotTeamId}/repos/${repository.owner.name}/${repository.name}`, body => {
         expect(body).toMatchObject({ permission: 'admin' })
@@ -61,9 +52,7 @@ describe('teams plugin', function () {
         return true
       })
       .reply(OK)
-    githubScope
-      .delete(`/teams/${formationTeamId}/repos/${repository.owner.name}/${repository.name}`)
-      .reply(NO_CONTENT)
+    githubScope.delete(`/teams/${formationTeamId}/repos/${repository.owner.name}/${repository.name}`).reply(NO_CONTENT)
 
     await probot.receive(buildTriggerEvent())
   })

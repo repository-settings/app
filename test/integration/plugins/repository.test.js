@@ -3,7 +3,7 @@ const fs = require('fs')
 const settings = require('../../../lib/settings')
 const { buildTriggerEvent, initializeNock, loadInstance, repository, teardownNock } = require('../common')
 
-const loadConfig = (configFilename) => {
+const loadConfig = configFilename => {
   const pathToConfig = path.resolve(__dirname, '..', '..', 'fixtures', 'repository', configFilename)
   const configFile = Buffer.from(fs.readFileSync(pathToConfig, 'utf8'))
 

@@ -22,13 +22,15 @@ describe('Teams', () => {
     github = {
       paginate: jest.fn().mockImplementation(() => Promise.resolve()),
       repos: {
-        listTeams: jest.fn().mockImplementation(() => Promise.resolve({
-          data: [
-            { id: unchangedTeamId, slug: unchangedTeamName, permission: 'push' },
-            { id: removedTeamId, slug: removedTeamName, permission: 'push' },
-            { id: updatedTeamId, slug: updatedTeamName, permission: 'pull' }
-          ]
-        }))
+        listTeams: jest.fn().mockImplementation(() =>
+          Promise.resolve({
+            data: [
+              { id: unchangedTeamId, slug: unchangedTeamName, permission: 'push' },
+              { id: removedTeamId, slug: removedTeamName, permission: 'push' },
+              { id: updatedTeamId, slug: updatedTeamName, permission: 'pull' }
+            ]
+          })
+        )
       },
       request: jest.fn()
     }
@@ -47,37 +49,28 @@ describe('Teams', () => {
 
       await plugin.sync()
 
-      expect(github.request).toHaveBeenCalledWith(
-        'PUT /teams/:team_id/repos/:owner/:repo',
-        {
-          org,
-          owner: org,
-          repo: 'test',
-          team_id: updatedTeamId,
-          permission: 'admin'
-        }
-      )
+      expect(github.request).toHaveBeenCalledWith('PUT /teams/:team_id/repos/:owner/:repo', {
+        org,
+        owner: org,
+        repo: 'test',
+        team_id: updatedTeamId,
+        permission: 'admin'
+      })
 
-      expect(github.request).toHaveBeenCalledWith(
-        'PUT /teams/:team_id/repos/:owner/:repo',
-        {
-          org,
-          owner: org,
-          repo: 'test',
-          team_id: addedTeamId,
-          permission: 'pull'
-        }
-      )
+      expect(github.request).toHaveBeenCalledWith('PUT /teams/:team_id/repos/:owner/:repo', {
+        org,
+        owner: org,
+        repo: 'test',
+        team_id: addedTeamId,
+        permission: 'pull'
+      })
 
-      expect(github.request).toHaveBeenCalledWith(
-        'DELETE /teams/:team_id/repos/:owner/:repo',
-        {
-          org,
-          owner: org,
-          repo: 'test',
-          team_id: removedTeamId
-        }
-      )
+      expect(github.request).toHaveBeenCalledWith('DELETE /teams/:team_id/repos/:owner/:repo', {
+        org,
+        owner: org,
+        repo: 'test',
+        team_id: removedTeamId
+      })
     })
   })
 })
