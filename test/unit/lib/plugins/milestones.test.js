@@ -25,12 +25,14 @@ describe('Milestones', () => {
 
   describe('sync', () => {
     it('syncs milestones', async () => {
-      github.paginate.mockReturnValueOnce(Promise.resolve([
-        { title: 'no-change', description: 'no-change-description', due_on: null, state: 'open', number: 5 },
-        { title: 'new-description', description: 'old-description', due_on: null, state: 'open', number: 2 },
-        { title: 'new-state', description: 'FF0000', due_on: null, state: 'open', number: 4 },
-        { title: 'remove-milestone', description: 'old-description', due_on: null, state: 'open', number: 1 }
-      ]))
+      github.paginate.mockReturnValueOnce(
+        Promise.resolve([
+          { title: 'no-change', description: 'no-change-description', due_on: null, state: 'open', number: 5 },
+          { title: 'new-description', description: 'old-description', due_on: null, state: 'open', number: 2 },
+          { title: 'new-state', description: 'FF0000', due_on: null, state: 'open', number: 4 },
+          { title: 'remove-milestone', description: 'old-description', due_on: null, state: 'open', number: 1 }
+        ])
+      )
 
       const plugin = configure([
         { title: 'no-change', description: 'no-change-description', due_on: '2019-03-29T07:00:00Z', state: 'open' },
