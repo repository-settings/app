@@ -1,0 +1,7 @@
+# This file keeps track of commits that can be safely ignored when running `git blame`
+# See https://michaelheap.com/git-ignore-rev/
+#
+# Please add a comment with each commit SHA to explain why it should be skipped
+
+# Apply prettier-standard for the first time
+8e3d7f1a0114735005976434eb2b6baba9097bbd 
