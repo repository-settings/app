@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "repository": "github:probot/settings",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon",
@@ -13,9 +14,9 @@
     "lint:lockfile": "lockfile-lint --path package-lock.json --type npm --validate-https --allowed-hosts npm",
     "lint:engines": "check-engine",
     "lint:peer": "npm ls >/dev/null",
-    "test:unit": "jest 'test/unit/'",
+    "test:unit": "NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 jest 'test/unit/'",
     "test:unit:watch": "npm run test:unit -- --watch",
-    "test:integration": "jest --test-timeout=10000 'test/integration/'",
+    "test:integration": "NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 jest --test-timeout=10000 'test/integration/'",
     "test:integration:debug": "LOG_LEVEL=debug DEBUG=nock.* run-s test:integration"
   },
   "author": "Brandon Keepers",

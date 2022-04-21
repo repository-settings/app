@@ -1,8 +1,7 @@
-const path = require('path')
-const fs = require('fs')
-const { CREATED, NO_CONTENT, OK } = require('http-status-codes')
-const settings = require('../../../lib/settings')
-const { buildTriggerEvent, initializeNock, loadInstance, repository, teardownNock } = require('../common')
+import fs from 'fs'
+import { CREATED, NO_CONTENT, OK } from 'http-status-codes'
+import Settings from '../../../lib/settings'
+import { buildTriggerEvent, initializeNock, loadInstance, repository, teardownNock } from '../common'
 
 describe('milestones plugin', function () {
   let probot, githubScope
@@ -17,11 +16,11 @@ describe('milestones plugin', function () {
   })
 
   it('syncs milestones', async () => {
-    const pathToConfig = path.resolve(__dirname, '..', '..', 'fixtures', 'milestones-config.yml')
+    const pathToConfig = new URL('../../fixtures/milestones-config.yml', import.meta.url)
     const configFile = Buffer.from(fs.readFileSync(pathToConfig, 'utf8'))
     const config = configFile.toString()
     githubScope
-      .get(`/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(settings.FILE_NAME)}`)
+      .get(`/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(Settings.FILE_NAME)}`)
       .reply(OK, config)
     githubScope.patch(`/repos/${repository.owner.name}/${repository.name}`).reply(200)
     githubScope.get(`/repos/${repository.owner.name}/${repository.name}/milestones?per_page=100&state=all`).reply(OK, [

@@ -1,5 +1,5 @@
-const settings = require('../../../lib/settings')
-const { initializeNock, loadInstance, repository, teardownNock } = require('../common')
+import Settings from '../../../lib/settings'
+import { initializeNock, loadInstance, repository, teardownNock } from '../common'
 
 describe('push trigger', function () {
   let probot, githubScope
@@ -19,7 +19,7 @@ describe('push trigger', function () {
       payload: {
         ref: 'refs/heads/wip',
         repository,
-        commits: [{ modified: [settings.FILE_NAME], added: [] }]
+        commits: [{ modified: [Settings.FILE_NAME], added: [] }]
       }
     })
   })
