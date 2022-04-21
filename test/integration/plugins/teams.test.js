@@ -1,9 +1,8 @@
-const path = require('path')
-const fs = require('fs')
-const { CREATED, NO_CONTENT, OK } = require('http-status-codes')
-const any = require('@travi/any')
-const settings = require('../../../lib/settings')
-const { buildTriggerEvent, initializeNock, loadInstance, repository, teardownNock } = require('../common')
+import fs from 'fs'
+import { CREATED, NO_CONTENT, OK } from 'http-status-codes'
+import any from '@travi/any'
+import Settings from '../../../lib/settings'
+import { buildTriggerEvent, initializeNock, loadInstance, repository, teardownNock } from '../common'
 
 describe('teams plugin', function () {
   let probot, githubScope
@@ -18,7 +17,7 @@ describe('teams plugin', function () {
   })
 
   it('syncs teams', async () => {
-    const pathToConfig = path.resolve(__dirname, '..', '..', 'fixtures', 'teams-config.yml')
+    const pathToConfig = new URL('../../fixtures/teams-config.yml', import.meta.url)
     const configFile = Buffer.from(fs.readFileSync(pathToConfig, 'utf8'))
     const config = configFile.toString()
     const probotTeamId = any.integer()
@@ -26,7 +25,7 @@ describe('teams plugin', function () {
     const greenkeeperKeeperTeamId = any.integer()
     const formationTeamId = any.integer()
     githubScope
-      .get(`/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(settings.FILE_NAME)}`)
+      .get(`/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(Settings.FILE_NAME)}`)
       .reply(OK, config)
     githubScope.get(`/repos/${repository.owner.name}/${repository.name}/teams`).reply(OK, [
       { slug: 'greenkeeper-keeper', id: greenkeeperKeeperTeamId, permission: 'pull' },

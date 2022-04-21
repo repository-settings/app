@@ -1,8 +1,8 @@
-const { Probot } = require('probot')
-const nock = require('nock')
-const any = require('@travi/any')
-const settingsBot = require('../../index')
-const settings = require('../../lib/settings')
+import { Probot } from 'probot'
+import nock from 'nock'
+import any from '@travi/any'
+import settingsBot from '../../index'
+import settings from '../../lib/settings'
 
 nock.disableNetConnect()
 
@@ -65,7 +65,7 @@ function buildTriggerEvent () {
   return any.fromList([buildPushEvent(), buildRepositoryCreatedEvent(), buildRepositoryEditedEvent()])
 }
 
-module.exports = {
+export {
   loadInstance,
   initializeNock,
   teardownNock,
