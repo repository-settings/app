@@ -7,7 +7,13 @@ import SettingsApp from './lib/settings'
 export default (robot, _, Settings = SettingsApp) => {
   async function syncSettings (context, repo = context.repo()) {
     const config = await context.config('settings.yml', {}, { arrayMerge: mergeArrayByName })
-    return Settings.sync(context.octokit, repo, config)
+    if (!config || !Object.keys(config).length) {
+      robot.log.debug(`Unable to read config from '${Settings.FILE_NAME}', returning...`)
+      return
+    }
+    const results = Settings.sync(context.octokit, repo, config)
+    robot.log.debug('Synced settings')
+    return results
   }
 
   robot.on('push', async context => {
