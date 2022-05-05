@@ -19,4 +19,8 @@ jobs:
           node-version: 16
           cache: npm
       - run: npm ci
+      - name: Check that the latest CommonJS target has been checked in
+        run: |
+          npm run build
+          git diff-index --quiet HEAD
       - run: npm test
