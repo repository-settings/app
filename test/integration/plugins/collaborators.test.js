@@ -1,7 +1,8 @@
-import fs from 'fs'
-import { CREATED, NO_CONTENT, OK } from 'http-status-codes'
-import Settings from '../../../lib/settings'
-import { buildTriggerEvent, initializeNock, loadInstance, repository, teardownNock } from '../common'
+const path = require('path')
+const fs = require('fs')
+const { CREATED, NO_CONTENT, OK } = require('http-status-codes')
+const settings = require('../../../lib/settings')
+const { buildTriggerEvent, initializeNock, loadInstance, repository, teardownNock } = require('../common')
 
 describe('collaborators plugin', function () {
   let probot, githubScope
@@ -16,11 +17,11 @@ describe('collaborators plugin', function () {
   })
 
   it('syncs collaborators', async () => {
-    const pathToConfig = new URL('../../fixtures/collaborators-config.yml', import.meta.url)
+    const pathToConfig = path.resolve(__dirname, '..', '..', 'fixtures', 'collaborators-config.yml')
     const configFile = Buffer.from(fs.readFileSync(pathToConfig, 'utf8'))
     const config = configFile.toString()
     githubScope
-      .get(`/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(Settings.FILE_NAME)}`)
+      .get(`/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(settings.FILE_NAME)}`)
       .reply(OK, config)
     githubScope.get(`/repos/${repository.owner.name}/${repository.name}/collaborators?affiliation=direct`).reply(OK, [
       { login: 'travi', permissions: { admin: true } },
