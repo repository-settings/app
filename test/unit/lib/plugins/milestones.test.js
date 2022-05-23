@@ -1,5 +1,4 @@
-import Milestones from '../../../../lib/plugins/milestones'
-import { jest } from '@jest/globals'
+const Milestones = require('../../../../lib/plugins/milestones')
 
 describe('Milestones', () => {
   let github

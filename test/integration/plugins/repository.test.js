@@ -1,10 +1,10 @@
-import path from 'path'
-import fs from 'fs'
-import Settings from '../../../lib/settings'
-import { buildTriggerEvent, initializeNock, loadInstance, repository, teardownNock } from '../common'
+const path = require('path')
+const fs = require('fs')
+const settings = require('../../../lib/settings')
+const { buildTriggerEvent, initializeNock, loadInstance, repository, teardownNock } = require('../common')
 
 const loadConfig = configFilename => {
-  const pathToConfig = new URL(path.join('../../fixtures/repository', configFilename), import.meta.url)
+  const pathToConfig = path.resolve(__dirname, '..', '..', 'fixtures', 'repository', configFilename)
   const configFile = Buffer.from(fs.readFileSync(pathToConfig, 'utf8'))
 
   return configFile.toString()
@@ -27,7 +27,7 @@ describe('repository plugin', function () {
     const repoSettings = Object.assign({}, config.repository)
 
     githubScope
-      .get(`/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(Settings.FILE_NAME)}`)
+      .get(`/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(settings.FILE_NAME)}`)
       .reply(200, config)
     githubScope
       .patch(`/repos/${repository.owner.name}/${repository.name}`, body => {
@@ -45,7 +45,7 @@ describe('repository plugin', function () {
     const repoSettings = Object.assign({}, config.repository)
 
     githubScope
-      .get(`/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(Settings.FILE_NAME)}`)
+      .get(`/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(settings.FILE_NAME)}`)
       .reply(200, config)
     githubScope
       .patch(`/repos/${repository.owner.name}/${repository.name}`, body => {
@@ -71,7 +71,7 @@ describe('repository plugin', function () {
     delete repoSettings.enable_vulnerability_alerts
 
     githubScope
-      .get(`/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(Settings.FILE_NAME)}`)
+      .get(`/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(settings.FILE_NAME)}`)
       .reply(200, config)
     githubScope
       .patch(`/repos/${repository.owner.name}/${repository.name}`, body => {
@@ -94,7 +94,7 @@ describe('repository plugin', function () {
     delete repoSettings.enable_automated_security_fixes
 
     githubScope
-      .get(`/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(Settings.FILE_NAME)}`)
+      .get(`/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(settings.FILE_NAME)}`)
       .reply(200, config)
     githubScope
       .patch(`/repos/${repository.owner.name}/${repository.name}`, body => {

@@ -1,5 +1,5 @@
-import branchArrayMerge from '../../../lib/mergeArrayByName'
-import YAML from 'js-yaml'
+const branchArrayMerge = require('../../../lib/mergeArrayByName')
+const YAML = require('js-yaml')
 
 describe('mergeArrayByName', () => {
   it('works', () => {

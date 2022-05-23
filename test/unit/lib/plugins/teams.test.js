@@ -1,7 +1,6 @@
-import { when } from 'jest-when'
-import any from '@travi/any'
-import Teams from '../../../../lib/plugins/teams'
-import { jest } from '@jest/globals'
+const { when } = require('jest-when')
+const any = require('@travi/any')
+const Teams = require('../../../../lib/plugins/teams')
 
 describe('Teams', () => {
   let github

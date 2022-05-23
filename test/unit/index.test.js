@@ -1,12 +1,6 @@
-import { Probot } from 'probot'
-import any from '@travi/any'
-import plugin from '../../index'
-import { readFileSync } from 'fs'
-import { jest } from '@jest/globals'
-
-const pushSettings = JSON.parse(readFileSync(new URL('../fixtures/events/push.settings.json', import.meta.url)))
-const pushReadme = JSON.parse(readFileSync(new URL('../fixtures/events/push.readme.json', import.meta.url)))
-const repositoryEdited = JSON.parse(readFileSync(new URL('../fixtures/events/repository.edited.json', import.meta.url)))
+const { Probot } = require('probot')
+const any = require('@travi/any')
+const plugin = require('../../index')
 
 describe('plugin', () => {
   let app, event, sync
@@ -32,7 +26,7 @@ describe('plugin', () => {
 
     event = {
       name: 'push',
-      payload: pushSettings
+      payload: JSON.parse(JSON.stringify(require('../fixtures/events/push.settings.json')))
     }
     sync = jest.fn()
 
@@ -59,7 +53,7 @@ describe('plugin', () => {
 
   describe('with other files modified', () => {
     beforeEach(() => {
-      event.payload = pushReadme
+      event.payload = require('../fixtures/events/push.readme.json')
     })
 
     it('does not sync settings', async () => {
@@ -72,7 +66,7 @@ describe('plugin', () => {
     beforeEach(() => {
       event = {
         name: 'repository.edited',
-        payload: repositoryEdited
+        payload: require('../fixtures/events/repository.edited.json')
       }
     })
 

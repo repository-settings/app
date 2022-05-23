@@ -1,5 +1,4 @@
-import Labels from '../../../../lib/plugins/labels'
-import { jest } from '@jest/globals'
+const Labels = require('../../../../lib/plugins/labels')
 
 describe('Labels', () => {
   let github

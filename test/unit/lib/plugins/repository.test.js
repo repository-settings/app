@@ -1,5 +1,4 @@
-import Repository from '../../../../lib/plugins/repository'
-import { jest } from '@jest/globals'
+const Repository = require('../../../../lib/plugins/repository')
 
 describe('Repository', () => {
   let github
