@@ -2,7 +2,7 @@
   "name": "probot-settings",
   "version": "1.0.0",
   "description": "",
-  "repository": "github:probot/settings",
+  "repository": "github:repository-settings/app",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon",

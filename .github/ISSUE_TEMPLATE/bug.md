@@ -18,10 +18,10 @@ labels: bug
 
 ## Context
 
-### Are you using the hosted instance of probot/settings or running your own?
+### Are you using the hosted instance of repository-settings/app or running your own?
 
 ### If running your own instance, are you using it with github.com or GitHub Enterprise?
 
-#### Version of probot/settings
+#### Version of repository-settings/app
 
 #### Version of GitHub Enterprise
