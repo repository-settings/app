@@ -183,8 +183,8 @@ See [docs/deploy.md](docs/deploy.md) if you would like to run your own instance 
 
 [dependabot-link]: https://dependabot.com/
 
-[dependabot-badge]: https://badgen.net/dependabot/probot/settings/?icon=dependabot
+[dependabot-badge]: https://badgen.net/dependabot/repository-settings/app/?icon=dependabot
 
-[github-actions-ci-link]: https://github.com/probot/settings/actions?query=workflow%3A%22Node.js+CI%22+branch%3Amaster
+[github-actions-ci-link]: https://github.com/repository-settings/app/actions?query=workflow%3A%22Node.js+CI%22+branch%3Amaster
 
-[github-actions-ci-badge]: https://github.com/probot/settings/workflows/Node.js%20CI/badge.svg
+[github-actions-ci-badge]: https://github.com/repository-settings/app/workflows/Node.js%20CI/badge.svg

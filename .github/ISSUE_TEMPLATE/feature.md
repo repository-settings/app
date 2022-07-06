@@ -9,7 +9,7 @@ labels: enhancement
 * Is the functionality available in the GitHub UI? If so, please provide a link to information about the feature.
 
 <!--
-  For awareness, this must be available before probot/settings can manage the setting. However, we are happy to track
+  For awareness, this must be available before repository-settings/app can manage the setting. However, we are happy to track
   progress toward API availability in an issue before it is made available.
 -->
 * Is the functionality available through the GitHub API? If the functionality is available, please provide links to the
