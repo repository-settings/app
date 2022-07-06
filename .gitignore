@@ -4,3 +4,4 @@ node_modules/
 private-key.pem
 .env
 *.pem
+.vercel
