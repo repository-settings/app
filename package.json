@@ -12,7 +12,7 @@
     "lint:js": "prettier-standard --lint --check",
     "lint:js:fix": "prettier-standard --format --lint",
     "lint:lockfile": "lockfile-lint --path package-lock.json --type npm --validate-https --allowed-hosts npm",
-    "lint:engines": "check-engine",
+    "lint:engines": "ls-engines",
     "lint:peer": "npm ls >/dev/null",
     "test:unit": "jest 'test/unit/'",
     "test:unit:watch": "npm run test:unit -- --watch",
