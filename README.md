@@ -1,7 +1,7 @@
 # GitHub Settings
 
 [![Node CI Workflow Status][github-actions-ci-badge]][github-actions-ci-link]
-[![Dependabot][dependabot-badge]][dependabot-link]
+[![Renovate][renovate-badge]][renovate-link]
 
 This GitHub App syncs repository settings defined in `.github/settings.yml` to GitHub, enabling Pull Requests for repository settings.
 
@@ -181,10 +181,10 @@ Until restrictions are added in this app, one way to preserve admin/push permiss
 
 See [docs/deploy.md](docs/deploy.md) if you would like to run your own instance of this plugin.
 
-[dependabot-link]: https://dependabot.com/
-
-[dependabot-badge]: https://badgen.net/dependabot/repository-settings/app/?icon=dependabot
-
 [github-actions-ci-link]: https://github.com/repository-settings/app/actions?query=workflow%3A%22Node.js+CI%22+branch%3Amaster
 
 [github-actions-ci-badge]: https://github.com/repository-settings/app/workflows/Node.js%20CI/badge.svg
+
+[renovate-link]: https://renovatebot.com
+
+[renovate-badge]: https://img.shields.io/badge/renovate-enabled-brightgreen.svg?logo=renovatebot
