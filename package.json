@@ -1,6 +1,7 @@
 {
   "name": "probot-settings",
-  "version": "1.0.0",
+  "version": "0.0.0-semantically-released",
+  "private": true,
   "description": "",
   "repository": "github:repository-settings/app",
   "main": "index.js",
