@@ -140,6 +140,11 @@ branches:
         dismiss_stale_reviews: true
         # Blocks merge until code owners have reviewed.
         require_code_owner_reviews: true
+        # Allow specific users, teams, or apps to bypass pull request requirements.
+        bypass_pull_request_allowances:
+          users: []
+          teams: []
+          apps: []
         # Specify which users and teams can dismiss pull request reviews. Pass an empty dismissal_restrictions object to disable. User and team dismissal_restrictions are only available for organization-owned repositories. Omit this parameter for personal repositories.
         dismissal_restrictions:
           users: []
