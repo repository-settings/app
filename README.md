@@ -203,6 +203,6 @@ See [docs/deploy.md](docs/deploy.md) if you would like to run your own instance 
 
 [node-badge]: https://img.shields.io/node/v/probot-settings?logo=node.js
 
-[vercel-badge]: https://github.com/repository-settings/app/raw/master/assets/powered-by-vercel/svg
+[vercel-badge]: https://github.com/repository-settings/app/raw/master/assets/powered-by-vercel.svg
 
 [vercel-link]: https://vercel.com?utm_source=repository-settings&utm_campaign=oss
