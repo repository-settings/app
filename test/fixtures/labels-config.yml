@@ -1,0 +1,7 @@
+labels:
+  - name: bug
+    color: ee0701
+  - name: enhancement
+    color: 008672
+  - name: help wanted
+    color: d876e3
