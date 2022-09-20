@@ -5,9 +5,9 @@ const { buildRepositoryCreatedEvent, initializeNock, loadInstance, repository, t
 describe('repository.created trigger', function () {
   let probot, githubScope
 
-  beforeEach(() => {
+  beforeEach(async () => {
     githubScope = initializeNock()
-    probot = loadInstance()
+    probot = await loadInstance()
   })
 
   afterEach(() => {

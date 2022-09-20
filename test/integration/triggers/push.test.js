@@ -4,9 +4,9 @@ const { initializeNock, loadInstance, repository, teardownNock } = require('../c
 describe('push trigger', function () {
   let probot, githubScope
 
-  beforeEach(() => {
+  beforeEach(async () => {
     githubScope = initializeNock()
-    probot = loadInstance()
+    probot = await loadInstance()
   })
 
   afterEach(() => {

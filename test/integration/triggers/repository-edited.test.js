@@ -6,9 +6,9 @@ const { buildRepositoryEditedEvent, initializeNock, loadInstance, repository, te
 describe('repository.edited trigger', function () {
   let probot, githubScope
 
-  beforeEach(() => {
+  beforeEach(async () => {
     githubScope = initializeNock()
-    probot = loadInstance()
+    probot = await loadInstance()
   })
 
   afterEach(() => {

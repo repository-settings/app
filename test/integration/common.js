@@ -16,9 +16,9 @@ const repository = {
   }
 }
 
-function loadInstance () {
+async function loadInstance () {
   const probot = new Probot({ appId: 1, privateKey: 'test', githubToken: 'test' })
-  probot.load(settingsBot)
+  await probot.load(settingsBot)
 
   return probot
 }
