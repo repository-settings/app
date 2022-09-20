@@ -5,8 +5,23 @@ const mergeArrayByName = require('./lib/mergeArrayByName')
  */
 module.exports = (robot, _, Settings = require('./lib/settings')) => {
   async function syncSettings (context, repo = context.repo()) {
+    const { host } = context
+    const { GHE_HOST } = process.env
+    if (host === 'github.com' && GHE_HOST) {
+      robot.log.warn('Webhook source is public github, but GHE_HOST is set. Settings may not be read correctly.')
+    }
+    else if (host !== GHE_HOST) {
+      robot.log.warn('Webhook source does not match GHE_HOST. Settings may not be read correctly.')
+    }
+
     const config = await context.config('settings.yml', {}, { arrayMerge: mergeArrayByName })
-    return Settings.sync(context.octokit, repo, config)
+    if (!config || !Object.keys(config).length) {
+      robot.log.error(`Unable to read config from '${Settings.FILE_NAME}'`)
+      return
+    }
+    const results = Settings.sync(context.octokit, repo, config)
+    robot.log.debug('Synced settings')
+    return results
   }
 
   robot.on('push', async context => {
