@@ -7,9 +7,9 @@ const { buildTriggerEvent, initializeNock, loadInstance, repository, teardownNoc
 describe('collaborators plugin', function () {
   let probot, githubScope
 
-  beforeEach(() => {
+  beforeEach(async () => {
     githubScope = initializeNock()
-    probot = loadInstance()
+    probot = await loadInstance()
   })
 
   afterEach(() => {

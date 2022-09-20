@@ -8,9 +8,9 @@ const { buildTriggerEvent, initializeNock, loadInstance, repository, teardownNoc
 describe('teams plugin', function () {
   let probot, githubScope
 
-  beforeEach(() => {
+  beforeEach(async () => {
     githubScope = initializeNock()
-    probot = loadInstance()
+    probot = await loadInstance()
   })
 
   afterEach(() => {
