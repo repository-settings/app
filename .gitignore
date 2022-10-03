@@ -5,3 +5,4 @@ private-key.pem
 .env
 *.pem
 .vercel
+.idea
