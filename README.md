@@ -116,6 +116,23 @@ collaborators:
   # * `maintain` - Recommended for project managers who need to manage the repository without access to sensitive or destructive actions.
   # * `triage` - Recommended for contributors who need to proactively manage issues and pull requests without write access.
 
+# See https://docs.github.com/en/rest/deployments/environments#create-or-update-an-environment for available options
+environments:
+  - name: production
+    wait_timer: 5
+    reviewers:
+      - id: 1
+        type: 'Team'
+      - id: 2
+        type: 'User'
+    deployment_branch_policy:
+      protected_branches: true
+      custom_branch_policies: false
+  - name: development
+    deployment_branch_policy:
+      protected_branches: false
+      custom_branch_policies: true
+
 # See https://docs.github.com/en/rest/reference/teams#add-or-update-team-repository-permissions for available options
 teams:
   - name: core

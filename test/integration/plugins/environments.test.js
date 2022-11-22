@@ -1,0 +1,166 @@
+const path = require('path')
+const fs = require('fs')
+const { CREATED, NO_CONTENT, OK } = require('http-status-codes')
+const settings = require('../../../lib/settings')
+const { buildTriggerEvent, initializeNock, loadInstance, repository, teardownNock } = require('../common')
+
+describe('environments plugin', function () {
+  let probot, githubScope
+
+  beforeEach(async () => {
+    githubScope = initializeNock()
+    probot = await loadInstance()
+  })
+
+  afterEach(() => {
+    teardownNock(githubScope)
+  })
+
+  it('syncs environments', async () => {
+    const pathToConfig = path.resolve(__dirname, '..', '..', 'fixtures', 'environments-config.yml')
+    const configFile = Buffer.from(fs.readFileSync(pathToConfig, 'utf8'))
+    const config = configFile.toString()
+    githubScope
+      .get(`/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(settings.FILE_NAME)}`)
+      .reply(OK, config)
+    githubScope.get(`/repos/${repository.owner.name}/${repository.name}/environments`).reply(OK, {
+      environments: [
+        { name: 'changed-wait-timer', wait_timer: 1 },
+        {
+          name: 'changed-reviewers-type',
+          reviewers: [
+            { id: 1, type: 'Team' },
+            { id: 2, type: 'User' }
+          ]
+        },
+        {
+          name: 'changed-reviewers-id',
+          reviewers: [
+            { id: 1, type: 'Team' },
+            { id: 2, type: 'User' }
+          ]
+        },
+        {
+          name: 'changed-reviewers-remove',
+          reviewers: [
+            { id: 1, type: 'Team' },
+            { id: 2, type: 'User' }
+          ]
+        },
+        {
+          name: 'changed-reviewers-add',
+          reviewers: [
+            { id: 1, type: 'Team' },
+            { id: 2, type: 'User' }
+          ]
+        },
+        {
+          name: 'changed-deployment-branch-policy',
+          deployment_branch_policy: { protected_branches: true, custom_branch_policies: false }
+        },
+        { name: 'changed-all', wait_timer: 0 },
+        { name: 'unchanged-default-wait-timer', wait_timer: 0 },
+        { name: 'unchanged-wait-timer', wait_timer: 1 },
+        {
+          name: 'unchanged-reviewers-unsorted',
+          reviewers: [
+            { id: 1, type: 'Team' },
+            { id: 2, type: 'User' }
+          ]
+        },
+        {
+          name: 'unchanged-reviewers-sorted',
+          reviewers: [
+            { id: 1, type: 'Team' },
+            { id: 2, type: 'User' }
+          ]
+        },
+        {
+          name: 'unchanged-deployment-branch-policy',
+          deployment_branch_policy: { protected_branches: false, custom_branch_policies: true }
+        },
+        { name: 'deleted', wait_timer: 0 }
+      ]
+    })
+    githubScope
+      .put(`/repos/${repository.owner.name}/${repository.name}/environments/changed-wait-timer`, body => {
+        expect(body).toMatchObject({ wait_timer: 10 })
+        return true
+      })
+      .reply(CREATED)
+    githubScope
+      .put(`/repos/${repository.owner.name}/${repository.name}/environments/changed-reviewers-type`, body => {
+        expect(body).toMatchObject({
+          reviewers: [
+            { id: 1, type: 'User' },
+            { id: 2, type: 'User' }
+          ]
+        })
+        return true
+      })
+      .reply(CREATED)
+    githubScope
+      .put(`/repos/${repository.owner.name}/${repository.name}/environments/changed-reviewers-id`, body => {
+        expect(body).toMatchObject({
+          reviewers: [
+            { id: 1, type: 'Team' },
+            { id: 3, type: 'User' }
+          ]
+        })
+        return true
+      })
+      .reply(CREATED)
+    githubScope
+      .put(`/repos/${repository.owner.name}/${repository.name}/environments/changed-reviewers-remove`, body => {
+        expect(body).toMatchObject({ reviewers: [{ id: 1, type: 'Team' }] })
+        return true
+      })
+      .reply(CREATED)
+    githubScope
+      .put(`/repos/${repository.owner.name}/${repository.name}/environments/changed-reviewers-add`, body => {
+        expect(body).toMatchObject({
+          reviewers: [
+            { id: 1, type: 'Team' },
+            { id: 2, type: 'User' },
+            { id: 3, type: 'User' }
+          ]
+        })
+        return true
+      })
+      .reply(CREATED)
+    githubScope
+      .put(`/repos/${repository.owner.name}/${repository.name}/environments/changed-deployment-branch-policy`, body => {
+        expect(body).toMatchObject({
+          deployment_branch_policy: { protected_branches: false, custom_branch_policies: true }
+        })
+        return true
+      })
+      .reply(CREATED)
+    githubScope
+      .put(`/repos/${repository.owner.name}/${repository.name}/environments/changed-all`, body => {
+        expect(body).toMatchObject({
+          wait_timer: 10,
+          reviewers: [{ id: 2, type: 'User' }],
+          deployment_branch_policy: { protected_branches: false, custom_branch_policies: true }
+        })
+        return true
+      })
+      .reply(CREATED)
+    githubScope
+      .put(`/repos/${repository.owner.name}/${repository.name}/environments/new-environment`, body => {
+        expect(body).toMatchObject({
+          wait_timer: 1,
+          reviewers: [
+            { id: 1, type: 'Team' },
+            { id: 2, type: 'User' }
+          ],
+          deployment_branch_policy: { protected_branches: false, custom_branch_policies: true }
+        })
+        return true
+      })
+      .reply(CREATED)
+    githubScope.delete(`/repos/${repository.owner.name}/${repository.name}/environments/deleted`).reply(NO_CONTENT)
+
+    await probot.receive(buildTriggerEvent())
+  })
+})
