@@ -22,7 +22,7 @@ All top-level settings are optional. Some plugins do have required fields.
 # These settings are synced to GitHub by https://probot.github.io/apps/settings/
 
 repository:
-  # See https://docs.github.com/en/rest/reference/repos#update-a-repository for all available settings.
+  # See https://docs.github.com/en/rest/repos/repos#update-a-repository for all available settings.
 
   # The name of the repository. Changing this will rename the repository
   name: repo-name
