@@ -117,6 +117,7 @@ collaborators:
   # * `triage` - Recommended for contributors who need to proactively manage issues and pull requests without write access.
 
 # See https://docs.github.com/en/rest/deployments/environments#create-or-update-an-environment for available options
+# Note: deployment_branch_policy differs from the API for ease of use. Either protected_branches (boolean) OR custom_branches (array of strings) is required; this will manage the API requirements under the hood. See https://docs.github.com/en/rest/deployments/branch-policies for documentation of custom_branches. If both are provided in an unexpected manner, protected_branches will be used.
 environments:
   - name: production
     wait_timer: 5
@@ -127,11 +128,11 @@ environments:
         type: 'User'
     deployment_branch_policy:
       protected_branches: true
-      custom_branch_policies: false
   - name: development
     deployment_branch_policy:
-      protected_branches: false
-      custom_branch_policies: true
+      custom_branches:
+        - main
+        - dev/*
 
 # See https://docs.github.com/en/rest/reference/teams#add-or-update-team-repository-permissions for available options
 teams:

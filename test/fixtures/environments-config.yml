@@ -32,8 +32,9 @@ environments:
 
   - name: changed-deployment-branch-policy
     deployment_branch_policy:
-      protected_branches: false
-      custom_branch_policies: true
+      custom_branches:
+        - stage/*
+        - uat/*
 
   - name: changed-all
     wait_timer: 10
@@ -41,8 +42,8 @@ environments:
       - id: 2
         type: User
     deployment_branch_policy:
-      protected_branches: false
-      custom_branch_policies: true
+      custom_branches:
+        - dev/*
 
   - name: new-environment
     wait_timer: 1
@@ -52,8 +53,7 @@ environments:
       - id: 2
         type: User
     deployment_branch_policy:
-      protected_branches: false
-      custom_branch_policies: true
+      protected_branches: true
 
   - name: unchanged-default-wait-timer
 
@@ -76,5 +76,6 @@ environments:
 
   - name: unchanged-deployment-branch-policy
     deployment_branch_policy:
-      protected_branches: false
-      custom_branch_policies: true
+      custom_branches:
+        - dev/*
+        - dev-*

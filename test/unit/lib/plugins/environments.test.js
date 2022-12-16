@@ -12,7 +12,7 @@ describe('Environments', () => {
 
   beforeEach(() => {
     github = {
-      request: jest.fn()
+      request: jest.fn().mockReturnValue(Promise.resolve(true))
     }
   })
 
@@ -41,8 +41,13 @@ describe('Environments', () => {
             }
           ],
           deployment_branch_policy: {
-            protected_branches: false,
-            custom_branch_policies: true
+            custom_branches: ['dev/*', 'dev-*']
+          }
+        },
+        {
+          name: 'changed-branch-policy',
+          deployment_branch_policy: {
+            protected_branches: true
           }
         },
         {
@@ -76,6 +81,13 @@ describe('Environments', () => {
                 ]
               },
               {
+                name: 'changed-branch-policy',
+                deployment_branch_policy: {
+                  protected_branches: false,
+                  custom_branch_policies: true
+                }
+              },
+              {
                 name: 'unchanged-reviewers-unsorted',
                 reviewers: [
                   { id: 1, type: 'Team' },
@@ -83,6 +95,29 @@ describe('Environments', () => {
                 ]
               },
               { name: 'deleted', wait_timer: 0 }
+            ]
+          }
+        })
+
+      when(github.request)
+        .calledWith('GET /repos/:org/:repo/environments/:environment_name/deployment-branch-policies', {
+          org,
+          repo,
+          environment_name: 'changed-branch-policy'
+        })
+        .mockResolvedValue({
+          data: {
+            branch_policies: [
+              {
+                id: 2,
+                node_id: '2',
+                name: 'dev-*'
+              },
+              {
+                id: 1,
+                node_id: '1',
+                name: 'dev/*'
+              }
             ]
           }
         })
@@ -124,6 +159,57 @@ describe('Environments', () => {
           deployment_branch_policy: {
             protected_branches: false,
             custom_branch_policies: true
+          }
+        })
+
+        expect(github.request).toHaveBeenCalledWith(
+          'POST /repos/:org/:repo/environments/:environment_name/deployment-branch-policies',
+          {
+            org,
+            repo,
+            environment_name: 'new-environment',
+            name: 'dev/*'
+          }
+        )
+
+        expect(github.request).toHaveBeenCalledWith(
+          'POST /repos/:org/:repo/environments/:environment_name/deployment-branch-policies',
+          {
+            org,
+            repo,
+            environment_name: 'new-environment',
+            name: 'dev-*'
+          }
+        )
+
+        expect(github.request).toHaveBeenCalledWith(
+          'DELETE /repos/:org/:repo/environments/:environment_name/deployment-branch-policies/:id',
+          {
+            org,
+            repo,
+            environment_name: 'changed-branch-policy',
+            id: 1
+          }
+        )
+
+        expect(github.request).toHaveBeenCalledWith(
+          'DELETE /repos/:org/:repo/environments/:environment_name/deployment-branch-policies/:id',
+          {
+            org,
+            repo,
+            environment_name: 'changed-branch-policy',
+            id: 2
+          }
+        )
+
+        expect(github.request).toHaveBeenCalledWith('PUT /repos/:org/:repo/environments/:environment_name', {
+          org,
+          repo,
+          environment_name: 'changed-branch-policy',
+          wait_timer: 0,
+          deployment_branch_policy: {
+            protected_branches: true,
+            custom_branch_policies: false
           }
         })
 
