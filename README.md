@@ -127,7 +127,7 @@ teams:
     # * `triage` - Recommended for contributors who need to proactively manage issues and pull requests without write access.
     permission: admin
   - name: docs
-    permission: push
+    permission: write
 
 branches:
   - name: master
