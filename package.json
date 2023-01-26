@@ -32,7 +32,7 @@
     "jest": "29.4.0",
     "jest-when": "3.5.2",
     "lockfile-lint": "4.10.0",
-    "ls-engines": "0.8.1",
+    "ls-engines": "0.9.0",
     "nock": "13.3.0",
     "nodemon": "2.0.20",
     "npm-run-all": "4.1.5",
