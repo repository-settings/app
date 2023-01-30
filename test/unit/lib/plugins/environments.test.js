@@ -127,6 +127,7 @@ describe('Environments', () => {
           org,
           repo,
           environment_name: 'changed-wait-timer',
+          deployment_branch_policy: null,
           wait_timer: 10
         })
 
@@ -134,6 +135,7 @@ describe('Environments', () => {
           org,
           repo,
           environment_name: 'changed-reviewers-type',
+          deployment_branch_policy: null,
           wait_timer: 0,
           reviewers: [
             { id: 1, type: 'User' },
