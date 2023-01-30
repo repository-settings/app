@@ -1,4 +1,8 @@
 {
   "$schema":"https://docs.renovatebot.com/renovate-schema.json",
-  "extends":["github>form8ion/renovate-config:js-app"]
+  "extends":["github>form8ion/renovate-config:js-app"],
+  "lockFileMaintenance": {
+    "enabled": true,
+    "automergeType": "pr"
+  }
 }
