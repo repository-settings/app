@@ -118,6 +118,7 @@ collaborators:
 
 # See https://docs.github.com/en/rest/deployments/environments#create-or-update-an-environment for available options
 # Note: deployment_branch_policy differs from the API for ease of use. Either protected_branches (boolean) OR custom_branches (array of strings) is required; this will manage the API requirements under the hood. See https://docs.github.com/en/rest/deployments/branch-policies for documentation of custom_branches. If both are provided in an unexpected manner, protected_branches will be used.
+# Either removing or simply not setting deployment_branch_policy will restore the default 'All branches' setting.
 environments:
   - name: production
     wait_timer: 5
