@@ -1,0 +1,81 @@
+environments:
+  - name: changed-wait-timer
+    wait_timer: 10
+
+  - name: changed-reviewers-type
+    reviewers:
+      - id: 1
+        type: User
+      - id: 2
+        type: User
+
+  - name: changed-reviewers-id
+    reviewers:
+      - id: 1
+        type: Team
+      - id: 3
+        type: User
+
+  - name: changed-reviewers-remove
+    reviewers:
+      - id: 1
+        type: Team
+
+  - name: changed-reviewers-add
+    reviewers:
+      - id: 1
+        type: Team
+      - id: 2
+        type: User
+      - id: 3
+        type: User
+
+  - name: changed-deployment-branch-policy
+    deployment_branch_policy:
+      custom_branches:
+        - stage/*
+        - uat/*
+
+  - name: changed-all
+    wait_timer: 10
+    reviewers:
+      - id: 2
+        type: User
+    deployment_branch_policy:
+      custom_branches:
+        - dev/*
+
+  - name: new-environment
+    wait_timer: 1
+    reviewers:
+      - id: 1
+        type: Team
+      - id: 2
+        type: User
+    deployment_branch_policy:
+      protected_branches: true
+
+  - name: unchanged-default-wait-timer
+
+  - name: unchanged-wait-timer
+    wait_timer: 1
+
+  - name: unchanged-reviewers-unsorted
+    reviewers:
+      - id: 2
+        type: User
+      - id: 1
+        type: Team
+
+  - name: unchanged-reviewers-sorted
+    reviewers:
+      - id: 1
+        type: Team
+      - id: 2
+        type: User
+
+  - name: unchanged-deployment-branch-policy
+    deployment_branch_policy:
+      custom_branches:
+        - dev/*
+        - dev-*

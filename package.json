@@ -16,7 +16,7 @@
     "lint:peer": "npm ls >/dev/null",
     "test:unit": "jest 'test/unit/'",
     "test:unit:watch": "npm run test:unit -- --watch",
-    "test:integration": "jest --test-timeout=10000 'test/integration/'",
+    "test:integration": "jest --test-timeout=20000 'test/integration/'",
     "test:integration:debug": "LOG_LEVEL=debug DEBUG=nock.* run-s test:integration"
   },
   "author": "Brandon Keepers",
