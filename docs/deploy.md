@@ -13,6 +13,7 @@ This plugin requires these **Permissions & events** for the GitHub Integration:
 - Issues: **Read & Write**
 - Single file: **Read & Write**
   - Path: `.github/settings.yml`
+- Actions: **Read only**
 
 ### Organization Permissions
 
