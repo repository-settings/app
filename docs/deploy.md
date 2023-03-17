@@ -6,7 +6,7 @@ If you would like to run your own instance of this plugin, see the [docs for dep
 
 This plugin requires these **Permissions & events** for the GitHub Integration:
 
-### Permissions
+### Repository Permissions
 
 - Administration: **Read & Write**
 - Contents: **Read only**
