@@ -4,5 +4,14 @@
   "lockFileMaintenance": {
     "enabled": true,
     "automergeType": "pr"
-  }
+  },
+  "regexManagers": [
+    {
+      "description": "Update semantic-release version used by npx",
+      "fileMatch": ["^\\.github/workflows/release\\.yml$"],
+      "matchStrings": ["\\srun: npx semantic-release@(?<currentValue>.*?)\\s"],
+      "datasourceTemplate": "npm",
+      "depNameTemplate": "semantic-release"
+    }
+  ]
 }
