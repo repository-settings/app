@@ -1,6 +1,11 @@
+const path = require('node:path')
+const { promises: fs } = require('node:fs')
+const { OK } = require('http-status-codes')
 const { Probot } = require('probot')
+
 const nock = require('nock')
 const any = require('@travi/any')
+
 const settingsBot = require('../../index')
 const settings = require('../../lib/settings')
 
@@ -65,6 +70,18 @@ function buildTriggerEvent () {
   return any.fromList([buildPushEvent(), buildRepositoryCreatedEvent(), buildRepositoryEditedEvent()])
 }
 
+async function defineSettingsFileForScenario (settingsFileFixtureName, githubScope) {
+  const pathToConfig = path.resolve(__dirname, '..', 'fixtures', settingsFileFixtureName)
+  const configFile = Buffer.from(await fs.readFile(pathToConfig, 'utf8'))
+  const config = configFile.toString()
+
+  githubScope
+    .get(`/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(settings.FILE_NAME)}`)
+    .reply(OK, config)
+
+  return config
+}
+
 module.exports = {
   loadInstance,
   initializeNock,
@@ -72,5 +89,6 @@ module.exports = {
   buildTriggerEvent,
   buildRepositoryCreatedEvent,
   buildRepositoryEditedEvent,
+  defineSettingsFileForScenario,
   repository
 }
