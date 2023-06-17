@@ -1,8 +1,7 @@
 const path = require('node:path')
 const { promises: fs } = require('node:fs')
 const { OK } = require('http-status-codes')
-const { Probot } = require('probot')
-
+const { Probot, ProbotOctokit } = require('probot')
 const nock = require('nock')
 const any = require('@travi/any')
 
@@ -22,7 +21,15 @@ const repository = {
 }
 
 async function loadInstance () {
-  const probot = new Probot({ appId: 1, privateKey: 'test', githubToken: 'test' })
+  const probot = new Probot({
+    appId: 1,
+    privateKey: 'test',
+    githubToken: 'test',
+    Octokit: ProbotOctokit.defaults({
+      retry: { enabled: false },
+      throttle: { enabled: false }
+    })
+  })
   await probot.load(settingsBot)
 
   return probot
