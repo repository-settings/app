@@ -1,7 +1,11 @@
-const { initializeNock, loadInstance, teardownNock, repository, buildTriggerEvent } = require('../common')
-const path = require('path')
-const fs = require('fs')
-const settings = require('../../../lib/settings')
+const {
+  initializeNock,
+  loadInstance,
+  teardownNock,
+  repository,
+  buildTriggerEvent,
+  defineSettingsFileForScenario
+} = require('../common')
 const { OK, CREATED, NO_CONTENT } = require('http-status-codes')
 describe('branches plugin', function () {
   let probot, githubScope
@@ -16,12 +20,7 @@ describe('branches plugin', function () {
   })
 
   it('configures labels', async () => {
-    const pathToConfig = path.resolve(__dirname, '..', '..', 'fixtures', 'labels-config.yml')
-    const configFile = Buffer.from(fs.readFileSync(pathToConfig, 'utf8'))
-    const config = configFile.toString()
-    githubScope
-      .get(`/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(settings.FILE_NAME)}`)
-      .reply(OK, config)
+    await defineSettingsFileForScenario('labels-config.yml', githubScope)
     githubScope.get(`/repos/${repository.owner.name}/${repository.name}/labels?per_page=100`).reply(OK, [
       { name: 'bug', color: 'ee0701' },
       { name: 'duplicate', color: 'cccccc' },
