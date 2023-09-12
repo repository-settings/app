@@ -148,6 +148,11 @@ teams:
   - name: docs
     permission: push
 
+# See https://docs.github.com/en/rest/repos/tags#create-a-tag-protection-state-for-a-repository for available options
+tags:
+  - pattern: "v1"
+  - pattern: "release/*"
+
 branches:
   - name: master
     # https://docs.github.com/en/rest/reference/repos#update-branch-protection
