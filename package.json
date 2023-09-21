@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@travi/any": "2.1.10",
-    "http-status-codes": "2.2.0",
+    "http-status-codes": "2.3.0",
     "jest": "29.7.0",
     "jest-when": "3.6.0",
     "lockfile-lint": "4.12.1",
