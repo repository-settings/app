@@ -82,7 +82,7 @@ repository:
 labels:
   - name: bug
     color: CC0000
-    description: An issue with the system 🐛.
+    description: An issue with the system.
 
   - name: feature
     # If including a `#`, make sure to wrap it with quotes!
