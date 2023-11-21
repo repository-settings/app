@@ -33,7 +33,7 @@ repository:
   # A URL with more information about the repository
   homepage: https://example.github.io/
 
-  # A comma-separated list of topics to set on the repository
+  # A comma-separated list of topics to set on the repository. Note: topic names cannot contain uppercase letters, or spaces.
   topics: github, probot
 
   # Either `true` to make the repository private, or `false` to make it public.
