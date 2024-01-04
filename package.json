@@ -1,8 +1,7 @@
 {
-  "name": "repository-settings",
+  "name": "@repository-settings/app",
   "version": "0.0.0-semantically-released",
-  "private": true,
-  "description": "",
+  "description": "Pull Requests for GitHub repository settings",
   "repository": "github:repository-settings/app",
   "main": "index.js",
   "scripts": {
@@ -57,5 +56,9 @@
       ".env",
       "."
     ]
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   }
 }
