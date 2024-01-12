@@ -16,7 +16,8 @@
     "test:unit": "jest 'test/unit/'",
     "test:unit:watch": "npm run test:unit -- --watch",
     "test:integration": "jest 'test/integration/'",
-    "test:integration:debug": "LOG_LEVEL=debug DEBUG=nock.* run-s test:integration"
+    "test:integration:debug": "LOG_LEVEL=debug DEBUG=nock.* run-s test:integration",
+    "generate:md": "remark . --output"
   },
   "author": "Brandon Keepers",
   "license": "ISC",
@@ -26,6 +27,7 @@
     "probot": "12.3.3"
   },
   "devDependencies": {
+    "@form8ion/remark-preset": "1.0.0",
     "@travi/any": "3.0.2",
     "http-status-codes": "2.3.0",
     "jest": "29.7.0",

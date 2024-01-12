@@ -6,6 +6,18 @@
 
 <!--consumer-badges end -->
 
+## Table of Contents
+
+* [Deploy a Self-Hosted Instance](#deploy-a-self-hosted-instance)
+  * [Install `@repository-settings/app` as a dependency of your own app (recommended)](#install-repository-settingsapp-as-a-dependency-of-your-own-app-recommended)
+    * [Depend on the package from npm](#depend-on-the-package-from-npm)
+    * [Example node.js app](#example-nodejs-app)
+  * [Deploy a fork of this repository](#deploy-a-fork-of-this-repository)
+* [Permissions & events](#permissions--events)
+  * [Permissions](#permissions)
+  * [Organization Permissions](#organization-permissions)
+  * [Events](#events)
+
 ## Deploy a Self-Hosted Instance
 
 Multiple options exist for deploying a self-hosted instance:

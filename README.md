@@ -9,6 +9,15 @@ This GitHub App syncs repository settings defined in `.github/settings.yml` to G
 
 <!--status-badges end -->
 
+## Table of Contents
+
+* [Usage](#usage)
+  * [Install](#install)
+    * [Hosted GitHub.com App](#hosted-githubcom-app)
+    * [Self-Hosted App](#self-hosted-app)
+  * [Configuration](#configuration)
+* [Security Implications](#security-implications)
+
 ## Usage
 
 ### Install
@@ -17,7 +26,7 @@ To gain the benefits of the Repository Settings app, it will need to installed
 as a GitHub App on your repositories.
 First, choose which approach to using the Repository Settings App is most appropriate for you:
 
-### Hosted GitHub.com App
+#### Hosted GitHub.com App
 
 A hosted version is provided for use with GitHub.com.
 
@@ -26,7 +35,7 @@ entire organization.
 
 [![Powered by Vercel][vercel-badge]][vercel-link]
 
-### Self-Hosted App
+#### Self-Hosted App
 
 If you would prefer to self-host your own instance, see the documentation about
 [self-hosting](docs/self-host.md) if you would like to run your own instance of this app.
@@ -41,9 +50,9 @@ about updating your repository settings through pull-requests.
 
 > [!Caution]
 > Note that this app inherently _escalates anyone with `push`
-permissions to the __admin__ role_, since they can push config settings to the
-default branch, which will be synced.
-Until then, use caution when merging PRs and adding collaborators.
+> permissions to the __admin__ role_, since they can push config settings to the
+> default branch, which will be synced.
+> Use caution when merging PRs and adding collaborators.
 
 One way to preserve admin/push permissions is to utilize the
 [GitHub CodeOwners feature](https://help.github.com/articles/about-codeowners/)
