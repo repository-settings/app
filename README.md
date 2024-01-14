@@ -78,6 +78,13 @@ repository:
   # vulnerability alerts.
   enable_vulnerability_alerts: true
 
+# Autolinks
+autolinks:
+  - key_prefix: ASDF-
+    url_template: https://jira.company.com/browse/ASDF-<num>
+  - key_prefix: BOLIGRAFO-
+    url_template: https://jira.company.com/browse/BOLIGRAFO-<num>
+
 # Labels: define labels for Issues and Pull Requests
 labels:
   - name: bug
