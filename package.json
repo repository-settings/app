@@ -33,7 +33,7 @@
     "jest-when": "3.6.0",
     "lockfile-lint": "4.12.1",
     "ls-engines": "0.9.1",
-    "nock": "13.4.0",
+    "nock": "13.5.0",
     "nodemon": "3.0.2",
     "npm-run-all2": "6.1.1",
     "prettier-standard": "16.4.1",
