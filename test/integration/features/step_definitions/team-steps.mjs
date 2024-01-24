@@ -9,6 +9,9 @@ import any from '@travi/any'
 import { repository } from './common-steps.mjs'
 import settings from '../../../../lib/settings.js'
 
+const teamName = any.word()
+const teamId = any.integer()
+
 Given('no team has been granted access to the repository', async function () {
   this.server.use(
     http.get(`https://api.github.com/repos/${repository.owner.name}/${repository.name}/teams`, ({ request }) => {
@@ -17,10 +20,15 @@ Given('no team has been granted access to the repository', async function () {
   )
 })
 
-Given('a team is granted {string} privileges in the config', async function (accessLevel) {
-  const teamName = any.word()
-  const teamId = any.integer()
+Given('a team has been granted {string} privileges to the repository', async function (accessLevel) {
+  this.server.use(
+    http.get(`https://api.github.com/repos/${repository.owner.name}/${repository.name}/teams`, ({ request }) => {
+      return HttpResponse.json([{ slug: teamName, id: teamId, permission: accessLevel }])
+    })
+  )
+})
 
+Given('a team is granted {string} privileges in the config', async function (accessLevel) {
   this.server.use(
     http.get(
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
@@ -39,6 +47,30 @@ Given('a team is granted {string} privileges in the config', async function (acc
         this.teamPermissionLevel = (await request.json()).permission
 
         return new HttpResponse(null, { status: StatusCodes.CREATED })
+      }
+    )
+  )
+})
+
+Given('the team privileges are updated to {string} in the config', async function (accessLevel) {
+  this.server.use(
+    http.get(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
+        settings.FILE_NAME
+      )}`,
+      ({ request }) => {
+        return HttpResponse.arrayBuffer(Buffer.from(dump({ teams: [{ name: teamName, permission: accessLevel }] })))
+      }
+    ),
+    http.get(`https://api.github.com/orgs/${repository.owner.name}/teams/${teamName}`, ({ request }) => {
+      return HttpResponse.json({ id: teamId })
+    }),
+    http.put(
+      `https://api.github.com/teams/${teamId}/repos/${repository.owner.name}/${repository.name}`,
+      async ({ request }) => {
+        this.teamPermissionLevel = (await request.json()).permission
+
+        return new HttpResponse(null, { status: StatusCodes.OK })
       }
     )
   )
