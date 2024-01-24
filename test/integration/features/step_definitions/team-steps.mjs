@@ -62,9 +62,6 @@ Given('the team privileges are updated to {string} in the config', async functio
         return HttpResponse.arrayBuffer(Buffer.from(dump({ teams: [{ name: teamName, permission: accessLevel }] })))
       }
     ),
-    http.get(`https://api.github.com/orgs/${repository.owner.name}/teams/${teamName}`, ({ request }) => {
-      return HttpResponse.json({ id: teamId })
-    }),
     http.put(
       `https://api.github.com/teams/${teamId}/repos/${repository.owner.name}/${repository.name}`,
       async ({ request }) => {
@@ -76,6 +73,31 @@ Given('the team privileges are updated to {string} in the config', async functio
   )
 })
 
+Given('the team privileges are removed in the config', async function () {
+  this.server.use(
+    http.get(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
+        settings.FILE_NAME
+      )}`,
+      ({ request }) => {
+        return HttpResponse.arrayBuffer(Buffer.from(dump({ teams: [] })))
+      }
+    ),
+    http.delete(
+      `https://api.github.com/teams/:teamId/repos/${repository.owner.name}/${repository.name}`,
+      async ({ params }) => {
+        this.removedTeamId = params.teamId
+
+        return new HttpResponse(null, { status: StatusCodes.NO_CONTENT })
+      }
+    )
+  )
+})
+
 Then('the team has {string} access granted to it', async function (accessLevel) {
   assert.equal(this.teamPermissionLevel, accessLevel)
+})
+
+Then('the team has privileges to the repo revoked', async function () {
+  assert.equal(this.removedTeamId, teamId)
 })

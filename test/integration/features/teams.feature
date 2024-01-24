@@ -12,6 +12,8 @@ Feature: Teams
     When a settings sync is triggered
     Then the team has "admin" access granted to it
 
-  @wip
   Scenario: Remove Team Access
+    Given a team has been granted "push" privileges to the repository
+    And the team privileges are removed in the config
     When a settings sync is triggered
+    Then the team has privileges to the repo revoked
