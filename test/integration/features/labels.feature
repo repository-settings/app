@@ -18,6 +18,8 @@ Feature: Labels
     When a settings sync is triggered
     Then the label has the updated color
 
-  @wip
   Scenario: Remove Label
+    Given a label exists
+    And the label is removed from the config
     When a settings sync is triggered
+    Then the label is no longer available

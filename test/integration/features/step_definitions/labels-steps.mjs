@@ -100,10 +100,35 @@ Given('the color is updated on the existing label', async function () {
   )
 })
 
+Given('the label is removed from the config', async function () {
+  this.server.use(
+    http.get(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
+        settings.FILE_NAME
+      )}`,
+      ({ request }) => {
+        return HttpResponse.arrayBuffer(Buffer.from(dump({ labels: [] })))
+      }
+    ),
+    http.delete(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/labels/:labelName`,
+      async ({ params }) => {
+        this.removedLabel = params.labelName
+
+        return new HttpResponse(null, { status: StatusCodes.NO_CONTENT })
+      }
+    )
+  )
+})
+
 Then('the label is available', async function () {
   assert.deepEqual(this.savedLabel, this.label)
 })
 
 Then('the label has the updated color', async function () {
   assert.equal(this.updatedColor, this.newColor)
+})
+
+Then('the label is no longer available', async function () {
+  assert.deepEqual(this.removedLabel, this.label.name)
 })
