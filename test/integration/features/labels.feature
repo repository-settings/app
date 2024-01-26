@@ -6,9 +6,11 @@ Feature: Labels
     When a settings sync is triggered
     Then the label is available
 
-  @wip
   Scenario: Create Label with leading `#`
+    Given no labels exist
+    And a label is added with a leading `#`
     When a settings sync is triggered
+    Then the label is available
 
   @wip
   Scenario: Update Label

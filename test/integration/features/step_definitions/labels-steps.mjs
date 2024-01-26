@@ -15,30 +15,56 @@ Given('no labels exist', async function () {
       return HttpResponse.json([])
     })
   )
-});
+})
 
 Given('a label is added', async function () {
   this.label = { name: any.word(), color: any.word() }
+
   this.server.use(
     http.get(
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
         settings.FILE_NAME
       )}`,
       ({ request }) => {
-        return HttpResponse.arrayBuffer(Buffer.from(dump({labels: [this.label]})))
+        return HttpResponse.arrayBuffer(Buffer.from(dump({ labels: [this.label] })))
       }
     ),
     http.post(
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/labels`,
       async ({ request }) => {
-        this.savedLabel = (await request.json())
+        this.savedLabel = await request.json()
 
         return new HttpResponse(null, { status: StatusCodes.CREATED })
       }
     )
   )
-});
+})
+
+Given('a label is added with a leading `#`', async function () {
+  this.label = { name: any.word(), color: any.word() }
+
+  this.server.use(
+    http.get(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
+        settings.FILE_NAME
+      )}`,
+      ({ request }) => {
+        return HttpResponse.arrayBuffer(
+          Buffer.from(dump({ labels: [{ ...this.label, color: `#${this.label.color}` }] }))
+        )
+      }
+    ),
+    http.post(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/labels`,
+      async ({ request }) => {
+        this.savedLabel = await request.json()
+
+        return new HttpResponse(null, { status: StatusCodes.CREATED })
+      }
+    )
+  )
+})
 
 Then('the label is available', async function () {
   assert.deepEqual(this.savedLabel, this.label)
-});
+})
