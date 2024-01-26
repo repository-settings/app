@@ -33,7 +33,7 @@
     "probot": "12.3.3"
   },
   "devDependencies": {
-    "@cucumber/cucumber": "10.3.1",
+    "@cucumber/cucumber": "9.6.0",
     "@form8ion/remark-preset": "1.0.0",
     "@travi/any": "3.0.2",
     "http-status-codes": "2.3.0",
