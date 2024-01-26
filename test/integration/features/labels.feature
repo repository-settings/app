@@ -12,9 +12,11 @@ Feature: Labels
     When a settings sync is triggered
     Then the label is available
 
-  @wip
   Scenario: Update Label
+    Given a label exists
+    And the color is updated on the existing label
     When a settings sync is triggered
+    Then the label has the updated color
 
   @wip
   Scenario: Remove Label
