@@ -50,7 +50,7 @@ Given('a label is added', async function () {
   )
 })
 
-Given('a label is added with a leading `#`', async function () {
+Given('a label is added with a leading `#` on the color code', async function () {
   this.label = { name: any.word(), color: any.word() }
 
   this.server.use(
