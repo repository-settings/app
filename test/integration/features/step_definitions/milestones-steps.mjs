@@ -74,6 +74,27 @@ Given('the milestone is updated in the config', async function () {
   )
 })
 
+Given('the milestone is removed from the config', async function () {
+  this.server.use(
+    http.get(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
+        settings.FILE_NAME
+      )}`,
+      ({ request }) => {
+        return HttpResponse.arrayBuffer(Buffer.from(dump({ milestones: [] })))
+      }
+    ),
+    http.delete(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/milestones/:milestoneNumber`,
+      async ({ params }) => {
+        this.removedMilestoneNumber = params.milestoneNumber
+
+        return new HttpResponse(null, { status: StatusCodes.OK })
+      }
+    )
+  )
+})
+
 Then('the milestone is available', async function () {
   assert.deepEqual(this.savedMilestone, this.milestone)
 })
@@ -84,4 +105,8 @@ Then('updated milestone is available', async function () {
     title: this.milestone.title,
     ...this.milestoneUpdates
   })
+})
+
+Then('the milestone is no longer available', async function () {
+  assert.equal(this.removedMilestoneNumber, this.milestone.number)
 })

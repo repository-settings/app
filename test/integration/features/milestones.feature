@@ -11,3 +11,10 @@ Feature: Milestones
     And the milestone is updated in the config
     When a settings sync is triggered
     Then updated milestone is available
+
+  @focus
+  Scenario: Delete a milestone
+    Given a milestone exists
+    And the milestone is removed from the config
+    When a settings sync is triggered
+    Then the milestone is no longer available
