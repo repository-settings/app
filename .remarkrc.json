@@ -1,0 +1,3 @@
+{
+  "plugins": ["@form8ion/remark-preset"]
+}

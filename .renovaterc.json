@@ -7,7 +7,7 @@
     "enabled": true,
     "automergeType": "pr"
   },
-  "regexManagers": [
+  "customManagers": [
     {
       "customType": "regex",
       "description": "Update semantic-release version used by npx",
