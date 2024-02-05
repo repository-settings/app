@@ -5,6 +5,7 @@ describe('Environments', () => {
   let github
   const org = 'bkeepers'
   const repo = 'test'
+  const repoId = 12345
 
   function configure (config) {
     return new Environments(github, { owner: org, repo }, config)
@@ -42,6 +43,10 @@ describe('Environments', () => {
           ],
           deployment_branch_policy: {
             custom_branches: ['dev/*', 'dev-*']
+          },
+          variables: {
+            FOO: 'bar',
+            FIZZ: 'buzz'
           }
         },
         {
@@ -65,6 +70,23 @@ describe('Environments', () => {
         },
         { name: 'Different-case', wait_timer: 0 }
       ])
+
+      when(github.request)
+        .calledWith('GET /repos/:org/:repo', {
+          org,
+          repo
+        }).mockResolvedValue({
+          data: {
+            id: repoId,
+            node_id: 'A_bcdefghijk',
+            name: repo,
+            full_name: `${org}/${repo}`,
+            private: true,
+            owner: {
+              login: org
+            }
+          }
+        })
 
       when(github.request)
         .calledWith('GET /repos/:org/:repo/environments', { org, repo })
@@ -214,6 +236,26 @@ describe('Environments', () => {
             custom_branch_policies: false
           }
         })
+
+        expect(github.request).toHaveBeenCalledWith(
+          'POST /repositories/:repository_id/environments/:environment_name/variables',
+          {
+            repoId,
+            environment_name: 'new-environment',
+            name: 'FOO',
+            value: 'bar'
+          }
+        )
+
+        expect(github.request).toHaveBeenCalledWith(
+          'POST /repositories/:repository_id/environments/:environment_name/variables',
+          {
+            repoId,
+            environment_name: 'new-environment',
+            name: 'FIZZ',
+            value: 'buzz'
+          }
+        )
 
         expect(github.request).toHaveBeenCalledWith('DELETE /repos/:org/:repo/environments/:environment_name', {
           org,
