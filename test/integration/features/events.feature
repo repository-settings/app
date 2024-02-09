@@ -10,12 +10,11 @@ Feature: Events that do not result in a sync
     When the repository is created
     Then a sync does not get triggered
 
-  @wip
   Scenario: Repository edited, but default branch was not changed
-    When the repository is created
+    Given the default branch is not changed as part of updating the repository
+    When the repository is edited
     Then a sync does not get triggered
 
-  @wip
   Scenario: Repository edited when repository does not have a settings file
     Given the repository has no settings file
     When the repository is edited

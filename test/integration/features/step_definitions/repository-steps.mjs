@@ -1,4 +1,4 @@
-import { When } from '@cucumber/cucumber'
+import { Given, When } from '@cucumber/cucumber'
 import any from '@travi/any'
 
 export const repository = {
@@ -18,20 +18,24 @@ export function buildRepositoryCreatedEvent () {
   }
 }
 
-export function buildRepositoryEditedEvent () {
+export function buildRepositoryEditedEvent ({ changes } = {}) {
   return {
     name: 'repository.edited',
     payload: {
-      changes: { default_branch: { from: any.word() } },
+      changes: { ...(changes || { default_branch: { from: any.word() } }) },
       repository
     }
   }
 }
+
+Given('the default branch is not changed as part of updating the repository', async function () {
+  this.repositoryEditedChanges = any.simpleObject()
+})
 
 When('the repository is created', async function () {
   await this.probot.receive(buildRepositoryCreatedEvent())
 })
 
 When('the repository is edited', async function () {
-  await this.probot.receive(buildRepositoryEditedEvent())
+  await this.probot.receive(buildRepositoryEditedEvent({ changes: this.repositoryEditedChanges }))
 })
