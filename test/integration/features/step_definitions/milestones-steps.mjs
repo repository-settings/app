@@ -7,7 +7,7 @@ import assert from 'node:assert'
 import any from '@travi/any'
 
 import settings from '../../../../lib/settings.js'
-import { repository } from './common-steps.mjs'
+import { repository } from './repository-steps.mjs'
 
 Given('no milestones exist', async function () {
   this.server.use(

@@ -6,8 +6,8 @@ import { Given, Then } from '@cucumber/cucumber'
 import { http, HttpResponse } from 'msw'
 import any from '@travi/any'
 
-import { repository } from './common-steps.mjs'
 import settings from '../../../../lib/settings.js'
+import { repository } from './repository-steps.mjs'
 
 const teamName = any.word()
 const teamId = any.integer()

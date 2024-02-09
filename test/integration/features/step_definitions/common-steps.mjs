@@ -1,21 +1,10 @@
+import { Probot, ProbotOctokit } from 'probot'
+
 import any from '@travi/any'
 import { Before, When } from '@cucumber/cucumber'
-
-import settings from '../../../../lib/settings.js'
-import { Probot, ProbotOctokit } from 'probot'
 import settingsBot from '../../../../index.js'
-
-let probot
-
-export const repository = {
-  default_branch: 'master',
-  name: 'botland',
-  owner: {
-    name: 'bkeepers-inc',
-    login: 'bkeepers-inc',
-    email: null
-  }
-}
+import { buildRepositoryCreatedEvent, buildRepositoryEditedEvent } from './repository-steps.mjs'
+import { buildPushEvent } from './config-steps.mjs'
 
 async function loadInstance () {
   const probot = new Probot({
@@ -32,42 +21,14 @@ async function loadInstance () {
   return probot
 }
 
-function buildPushEvent () {
-  return {
-    name: 'push',
-    payload: {
-      ref: 'refs/heads/master',
-      repository,
-      commits: [{ modified: [settings.FILE_NAME], added: [] }]
-    }
-  }
-}
-
-function buildRepositoryEditedEvent () {
-  return {
-    name: 'repository.edited',
-    payload: {
-      changes: { default_branch: { from: any.word() } },
-      repository
-    }
-  }
-}
-
-function buildRepositoryCreatedEvent () {
-  return {
-    name: 'repository.created',
-    payload: { repository }
-  }
-}
-
 function buildTriggerEvent () {
   return any.fromList([buildPushEvent(), buildRepositoryCreatedEvent(), buildRepositoryEditedEvent()])
 }
 
 Before(async function () {
-  probot = await loadInstance()
+  this.probot = await loadInstance()
 })
 
 When('a settings sync is triggered', async function () {
-  await probot.receive(buildTriggerEvent())
+  await this.probot.receive(buildTriggerEvent())
 })

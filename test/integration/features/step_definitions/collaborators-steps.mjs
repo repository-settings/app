@@ -1,12 +1,13 @@
+import { dump } from 'js-yaml'
+import { StatusCodes } from 'http-status-codes'
+
 import { Given, Then } from '@cucumber/cucumber'
 import assert from 'node:assert'
 import { http, HttpResponse } from 'msw'
 import any from '@travi/any'
 
-import { repository } from './common-steps.mjs'
 import settings from '../../../../lib/settings.js'
-import { dump } from 'js-yaml'
-import { StatusCodes } from 'http-status-codes'
+import { repository } from './repository-steps.mjs'
 
 const collaboratorLogin = any.word()
 

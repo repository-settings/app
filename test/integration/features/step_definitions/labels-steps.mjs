@@ -6,8 +6,8 @@ import { Given, Then } from '@cucumber/cucumber'
 import { http, HttpResponse } from 'msw'
 import assert from 'node:assert'
 
-import { repository } from './common-steps.mjs'
 import settings from '../../../../lib/settings.js'
+import { repository } from './repository-steps.mjs'
 
 Given('no labels exist', async function () {
   this.server.use(
