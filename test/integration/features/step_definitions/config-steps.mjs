@@ -1,10 +1,10 @@
 import { Given, Then, When } from '@cucumber/cucumber'
 
 import settings from '../../../../lib/settings.js'
-import { repository } from './repository-steps.mjs'
 import any from '@travi/any'
 import { http, HttpResponse } from 'msw'
 import { StatusCodes } from 'http-status-codes'
+import { repository } from './common-steps.mjs'
 
 export function buildPushEvent ({ pushBranch } = {}) {
   return {

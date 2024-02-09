@@ -1,15 +1,7 @@
 import { Given, When } from '@cucumber/cucumber'
 import any from '@travi/any'
 
-export const repository = {
-  default_branch: 'master',
-  name: 'botland',
-  owner: {
-    name: 'bkeepers-inc',
-    login: 'bkeepers-inc',
-    email: null
-  }
-}
+import { repository } from './common-steps.mjs'
 
 export function buildRepositoryCreatedEvent () {
   return {

@@ -7,7 +7,8 @@ import { http, HttpResponse } from 'msw'
 import any from '@travi/any'
 
 import settings from '../../../../lib/settings.js'
-import { repository } from './repository-steps.mjs'
+
+import { repository } from './common-steps.mjs'
 
 const collaboratorLogin = any.word()
 

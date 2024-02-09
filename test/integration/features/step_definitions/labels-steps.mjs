@@ -7,7 +7,8 @@ import { http, HttpResponse } from 'msw'
 import assert from 'node:assert'
 
 import settings from '../../../../lib/settings.js'
-import { repository } from './repository-steps.mjs'
+
+import { repository } from './common-steps.mjs'
 
 Given('no labels exist', async function () {
   this.server.use(
