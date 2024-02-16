@@ -9,6 +9,10 @@ import assert from 'node:assert'
 import { repository } from './common-steps.mjs'
 import settings from '../../../../lib/settings.js'
 
+function anyReviewer () {
+  return { id: any.integer(), type: any.fromList(['User', 'Team']) }
+}
+
 Given('no environments are defined', async function () {
   this.server.use(
     http.get(`https://api.github.com/repos/${repository.owner.name}/${repository.name}/environments`, () => {
@@ -27,6 +31,21 @@ Given('an environment exists', async function () {
   )
 })
 
+Given('an environment exists with reviewers defined', async function () {
+  this.environment = {
+    name: any.word(),
+    wait_timer: any.integer(),
+    deployment_branch_policy: null,
+    reviewers: any.listOf(anyReviewer)
+  }
+
+  this.server.use(
+    http.get(`https://api.github.com/repos/${repository.owner.name}/${repository.name}/environments`, () => {
+      return HttpResponse.json({ environments: [this.environment] })
+    })
+  )
+})
+
 Given('an environment is defined in the config', async function () {
   this.environmentName = any.word()
 
@@ -37,6 +56,32 @@ Given('an environment is defined in the config', async function () {
       )}`,
       ({ request }) => {
         return HttpResponse.arrayBuffer(Buffer.from(dump({ environments: [{ name: this.environmentName }] })))
+      }
+    ),
+    http.put(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/environments/${this.environmentName}`,
+      async ({ params, request }) => {
+        this.createdEnvironment = await request.json()
+
+        return new HttpResponse(null, { status: StatusCodes.CREATED })
+      }
+    )
+  )
+})
+
+Given('an environment is defined in the config with reviewers', async function () {
+  this.environmentName = any.word()
+  this.reviewers = any.listOf(anyReviewer)
+
+  this.server.use(
+    http.get(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
+        settings.FILE_NAME
+      )}`,
+      ({ request }) => {
+        return HttpResponse.arrayBuffer(
+          Buffer.from(dump({ environments: [{ name: this.environmentName, reviewers: this.reviewers }] }))
+        )
       }
     ),
     http.put(
@@ -102,6 +147,10 @@ Given('the environment is removed from the config', async function () {
 
 Then('the environment is available', async function () {
   assert.deepEqual(this.createdEnvironment, { deployment_branch_policy: null })
+})
+
+Then('the environment is available with reviewers', async function () {
+  assert.deepEqual(this.createdEnvironment, { deployment_branch_policy: null, reviewers: this.reviewers })
 })
 
 Then('the environment is updated', async function () {
