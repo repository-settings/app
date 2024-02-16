@@ -17,6 +17,16 @@ Given('no environments are defined', async function () {
   )
 })
 
+Given('an environment exists', async function () {
+  this.environment = { name: any.word(), wait_timer: any.integer(), deployment_branch_policy: null }
+
+  this.server.use(
+    http.get(`https://api.github.com/repos/${repository.owner.name}/${repository.name}/environments`, () => {
+      return HttpResponse.json({ environments: [this.environment] })
+    })
+  )
+})
+
 Given('an environment is defined in the config', async function () {
   this.environmentName = any.word()
 
@@ -30,9 +40,38 @@ Given('an environment is defined in the config', async function () {
       }
     ),
     http.put(
-      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/environments/:environmentName`,
-      async ({ params }) => {
-        this.createdEnvironmentName = params.environmentName
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/environments/${this.environmentName}`,
+      async ({ params, request }) => {
+        this.createdEnvironment = await request.json()
+
+        return new HttpResponse(null, { status: StatusCodes.CREATED })
+      }
+    )
+  )
+})
+
+Given('the environment is modified in the config', async function () {
+  this.environmentUpdates = { wait_timer: any.integer(), deployment_branch_policy: null }
+
+  this.server.use(
+    http.get(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
+        settings.FILE_NAME
+      )}`,
+      ({ request }) => {
+        return HttpResponse.arrayBuffer(
+          Buffer.from(
+            dump({
+              environments: [{ name: this.environment.name, ...this.environmentUpdates }]
+            })
+          )
+        )
+      }
+    ),
+    http.put(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/environments/${this.environment.name}`,
+      async ({ request }) => {
+        this.updatedEnvironment = await request.json()
 
         return new HttpResponse(null, { status: StatusCodes.CREATED })
       }
@@ -41,5 +80,9 @@ Given('an environment is defined in the config', async function () {
 })
 
 Then('the environment is available', async function () {
-  assert.equal(this.createdEnvironmentName, this.environmentName)
+  assert.deepEqual(this.createdEnvironment, { deployment_branch_policy: null })
+})
+
+Then('the environment is updated', async function () {
+  assert.deepEqual(this.updatedEnvironment, this.environmentUpdates)
 })

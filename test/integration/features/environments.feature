@@ -6,12 +6,11 @@ Feature: Environments
     When a settings sync is triggered
     Then the environment is available
 
-  @wip
   Scenario: Update an Environment
     Given an environment exists
     And the environment is modified in the config
     When a settings sync is triggered
-    Then the environment is update
+    Then the environment is updated
 
   @wip
   Scenario: Delete an Environment
