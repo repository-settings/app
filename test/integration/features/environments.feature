@@ -12,7 +12,6 @@ Feature: Environments
     When a settings sync is triggered
     Then the environment is updated
 
-  @wip
   Scenario: Delete an Environment
     Given an environment exists
     And the environment is removed from the config

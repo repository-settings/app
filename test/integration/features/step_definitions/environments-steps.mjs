@@ -79,10 +79,35 @@ Given('the environment is modified in the config', async function () {
   )
 })
 
+Given('the environment is removed from the config', async function () {
+  this.server.use(
+    http.get(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
+        settings.FILE_NAME
+      )}`,
+      ({ request }) => {
+        return HttpResponse.arrayBuffer(Buffer.from(dump({ environments: [] })))
+      }
+    ),
+    http.delete(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/environments/:environmentName`,
+      async ({ params }) => {
+        this.removedEnvironment = params.environmentName
+
+        return new HttpResponse(null, { status: StatusCodes.NO_CONTENT })
+      }
+    )
+  )
+})
+
 Then('the environment is available', async function () {
   assert.deepEqual(this.createdEnvironment, { deployment_branch_policy: null })
 })
 
 Then('the environment is updated', async function () {
   assert.deepEqual(this.updatedEnvironment, this.environmentUpdates)
+})
+
+Then('the environment is no longer available', async function () {
+  assert.equal(this.removedEnvironment, this.environment.name)
 })
