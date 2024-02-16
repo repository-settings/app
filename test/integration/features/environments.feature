@@ -30,10 +30,11 @@ Feature: Environments
     When a settings sync is triggered
     Then the reviewer type is updated
 
-  @wip
   Scenario: Update the id of a reviewer for an environment
     Given an environment exists with reviewers defined
+    And a reviewer has its id changed
     When a settings sync is triggered
+    Then the reviewer id is updated
 
   @wip
   Scenario: Add a reviewer to an environment

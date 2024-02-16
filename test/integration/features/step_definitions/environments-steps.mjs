@@ -178,6 +178,36 @@ Given('a reviewer has its type changed', async function () {
   )
 })
 
+Given('a reviewer has its id changed', async function () {
+  const [reviewerToBeUpdated, ...unchangedReviewers] = this.environment.reviewers
+  this.updatedReviewer = { ...reviewerToBeUpdated, id: any.integer() }
+
+  this.server.use(
+    http.get(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
+        settings.FILE_NAME
+      )}`,
+      ({ request }) => {
+        return HttpResponse.arrayBuffer(
+          Buffer.from(
+            dump({
+              environments: [{ ...this.environment, reviewers: [...unchangedReviewers, this.updatedReviewer] }]
+            })
+          )
+        )
+      }
+    ),
+    http.put(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/environments/${this.environment.name}`,
+      async ({ request }) => {
+        this.updatedEnvironment = await request.json()
+
+        return new HttpResponse(null, { status: StatusCodes.OK })
+      }
+    )
+  )
+})
+
 Then('the environment is available', async function () {
   assert.deepEqual(this.createdEnvironment, { deployment_branch_policy: null })
 })
@@ -195,6 +225,15 @@ Then('the environment is no longer available', async function () {
 })
 
 Then('the reviewer type is updated', async function () {
+  assert.equal(this.updatedEnvironment.reviewers.length, this.environment.reviewers.length)
+  assert.deepEqual(
+    this.updatedEnvironment.reviewers.find(reviewer => reviewer.id === this.updatedReviewer.id).type,
+    this.updatedReviewer.type
+  )
+})
+
+Then('the reviewer id is updated', async function () {
+  assert.equal(this.updatedEnvironment.reviewers.length, this.environment.reviewers.length)
   assert.deepEqual(
     this.updatedEnvironment.reviewers.find(reviewer => reviewer.id === this.updatedReviewer.id),
     this.updatedReviewer
