@@ -24,10 +24,11 @@ Feature: Environments
     When a settings sync is triggered
     Then the environment is available with reviewers
 
-  @wip
   Scenario: Update the reviewer type for an environment
     Given an environment exists with reviewers defined
+    And a reviewer has its type changed
     When a settings sync is triggered
+    Then the reviewer type is updated
 
   @wip
   Scenario: Update the id of a reviewer for an environment

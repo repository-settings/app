@@ -9,8 +9,10 @@ import assert from 'node:assert'
 import { repository } from './common-steps.mjs'
 import settings from '../../../../lib/settings.js'
 
+const possibleReviewerTypes = ['User', 'Team']
+
 function anyReviewer () {
-  return { id: any.integer(), type: any.fromList(['User', 'Team']) }
+  return { id: any.integer(), type: any.fromList(possibleReviewerTypes) }
 }
 
 Given('no environments are defined', async function () {
@@ -118,7 +120,7 @@ Given('the environment is modified in the config', async function () {
       async ({ request }) => {
         this.updatedEnvironment = await request.json()
 
-        return new HttpResponse(null, { status: StatusCodes.CREATED })
+        return new HttpResponse(null, { status: StatusCodes.OK })
       }
     )
   )
@@ -145,6 +147,37 @@ Given('the environment is removed from the config', async function () {
   )
 })
 
+Given('a reviewer has its type changed', async function () {
+  const [reviewerToBeUpdated, ...unchangedReviewers] = this.environment.reviewers
+  const alternativeType = possibleReviewerTypes.find(type => type !== reviewerToBeUpdated.type)
+  this.updatedReviewer = { ...reviewerToBeUpdated, type: alternativeType }
+
+  this.server.use(
+    http.get(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
+        settings.FILE_NAME
+      )}`,
+      ({ request }) => {
+        return HttpResponse.arrayBuffer(
+          Buffer.from(
+            dump({
+              environments: [{ ...this.environment, reviewers: [...unchangedReviewers, this.updatedReviewer] }]
+            })
+          )
+        )
+      }
+    ),
+    http.put(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/environments/${this.environment.name}`,
+      async ({ request }) => {
+        this.updatedEnvironment = await request.json()
+
+        return new HttpResponse(null, { status: StatusCodes.OK })
+      }
+    )
+  )
+})
+
 Then('the environment is available', async function () {
   assert.deepEqual(this.createdEnvironment, { deployment_branch_policy: null })
 })
@@ -159,4 +192,11 @@ Then('the environment is updated', async function () {
 
 Then('the environment is no longer available', async function () {
   assert.equal(this.removedEnvironment, this.environment.name)
+})
+
+Then('the reviewer type is updated', async function () {
+  assert.deepEqual(
+    this.updatedEnvironment.reviewers.find(reviewer => reviewer.id === this.updatedReviewer.id),
+    this.updatedReviewer
+  )
 })
