@@ -208,6 +208,35 @@ Given('a reviewer has its id changed', async function () {
   )
 })
 
+Given('a reviewer is added to the environment', async function () {
+  this.addedReviewer = anyReviewer()
+
+  this.server.use(
+    http.get(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
+        settings.FILE_NAME
+      )}`,
+      ({ request }) => {
+        return HttpResponse.arrayBuffer(
+          Buffer.from(
+            dump({
+              environments: [{ ...this.environment, reviewers: [this.addedReviewer] }]
+            })
+          )
+        )
+      }
+    ),
+    http.put(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/environments/${this.environment.name}`,
+      async ({ request }) => {
+        this.updatedEnvironment = await request.json()
+
+        return new HttpResponse(null, { status: StatusCodes.OK })
+      }
+    )
+  )
+})
+
 Then('the environment is available', async function () {
   assert.deepEqual(this.createdEnvironment, { deployment_branch_policy: null })
 })
@@ -238,4 +267,8 @@ Then('the reviewer id is updated', async function () {
     this.updatedEnvironment.reviewers.find(reviewer => reviewer.id === this.updatedReviewer.id),
     this.updatedReviewer
   )
+})
+
+Then('the reviewer is defined for the environment', async function () {
+  assert.deepEqual(this.updatedEnvironment.reviewers, [this.addedReviewer])
 })
