@@ -20,10 +20,12 @@ Feature: Repository
     When a settings sync is triggered
     Then vulnerability alerts are "disabled"
 
-  @wip
   Scenario: Repository with security fixes enabled
+    Given security fixes are "enabled" in the config
     When a settings sync is triggered
+    Then security fixes are "enabled"
 
-  @wip
   Scenario: Repository with security fixes disabled
+    Given security fixes are "disabled" in the config
     When a settings sync is triggered
+    Then security fixes are "disabled"

@@ -78,7 +78,38 @@ Given('vulnerability alerts are {string} in the config', async function (enablem
       async ({ request }) => {
         this.vulnerabilityAlertEnablement = enablement
 
-        return new HttpResponse(null, { status: StatusCodes.OK })
+        return new HttpResponse(null, {
+          status: this.repository.enable_vulnerability_alerts ? StatusCodes.OK : StatusCodes.NO_CONTENT
+        })
+      }
+    )
+  )
+})
+
+Given('security fixes are {string} in the config', async function (enablement) {
+  this.repository = {
+    name: repository.name,
+    enable_automated_security_fixes: enablement === 'enabled'
+  }
+
+  this.server.use(
+    http.get(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
+        settings.FILE_NAME
+      )}`,
+      ({ request }) => HttpResponse.arrayBuffer(Buffer.from(dump({ repository: this.repository })))
+    ),
+    http.patch(`https://api.github.com/repos/${repository.owner.name}/${repository.name}`, async ({ request }) => {
+      return new HttpResponse(null, { status: StatusCodes.OK })
+    }),
+    http[this.repository.enable_automated_security_fixes ? 'put' : 'delete'](
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/automated-security-fixes`,
+      async ({ request }) => {
+        this.securityFixesEnablement = enablement
+
+        return new HttpResponse(null, {
+          status: this.repository.enable_automated_security_fixes ? StatusCodes.OK : StatusCodes.NO_CONTENT
+        })
       }
     )
   )
@@ -94,4 +125,8 @@ Then('topics are updated', async function () {
 
 Then('vulnerability alerts are {string}', async function (enablement) {
   assert.equal(this.vulnerabilityAlertEnablement, enablement)
+})
+
+Then('security fixes are {string}', async function (enablement) {
+  assert.equal(this.securityFixesEnablement, enablement)
 })
