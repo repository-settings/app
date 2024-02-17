@@ -57,10 +57,41 @@ Given('topics are defined in the repository config', async function () {
   )
 })
 
+Given('vulnerability alerts are {string} in the config', async function (enablement) {
+  this.repository = {
+    name: repository.name,
+    enable_vulnerability_alerts: enablement === 'enabled'
+  }
+
+  this.server.use(
+    http.get(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
+        settings.FILE_NAME
+      )}`,
+      ({ request }) => HttpResponse.arrayBuffer(Buffer.from(dump({ repository: this.repository })))
+    ),
+    http.patch(`https://api.github.com/repos/${repository.owner.name}/${repository.name}`, async ({ request }) => {
+      return new HttpResponse(null, { status: StatusCodes.OK })
+    }),
+    http[this.repository.enable_vulnerability_alerts ? 'put' : 'delete'](
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/vulnerability-alerts`,
+      async ({ request }) => {
+        this.vulnerabilityAlertEnablement = enablement
+
+        return new HttpResponse(null, { status: StatusCodes.OK })
+      }
+    )
+  )
+})
+
 Then('the repository will be configured', async function () {
   assert.deepEqual(this.repositoryDetails, this.repository)
 })
 
 Then('topics are updated', async function () {
   assert.deepEqual(this.updatedTopics, this.repository.topics.split(', '))
+})
+
+Then('vulnerability alerts are {string}', async function (enablement) {
+  assert.equal(this.vulnerabilityAlertEnablement, enablement)
 })
