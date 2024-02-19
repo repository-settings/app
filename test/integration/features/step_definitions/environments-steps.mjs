@@ -237,6 +237,36 @@ Given('a reviewer is added to the environment', async function () {
   )
 })
 
+Given('a reviewer is removed from the environment in the config', async function () {
+  const [removedReviewer, ...remainingReviewers] = this.environment.reviewers
+  this.removedReviewer = removedReviewer
+
+  this.server.use(
+    http.get(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
+        settings.FILE_NAME
+      )}`,
+      ({ request }) => {
+        return HttpResponse.arrayBuffer(
+          Buffer.from(
+            dump({
+              environments: [{ ...this.environment, reviewers: remainingReviewers }]
+            })
+          )
+        )
+      }
+    ),
+    http.put(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/environments/${this.environment.name}`,
+      async ({ request }) => {
+        this.updatedEnvironment = await request.json()
+
+        return new HttpResponse(null, { status: StatusCodes.OK })
+      }
+    )
+  )
+})
+
 Then('the environment is available', async function () {
   assert.deepEqual(this.createdEnvironment, { deployment_branch_policy: null })
 })
@@ -271,4 +301,12 @@ Then('the reviewer id is updated', async function () {
 
 Then('the reviewer is defined for the environment', async function () {
   assert.deepEqual(this.updatedEnvironment.reviewers, [this.addedReviewer])
+})
+
+Then('the reviewer is removed from the environment', async function () {
+  assert.equal(this.updatedEnvironment.reviewers.length, this.environment.reviewers.length - 1)
+  assert.equal(
+    this.updatedEnvironment.reviewers.find(reviewer => reviewer.id === this.removedReviewer.id),
+    undefined
+  )
 })

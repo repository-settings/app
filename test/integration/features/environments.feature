@@ -42,10 +42,11 @@ Feature: Environments
     When a settings sync is triggered
     Then the reviewer is defined for the environment
 
-  @wip
   Scenario: Remove a reviewer from an environment
     Given an environment exists with reviewers defined
+    And a reviewer is removed from the environment in the config
     When a settings sync is triggered
+    Then the reviewer is removed from the environment
 
   @wip
   Scenario: Define an Environment with a Deployment Branch Policy
