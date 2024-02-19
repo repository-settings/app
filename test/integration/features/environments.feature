@@ -48,9 +48,17 @@ Feature: Environments
     When a settings sync is triggered
     Then the reviewer is removed from the environment
 
-  @wip
-  Scenario: Define an Environment with a Deployment Branch Policy
+  Scenario: Define an Environment with a protected branches Deployment Branch Policy
+    Given no environments are defined
+    And an environment is defined in the config with a protected branches deployment branch policy
     When a settings sync is triggered
+    Then the environment is available with a protected branches deployment branch policy
+
+  Scenario: Define an Environment with a custom branches Deployment Branch Policy
+    Given no environments are defined
+    And an environment is defined in the config with a custom branches deployment branch policy
+    When a settings sync is triggered
+    Then the environment is available with a custom branches deployment branch policy
 
   @wip
   Scenario: Define a Deployment Branch Policy for an exiting environment
