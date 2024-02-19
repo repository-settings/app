@@ -293,7 +293,7 @@ Given('an environment is defined in the config with a protected branches deploym
     http.put(
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/environments/${this.environmentName}`,
       async ({ request }) => {
-        this.createdEnvironment = await request.json()
+        this.savedEnvironment = await request.json()
 
         return new HttpResponse(null, { status: StatusCodes.CREATED })
       }
@@ -329,13 +329,89 @@ Given('an environment is defined in the config with a custom branches deployment
     http.put(
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/environments/${this.environmentName}`,
       async ({ request }) => {
-        this.createdEnvironment = await request.json()
+        this.savedEnvironment = await request.json()
 
         return new HttpResponse(null, { status: StatusCodes.CREATED })
       }
     ),
     http.post(
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/environments/${this.environmentName}/deployment-branch-policies`,
+      async ({ request }) => {
+        const policyName = (await request.json()).name
+        this.createdDeploymentBranchPolicyNames[policyName] = true
+
+        return new HttpResponse(null, { status: StatusCodes.OK })
+      }
+    )
+  )
+})
+
+Given('a protected deployment branch policy is defined for the environment', async function () {
+  this.server.use(
+    http.get(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
+        settings.FILE_NAME
+      )}`,
+      ({ request }) => {
+        return HttpResponse.arrayBuffer(
+          Buffer.from(
+            dump({
+              environments: [
+                {
+                  ...this.environment,
+                  deployment_branch_policy: { protected_branches: true }
+                }
+              ]
+            })
+          )
+        )
+      }
+    ),
+    http.put(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/environments/${this.environment.name}`,
+      async ({ request }) => {
+        this.savedEnvironment = await request.json()
+
+        return new HttpResponse(null, { status: StatusCodes.CREATED })
+      }
+    )
+  )
+})
+
+Given('a custom deployment branch policy is defined for the environment', async function () {
+  this.customBranchNames = any.listOf(any.word)
+  this.createdDeploymentBranchPolicyNames = {}
+
+  this.server.use(
+    http.get(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
+        settings.FILE_NAME
+      )}`,
+      ({ request }) => {
+        return HttpResponse.arrayBuffer(
+          Buffer.from(
+            dump({
+              environments: [
+                {
+                  ...this.environment,
+                  deployment_branch_policy: { protected_branches: false, custom_branches: this.customBranchNames }
+                }
+              ]
+            })
+          )
+        )
+      }
+    ),
+    http.put(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/environments/${this.environment.name}`,
+      async ({ request }) => {
+        this.savedEnvironment = await request.json()
+
+        return new HttpResponse(null, { status: StatusCodes.CREATED })
+      }
+    ),
+    http.post(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/environments/${this.environment.name}/deployment-branch-policies`,
       async ({ request }) => {
         const policyName = (await request.json()).name
         this.createdDeploymentBranchPolicyNames[policyName] = true
@@ -391,14 +467,33 @@ Then('the reviewer is removed from the environment', async function () {
 })
 
 Then('the environment is available with a protected branches deployment branch policy', async function () {
-  assert.deepEqual(this.createdEnvironment, {
+  assert.deepEqual(this.savedEnvironment, {
+    deployment_branch_policy: { protected_branches: true, custom_branch_policies: false }
+  })
+})
+
+Then('the protected branches deployment branch policy is available for the environment', async function () {
+  const { name, deployment_branch_policy: policy, ...existingEnvironment } = this.environment
+
+  assert.deepEqual(this.savedEnvironment, {
+    ...existingEnvironment,
     deployment_branch_policy: { protected_branches: true, custom_branch_policies: false }
   })
 })
 
 Then('the environment is available with a custom branches deployment branch policy', async function () {
-  assert.deepEqual(this.createdEnvironment, {
+  assert.deepEqual(this.savedEnvironment, {
     deployment_branch_policy: { protected_branches: false, custom_branch_policies: true }
   })
   assert.deepEqual(this.customBranchNames, Object.keys(this.createdDeploymentBranchPolicyNames))
+})
+
+Then('the custom branches deployment branch policy is available for the environment', async function () {
+  const { name, deployment_branch_policy: policy, ...existingEnvironment } = this.environment
+
+  assert.deepEqual(this.savedEnvironment, {
+    ...existingEnvironment,
+    deployment_branch_policy: { protected_branches: false, custom_branch_policies: true }
+  })
+  assert.deepEqual(this.customBranchNames.sort(), Object.keys(this.createdDeploymentBranchPolicyNames))
 })

@@ -60,12 +60,26 @@ Feature: Environments
     When a settings sync is triggered
     Then the environment is available with a custom branches deployment branch policy
 
+  Scenario: Define a protected deployment Branch Policy for an exiting environment
+    Given an environment exists
+    And a protected deployment branch policy is defined for the environment
+    When a settings sync is triggered
+    Then the protected branches deployment branch policy is available for the environment
+
+  Scenario: Define a custom branches Deployment Branch Policy for an exiting environment
+    Given an environment exists
+    And a custom deployment branch policy is defined for the environment
+    When a settings sync is triggered
+    Then the custom branches deployment branch policy is available for the environment
+
   @wip
-  Scenario: Define a Deployment Branch Policy for an exiting environment
+  Scenario: Update the Deployment Branch Policy for an environment
+    Given an environment exists with a protected branches deployment branch policy
     When a settings sync is triggered
 
   @wip
   Scenario: Update the Deployment Branch Policy for an environment
+    Given an environment exists with a custom branches deployment branch policy
     When a settings sync is triggered
 
   @wip
