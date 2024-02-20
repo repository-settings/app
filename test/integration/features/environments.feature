@@ -95,8 +95,9 @@ Feature: Environments
   Scenario: Unchanged wait-timer considered equivalent to default
     When a settings sync is triggered
     Then no update will happen
-
-  @wip
+    
   Scenario: Unchanged deployment branch policy
+    Given an environment exists with a "custom" branches deployment branch policy
+    And an environment is defined in the config with the same custom branches deployment branch policy but sorted differently
     When a settings sync is triggered
     Then no update will happen

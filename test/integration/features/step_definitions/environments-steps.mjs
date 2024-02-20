@@ -478,6 +478,36 @@ Given('an environment is defined in the config with the same reviewers but sorte
   )
 })
 
+Given(
+  'an environment is defined in the config with the same custom branches deployment branch policy but sorted differently',
+  async function () {
+    this.server.use(
+      http.get(
+        `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
+          settings.FILE_NAME
+        )}`,
+        ({ request }) => {
+          return HttpResponse.arrayBuffer(
+            Buffer.from(
+              dump({
+                environments: [
+                  {
+                    ...this.environment,
+                    deployment_branch_policy: {
+                      protected_branches: false,
+                      custom_branches: this.customBranches.map(branch => branch.name).reverse()
+                    }
+                  }
+                ]
+              })
+            )
+          )
+        }
+      )
+    )
+  }
+)
+
 Then('the environment is available', async function () {
   assert.deepEqual(this.createdEnvironment, { deployment_branch_policy: null })
 })
