@@ -461,6 +461,23 @@ Given('a custom deployment branch policy is defined for the environment', async 
   )
 })
 
+Given('an environment is defined in the config with the same reviewers but sorted differently', async function () {
+  const ascendingIdSortedReviewers = this.environment.reviewers.sort((a, b) => a.id - b.id)
+
+  this.server.use(
+    http.get(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
+        settings.FILE_NAME
+      )}`,
+      ({ request }) => {
+        return HttpResponse.arrayBuffer(
+          Buffer.from(dump({ environments: [{ ...this.environment, reviewers: ascendingIdSortedReviewers }] }))
+        )
+      }
+    )
+  )
+})
+
 Then('the environment is available', async function () {
   assert.deepEqual(this.createdEnvironment, { deployment_branch_policy: null })
 })
@@ -542,4 +559,9 @@ Then('custom deployment branch policies are removed', async function () {
     Object.keys(this.removedDeploymentBranchPolicyIds),
     this.customBranches.map(branch => branch.id)
   )
+})
+
+Then('no update will happen', async function () {
+  // absence of an error means no update calls were made
+  return undefined
 })

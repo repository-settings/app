@@ -85,14 +85,18 @@ Feature: Environments
     Then custom deployment branch policies are removed
     And the protected branches deployment branch policy is available for the environment
 
-  @wip
   Scenario: Reviewers are unchanged, but are sorted differently than the api
+    Given an environment exists with reviewers defined
+    And an environment is defined in the config with the same reviewers but sorted differently
     When a settings sync is triggered
+    Then no update will happen
 
   @wip
   Scenario: Unchanged wait-timer considered equivalent to default
     When a settings sync is triggered
+    Then no update will happen
 
   @wip
   Scenario: Unchanged deployment branch policy
     When a settings sync is triggered
+    Then no update will happen
