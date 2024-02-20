@@ -33,6 +33,16 @@ Given('an environment exists', async function () {
   )
 })
 
+Given('an environment exists without wait-timer defined', async function () {
+  this.environment = { name: any.word(), deployment_branch_policy: null }
+
+  this.server.use(
+    http.get(`https://api.github.com/repos/${repository.owner.name}/${repository.name}/environments`, () => {
+      return HttpResponse.json({ environments: [this.environment] })
+    })
+  )
+})
+
 Given('an environment exists with reviewers defined', async function () {
   this.environment = {
     name: any.word(),
@@ -131,6 +141,27 @@ Given('an environment is defined in the config with reviewers', async function (
         this.createdEnvironment = await request.json()
 
         return new HttpResponse(null, { status: StatusCodes.CREATED })
+      }
+    )
+  )
+})
+
+Given('wait-timer is not defined for the environment in the config', async function () {
+  const { wait_timer: waitTimer, ...environmentWithoutWaitTimer } = this.environment
+
+  this.server.use(
+    http.get(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
+        settings.FILE_NAME
+      )}`,
+      ({ request }) => {
+        return HttpResponse.arrayBuffer(
+          Buffer.from(
+            dump({
+              environments: [environmentWithoutWaitTimer]
+            })
+          )
+        )
       }
     )
   )
