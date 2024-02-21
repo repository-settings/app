@@ -33,18 +33,18 @@
   "devDependencies": {
     "@cucumber/cucumber": "9.6.0",
     "@form8ion/remark-preset": "1.0.0",
-    "@travi/any": "3.0.2",
+    "@travi/any": "3.1.0",
     "http-status-codes": "2.3.0",
     "jest": "29.7.0",
     "jest-when": "3.6.0",
-    "lockfile-lint": "4.12.1",
+    "lockfile-lint": "4.13.2",
     "ls-engines": "0.9.1",
     "msw": "2.1.4",
     "nock": "13.5.0",
     "nodemon": "3.0.3",
-    "npm-run-all2": "6.1.1",
+    "npm-run-all2": "6.1.2",
     "prettier-standard": "16.4.1",
-    "smee-client": "2.0.0",
+    "smee-client": "2.0.1",
     "standard": "17.1.0"
   },
   "standard": {
