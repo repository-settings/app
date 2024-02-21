@@ -21,10 +21,11 @@ async function loadInstance () {
     appId: 1,
     privateKey: 'test',
     githubToken: 'test',
-    Octokit: ProbotOctokit.defaults({
+    Octokit: ProbotOctokit.defaults(instanceOptions => ({
+      ...instanceOptions,
       retry: { enabled: false },
       throttle: { enabled: false }
-    })
+    }))
   })
   await probot.load(settingsBot)
 
