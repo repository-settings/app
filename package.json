@@ -24,7 +24,7 @@
   "dependencies": {
     "deepmerge": "4.3.1",
     "js-yaml": "4.1.0",
-    "probot": "12.3.3"
+    "probot": "13.0.2"
   },
   "devDependencies": {
     "@form8ion/remark-preset": "1.0.0",
