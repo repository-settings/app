@@ -1,7 +1,0 @@
-teams:
-  - name: probot
-    permission: admin
-  - name: github
-    permission: maintain
-  - name: greenkeeper-keeper
-    permission: push
