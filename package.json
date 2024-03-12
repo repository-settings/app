@@ -28,7 +28,7 @@
   "dependencies": {
     "deepmerge": "4.3.1",
     "js-yaml": "4.1.0",
-    "probot": "13.0.2"
+    "probot": "13.1.0"
   },
   "devDependencies": {
     "@cucumber/cucumber": "10.3.1",
