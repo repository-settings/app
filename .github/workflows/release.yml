@@ -23,7 +23,7 @@ jobs:
           cache: npm
       - run: npm clean-install
       - run: npm audit signatures
-      - run: npx semantic-release@23.0.2
+      - run: npx semantic-release@23.0.3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.REPOSITORY_SETTINGS_BOT_NPM_TOKEN }}
