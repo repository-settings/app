@@ -36,4 +36,5 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm clean-install
+      - run: corepack npm audit signatures
       - run: npm test
