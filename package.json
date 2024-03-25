@@ -13,6 +13,7 @@
     "lint:lockfile": "lockfile-lint --path package-lock.json --type npm --validate-https --allowed-hosts npm",
     "lint:engines": "ls-engines",
     "lint:peer": "npm ls >/dev/null",
+    "lint:publish": "publint --strict",
     "test:unit": "jest 'test/unit/'",
     "test:unit:watch": "npm run test:unit -- --watch",
     "test:integration": "run-s 'test:integration:base -- --profile noWip'",
@@ -43,6 +44,7 @@
     "nodemon": "3.1.0",
     "npm-run-all2": "6.1.2",
     "prettier-standard": "16.4.1",
+    "publint": "0.2.7",
     "smee-client": "2.0.1",
     "standard": "17.1.0"
   },
@@ -71,5 +73,6 @@
   "publishConfig": {
     "access": "public",
     "provenance": true
-  }
+  },
+  "packageManager": "npm@10.5.0+sha256.17ca6e08e7633b624e8f870db81a78f46afe119de62bcaf0a7407574139198fc"
 }
