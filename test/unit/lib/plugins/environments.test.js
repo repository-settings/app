@@ -41,7 +41,7 @@ describe('Environments', () => {
             }
           ],
           deployment_branch_policy: {
-            custom_branches: ['dev/*', 'dev-*']
+            custom_branches: ['dev/*', 'dev-*', { name: 'v*', type: 'tag' }]
           }
         },
         {
@@ -109,14 +109,22 @@ describe('Environments', () => {
           data: {
             branch_policies: [
               {
+                id: 3,
+                node_id: '3',
+                name: 'v*',
+                type: 'tag'
+              },
+              {
                 id: 2,
                 node_id: '2',
-                name: 'dev-*'
+                name: 'dev-*',
+                type: 'branch'
               },
               {
                 id: 1,
                 node_id: '1',
-                name: 'dev/*'
+                name: 'dev/*',
+                type: 'branch'
               }
             ]
           }
@@ -170,7 +178,8 @@ describe('Environments', () => {
             org,
             repo,
             environment_name: 'new-environment',
-            name: 'dev/*'
+            name: 'dev/*',
+            type: 'branch'
           }
         )
 
@@ -180,7 +189,19 @@ describe('Environments', () => {
             org,
             repo,
             environment_name: 'new-environment',
-            name: 'dev-*'
+            name: 'dev-*',
+            type: 'branch'
+          }
+        )
+
+        expect(github.request).toHaveBeenCalledWith(
+          'POST /repos/:org/:repo/environments/:environment_name/deployment-branch-policies',
+          {
+            org,
+            repo,
+            environment_name: 'new-environment',
+            name: 'v*',
+            type: 'tag'
           }
         )
 
@@ -201,6 +222,16 @@ describe('Environments', () => {
             repo,
             environment_name: 'changed-branch-policy',
             id: 2
+          }
+        )
+
+        expect(github.request).toHaveBeenCalledWith(
+          'DELETE /repos/:org/:repo/environments/:environment_name/deployment-branch-policies/:id',
+          {
+            org,
+            repo,
+            environment_name: 'changed-branch-policy',
+            id: 3
           }
         )
 
