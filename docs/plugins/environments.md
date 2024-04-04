@@ -29,4 +29,8 @@ environments:
       custom_branches:
         - main
         - dev/*
+        - name: release/*
+          type: branch
+        - name: v*
+          type: tag
 ```
