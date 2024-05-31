@@ -34,7 +34,7 @@
   "devDependencies": {
     "@cucumber/cucumber": "10.8.0",
     "@form8ion/remark-preset": "1.0.2",
-    "@travi/any": "3.1.0",
+    "@travi/any": "3.1.1",
     "http-status-codes": "2.3.0",
     "jest": "29.7.0",
     "jest-when": "3.6.0",
