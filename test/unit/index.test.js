@@ -1,4 +1,4 @@
-const { Probot } = require('probot')
+const { Probot, ProbotOctokit } = require('probot')
 const any = require('@travi/any')
 const plugin = require('../../index')
 
@@ -8,7 +8,7 @@ describe('plugin', () => {
   beforeEach(() => {
     class Octokit {
       static defaults () {
-        return Octokit
+        return ProbotOctokit
       }
 
       constructor () {
