@@ -253,5 +253,141 @@ describe('Environments', () => {
         })
       })
     })
+
+    it('do not update existing envs', () => {
+      const plugin = configure([
+        {
+          name: 'new-environment',
+          wait_timer: 1,
+          reviewers: [
+            {
+              id: 1,
+              type: 'Team'
+            },
+            {
+              id: 2,
+              type: 'User'
+            }
+          ],
+          deployment_branch_policy: {
+            custom_branches: ['dev/*', 'dev-*', { name: 'v*', type: 'tag' }]
+          }
+        }
+      ])
+
+      when(github.request)
+        .calledWith('GET /repos/:org/:repo/environments', { org, repo })
+        .mockResolvedValue({
+          data: {
+            environments: [
+              {
+                name: 'new-environment',
+                wait_timer: 1,
+                reviewers: [
+                  {
+                    id: 1,
+                    type: 'Team'
+                  },
+                  {
+                    id: 2,
+                    type: 'User'
+                  }
+                ],
+                deployment_branch_policy: {
+                  protected_branches: false,
+                  custom_branch_policies: true
+                }
+              }
+            ]
+          }
+        })
+
+      when(github.request)
+        .calledWith('GET /repos/:org/:repo/environments/:environment_name/deployment-branch-policies', {
+          org,
+          repo,
+          environment_name: 'new-environment'
+        })
+        .mockResolvedValue({
+          data: {
+            branch_policies: [
+              {
+                id: 3,
+                node_id: '3',
+                name: 'v*',
+                type: 'tag'
+              },
+              {
+                id: 2,
+                node_id: '2',
+                name: 'dev-*',
+                type: 'branch'
+              },
+              {
+                id: 1,
+                node_id: '1',
+                name: 'dev/*',
+                type: 'branch'
+              }
+            ]
+          }
+        })
+
+      return plugin.sync().then(() => {
+        expect(github.request).not.toHaveBeenCalledWith('PUT /repos/:org/:repo/environments/:environment_name', {
+          org,
+          repo,
+          environment_name: 'new-environment',
+          wait_timer: 1,
+          reviewers: [
+            {
+              id: 1,
+              type: 'Team'
+            },
+            {
+              id: 2,
+              type: 'User'
+            }
+          ],
+          deployment_branch_policy: {
+            protected_branches: false,
+            custom_branch_policies: true
+          }
+        })
+
+        expect(github.request).not.toHaveBeenCalledWith(
+          'POST /repos/:org/:repo/environments/:environment_name/deployment-branch-policies',
+          {
+            org,
+            repo,
+            environment_name: 'new-environment',
+            name: 'dev/*',
+            type: 'branch'
+          }
+        )
+
+        expect(github.request).not.toHaveBeenCalledWith(
+          'POST /repos/:org/:repo/environments/:environment_name/deployment-branch-policies',
+          {
+            org,
+            repo,
+            environment_name: 'new-environment',
+            name: 'dev-*',
+            type: 'branch'
+          }
+        )
+
+        expect(github.request).not.toHaveBeenCalledWith(
+          'POST /repos/:org/:repo/environments/:environment_name/deployment-branch-policies',
+          {
+            org,
+            repo,
+            environment_name: 'new-environment',
+            name: 'v*',
+            type: 'tag'
+          }
+        )
+      })
+    })
   })
 })

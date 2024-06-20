@@ -78,7 +78,7 @@ Given('an environment exists with a {string} branches deployment branch policy',
     this.customBranches = any.listOf(() => ({
       name: any.word(),
       id: any.integer(),
-      type: any.fromList(['branch', 'tag'])
+      type: any.fromList(['branch'])
     }))
     this.removedDeploymentBranchPolicyIds = {}
 
@@ -380,7 +380,7 @@ Given('an environment is defined in the config with a custom branches deployment
   this.customBranches = any.listOf(() => ({
     name: any.word(),
     id: any.integer(),
-    type: any.fromList(['branch', 'tag'])
+    type: any.fromList(['branch'])
   }))
   this.customBranchNames = this.customBranches.map(branch => branch.name)
   this.createdDeploymentBranchPolicyNames = {}
