@@ -51,6 +51,12 @@ describe('Environments', () => {
           }
         },
         {
+          name: 'changed-environment',
+          deployment_branch_policy: {
+            custom_branches: ['dev/*', { name: '*.*.*', type: 'tag' }]
+          }
+        },
+        {
           name: 'changed-branch-policy',
           deployment_branch_policy: {
             protected_branches: true
@@ -88,6 +94,13 @@ describe('Environments', () => {
               },
               {
                 name: 'unchanged-environment',
+                deployment_branch_policy: {
+                  protected_branches: false,
+                  custom_branch_policies: true
+                }
+              },
+              {
+                name: 'changed-environment',
                 deployment_branch_policy: {
                   protected_branches: false,
                   custom_branch_policies: true
@@ -158,6 +171,37 @@ describe('Environments', () => {
                 name: '*.*.*',
                 type: 'tag'
               },
+              {
+                id: 3,
+                node_id: '3',
+                name: 'v*',
+                type: 'tag'
+              },
+              {
+                id: 2,
+                node_id: '2',
+                name: 'dev-*',
+                type: 'branch'
+              },
+              {
+                id: 1,
+                node_id: '1',
+                name: 'dev/*',
+                type: 'branch'
+              }
+            ]
+          }
+        })
+
+      when(github.request)
+        .calledWith('GET /repos/:org/:repo/environments/:environment_name/deployment-branch-policies', {
+          org,
+          repo,
+          environment_name: 'changed-environment'
+        })
+        .mockResolvedValue({
+          data: {
+            branch_policies: [
               {
                 id: 3,
                 node_id: '3',
@@ -345,6 +389,91 @@ describe('Environments', () => {
             org,
             repo,
             environment_name: 'unchanged-environment',
+            id: 1
+          }
+        )
+
+        expect(github.request).toHaveBeenCalledWith('PUT /repos/:org/:repo/environments/:environment_name', {
+          org,
+          repo,
+          environment_name: 'changed-environment',
+          wait_timer: 0,
+          deployment_branch_policy: {
+            protected_branches: false,
+            custom_branch_policies: true
+          }
+        })
+
+        expect(github.request).toHaveBeenCalledWith(
+          'POST /repos/:org/:repo/environments/:environment_name/deployment-branch-policies',
+          {
+            org,
+            repo,
+            environment_name: 'changed-environment',
+            name: 'dev/*',
+            type: 'branch'
+          }
+        )
+
+        expect(github.request).not.toHaveBeenCalledWith(
+          'POST /repos/:org/:repo/environments/:environment_name/deployment-branch-policies',
+          {
+            org,
+            repo,
+            environment_name: 'changed-environment',
+            name: 'dev-*',
+            type: 'branch'
+          }
+        )
+
+        expect(github.request).not.toHaveBeenCalledWith(
+          'POST /repos/:org/:repo/environments/:environment_name/deployment-branch-policies',
+          {
+            org,
+            repo,
+            environment_name: 'changed-environment',
+            name: 'v*',
+            type: 'tag'
+          }
+        )
+
+        expect(github.request).toHaveBeenCalledWith(
+          'POST /repos/:org/:repo/environments/:environment_name/deployment-branch-policies',
+          {
+            org,
+            repo,
+            environment_name: 'changed-environment',
+            name: '*.*.*',
+            type: 'tag'
+          }
+        )
+
+        expect(github.request).toHaveBeenCalledWith(
+          'DELETE /repos/:org/:repo/environments/:environment_name/deployment-branch-policies/:id',
+          {
+            org,
+            repo,
+            environment_name: 'changed-environment',
+            id: 3
+          }
+        )
+
+        expect(github.request).toHaveBeenCalledWith(
+          'DELETE /repos/:org/:repo/environments/:environment_name/deployment-branch-policies/:id',
+          {
+            org,
+            repo,
+            environment_name: 'changed-environment',
+            id: 2
+          }
+        )
+
+        expect(github.request).toHaveBeenCalledWith(
+          'DELETE /repos/:org/:repo/environments/:environment_name/deployment-branch-policies/:id',
+          {
+            org,
+            repo,
+            environment_name: 'changed-environment',
             id: 1
           }
         )
