@@ -75,7 +75,11 @@ Given('an environment exists with a {string} branches deployment branch policy',
   )
 
   if (policyType === 'custom') {
-    this.customBranches = any.listOf(() => ({ name: any.word(), id: any.integer() }))
+    this.customBranches = any.listOf(() => ({
+      name: any.word(),
+      id: any.integer(),
+      type: any.fromList(['branch'])
+    }))
     this.removedDeploymentBranchPolicyIds = {}
 
     this.server.use(
@@ -373,7 +377,12 @@ Given('an environment is defined in the config with a protected branches deploym
 
 Given('an environment is defined in the config with a custom branches deployment branch policy', async function () {
   this.environmentName = any.word()
-  this.customBranchNames = any.listOf(any.word)
+  this.customBranches = any.listOf(() => ({
+    name: any.word(),
+    id: any.integer(),
+    type: any.fromList(['branch'])
+  }))
+  this.customBranchNames = this.customBranches.map(branch => branch.name)
   this.createdDeploymentBranchPolicyNames = {}
 
   this.server.use(
@@ -388,7 +397,7 @@ Given('an environment is defined in the config with a custom branches deployment
               environments: [
                 {
                   name: this.environmentName,
-                  deployment_branch_policy: { protected_branches: false, custom_branches: this.customBranchNames }
+                  deployment_branch_policy: { protected_branches: false, custom_branches: this.customBranches }
                 }
               ]
             })
