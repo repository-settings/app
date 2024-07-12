@@ -1,4 +1,5 @@
-const Branches = require('../../../../lib/plugins/branches')
+import Branches from '../../../../lib/plugins/branches'
+import { jest } from '@jest/globals'
 
 describe('Branches', () => {
   let github
