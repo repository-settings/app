@@ -1,5 +1,5 @@
-import mergeArrayByName from './lib/mergeArrayByName'
-import SettingsApp from './lib/settings'
+import mergeArrayByName from './lib/mergeArrayByName.js'
+import SettingsApp from './lib/settings.js'
 
 /**
  * @param {import('probot').Probot} robot

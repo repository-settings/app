@@ -1,6 +1,6 @@
 import { Probot, ProbotOctokit } from 'probot'
 import any from '@travi/any'
-import plugin from '../../index'
+import plugin from '../../index.js'
 import { readFileSync } from 'fs'
 import { jest } from '@jest/globals'
 

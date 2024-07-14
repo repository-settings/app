@@ -1,5 +1,6 @@
-const { when } = require('jest-when')
-const Environments = require('../../../../lib/plugins/environments')
+import { when } from 'jest-when'
+import { jest } from '@jest/globals'
+import Environments from '../../../../lib/plugins/environments.js'
 
 describe('Environments', () => {
   let github

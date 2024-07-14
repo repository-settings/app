@@ -4,7 +4,8 @@
   "description": "Pull Requests for GitHub repository settings",
   "repository": "github:repository-settings/app",
   "type": "module",
-  "main": "index.js",
+  "main": "./index.js",
+  "exports": "./index.js",
   "scripts": {
     "dev": "nodemon",
     "start": "probot run ./index.js",
