@@ -1,4 +1,5 @@
-const Collaborators = require('../../../../lib/plugins/collaborators')
+import Collaborators from '../../../../lib/plugins/collaborators'
+import { jest } from '@jest/globals'
 
 describe('Collaborators', () => {
   let github

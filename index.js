@@ -1,9 +1,10 @@
-const mergeArrayByName = require('./lib/mergeArrayByName')
+import mergeArrayByName from './lib/mergeArrayByName.js'
+import SettingsApp from './lib/settings.js'
 
 /**
  * @param {import('probot').Probot} robot
  */
-module.exports = (robot, _, Settings = require('./lib/settings')) => {
+export default (robot, _, Settings = SettingsApp) => {
   async function syncSettings (context, repo = context.repo()) {
     const config = await context.config('settings.yml', {}, { arrayMerge: mergeArrayByName })
     return Settings.sync(context.octokit, repo, config)
