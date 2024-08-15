@@ -46,7 +46,7 @@
     "nodemon": "3.1.4",
     "npm-run-all2": "6.2.2",
     "prettier-standard": "16.4.1",
-    "publint": "0.2.9",
+    "publint": "0.2.10",
     "smee-client": "2.0.3",
     "standard": "17.1.0"
   },
