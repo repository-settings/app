@@ -48,7 +48,7 @@
     "prettier-standard": "16.4.1",
     "publint": "0.2.10",
     "smee-client": "2.0.3",
-    "standard": "17.1.0"
+    "standard": "17.1.1"
   },
   "standard": {
     "env": [
