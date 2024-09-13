@@ -46,7 +46,5 @@ export default (robot, _, Settings = SettingsApp) => {
     return syncSettings(context)
   })
 
-  robot.on('repository.created', async context => {
-    return syncSettings(context)
-  })
+  robot.on('repository.created', async context => syncSettings(context))
 }

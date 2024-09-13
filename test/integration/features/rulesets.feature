@@ -1,6 +1,5 @@
 Feature: Repository Rulesets
 
-  @wip
   Scenario: Add a ruleset
     Given no rulesets are defined for the repository
     And a ruleset is defined in the config

@@ -7,6 +7,7 @@ import { http, HttpResponse } from 'msw'
 
 import { repository } from './common-steps.mjs'
 import settings from '../../../../lib/settings.js'
+import any from '@travi/any'
 
 Given('no rulesets are defined for the repository', async function () {
   this.server.use(
@@ -17,12 +18,14 @@ Given('no rulesets are defined for the repository', async function () {
 })
 
 Given('a ruleset is defined in the config', async function () {
+  this.ruleset = { name: any.word() }
+
   this.server.use(
     http.get(
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
         settings.FILE_NAME
       )}`,
-      ({ request }) => HttpResponse.arrayBuffer(Buffer.from(dump({ rulesets: [{}] })))
+      ({ request }) => HttpResponse.arrayBuffer(Buffer.from(dump({ rulesets: [this.ruleset] })))
     ),
     http.post(
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/rulesets`,
@@ -36,5 +39,5 @@ Given('a ruleset is defined in the config', async function () {
 })
 
 Then('the ruleset is enabled for the repository', async function () {
-  assert.deepEqual(this.createdRuleset, {})
+  assert.deepEqual(this.createdRuleset, this.ruleset)
 })
