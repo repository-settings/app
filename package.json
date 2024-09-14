@@ -44,7 +44,7 @@
     "ls-engines": "0.9.3",
     "msw": "2.4.6",
     "nodemon": "3.1.4",
-    "npm-run-all2": "6.2.2",
+    "npm-run-all2": "6.2.3",
     "prettier-standard": "16.4.1",
     "publint": "0.2.10",
     "smee-client": "2.0.3",
