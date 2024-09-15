@@ -17,6 +17,7 @@ describe('rulesets', () => {
     github = {
       repos: {
         createRepoRuleset: jest.fn(),
+        deleteRepoRuleset: jest.fn(),
         getRepoRulesets: jest.fn(),
         updateRepoRuleset: jest.fn()
       }
@@ -26,12 +27,18 @@ describe('rulesets', () => {
   it('should sync rulesets', async () => {
     const updatedValue = any.word()
     const existingRulesetId = any.integer()
+    const removedRulesetId = any.integer()
     const existingRuleset = { name: any.word(), foo: updatedValue }
     const newRuleset = { name: any.word() }
     const plugin = configure(github, owner, repo, [newRuleset, existingRuleset])
     when(github.repos.getRepoRulesets)
       .calledWith({ owner, repo })
-      .mockResolvedValue({ data: [{ ruleset_id: existingRulesetId, ...existingRuleset, foo: any.word() }] })
+      .mockResolvedValue({
+        data: [
+          { ruleset_id: existingRulesetId, ...existingRuleset, foo: any.word() },
+          { ruleset_id: removedRulesetId, name: any.word() }
+        ]
+      })
 
     await plugin.sync()
 
@@ -43,5 +50,6 @@ describe('rulesets', () => {
       ...existingRuleset,
       foo: updatedValue
     })
+    expect(github.repos.deleteRepoRuleset).toHaveBeenCalledWith({ owner, repo, ruleset_id: removedRulesetId })
   })
 })

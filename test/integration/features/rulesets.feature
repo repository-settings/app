@@ -12,7 +12,6 @@ Feature: Repository Rulesets
     When a settings sync is triggered
     Then the ruleset is updated
 
-  @wip
   Scenario: Delete a ruleset
     Given a ruleset exists for the repository
     And the ruleset is removed from the config
