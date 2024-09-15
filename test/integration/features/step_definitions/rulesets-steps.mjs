@@ -9,10 +9,21 @@ import { repository } from './common-steps.mjs'
 import settings from '../../../../lib/settings.js'
 import any from '@travi/any'
 
+const rulesetId = any.integer()
+const rulesetName = any.word()
+
 Given('no rulesets are defined for the repository', async function () {
   this.server.use(
     http.get(`https://api.github.com/repos/${repository.owner.name}/${repository.name}/rulesets`, ({ request }) =>
       HttpResponse.json([])
+    )
+  )
+})
+
+Given('a ruleset exists for the repository', async function () {
+  this.server.use(
+    http.get(`https://api.github.com/repos/${repository.owner.name}/${repository.name}/rulesets`, ({ request }) =>
+      HttpResponse.json([{ ruleset_id: rulesetId, name: rulesetName, enforcement: 'evaluate' }])
     )
   )
 })
@@ -38,6 +49,38 @@ Given('a ruleset is defined in the config', async function () {
   )
 })
 
+Given('the ruleset is modified in the config', async function () {
+  this.ruleset = { name: rulesetName, enforcement: 'active' }
+
+  this.server.use(
+    http.get(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
+        settings.FILE_NAME
+      )}`,
+      ({ request }) =>
+        HttpResponse.arrayBuffer(
+          Buffer.from(
+            dump({
+              rulesets: [{ ruleset_id: rulesetId, ...this.ruleset }]
+            })
+          )
+        )
+    ),
+    http.put(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/rulesets/${rulesetId}`,
+      async ({ request }) => {
+        this.updatedRuleset = await request.json()
+
+        return new HttpResponse(null, { status: StatusCodes.OK })
+      }
+    )
+  )
+})
+
 Then('the ruleset is enabled for the repository', async function () {
   assert.deepEqual(this.createdRuleset, this.ruleset)
+})
+
+Then('the ruleset is updated', async function () {
+  assert.deepEqual(this.updatedRuleset, this.ruleset)
 })
