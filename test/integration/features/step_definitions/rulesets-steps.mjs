@@ -77,10 +77,33 @@ Given('the ruleset is modified in the config', async function () {
   )
 })
 
+Given('the ruleset is removed from the config', async function () {
+  this.server.use(
+    http.get(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
+        settings.FILE_NAME
+      )}`,
+      ({ request }) => HttpResponse.arrayBuffer(Buffer.from(dump({ rulesets: [] })))
+    ),
+    http.delete(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/rulesets/:rulesetId`,
+      async ({ params }) => {
+        this.removedRuleset = params.rulesetId
+
+        return new HttpResponse(null, { status: StatusCodes.NO_CONTENT })
+      }
+    )
+  )
+})
+
 Then('the ruleset is enabled for the repository', async function () {
   assert.deepEqual(this.createdRuleset, this.ruleset)
 })
 
 Then('the ruleset is updated', async function () {
   assert.deepEqual(this.updatedRuleset, this.ruleset)
+})
+
+Then('the ruleset is deleted', async function () {
+  assert.equal(this.removedRuleset, rulesetId)
 })
