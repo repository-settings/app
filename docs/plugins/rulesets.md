@@ -1,5 +1,11 @@
 # Repository Rulesets
 
+> [!WARNING]
+> Support for Repository Rulesets is still under development.
+> Details may still change, like how the configuration is defined in the `settings.yml`.
+> Please follow [#732](https://github.com/repository-settings/app/issues/732) for progress updates.
+> Feedback is appreciated, but adopt cautiously, with the expectation of breaking changes until support is fully released.
+
 See https://docs.github.com/en/rest/repos/rules#update-a-repository-ruleset for
 all available ruleset properties and a description of each.
 
