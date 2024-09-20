@@ -18,6 +18,7 @@ rulesets:
       ref_name:
         include:
           - "~DEFAULT_BRANCH"
+        exclude: []
     rules:
       - type: deletion
       - type: non_fast_forward
@@ -29,6 +30,7 @@ rulesets:
       ref_name:
         include:
           - "~DEFAULT_BRANCH"
+        exclude: []
     rules:
       - type: required_status_checks
         parameters:
@@ -47,6 +49,7 @@ rulesets:
       ref_name:
         include:
           - "~DEFAULT_BRANCH"
+        exclude: []
     rules:
       - type: pull_request
         parameters:
