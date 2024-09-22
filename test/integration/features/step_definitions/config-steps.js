@@ -4,7 +4,7 @@ import settings from '../../../../lib/settings.js'
 import any from '@travi/any'
 import { http, HttpResponse } from 'msw'
 import { StatusCodes } from 'http-status-codes'
-import { repository } from './common-steps.mjs'
+import { repository } from './common-steps.js'
 
 export function buildPushEvent ({ pushBranch } = {}) {
   return {

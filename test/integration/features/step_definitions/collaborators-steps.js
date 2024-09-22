@@ -8,7 +8,7 @@ import any from '@travi/any'
 
 import settings from '../../../../lib/settings.js'
 
-import { repository } from './common-steps.mjs'
+import { repository } from './common-steps.js'
 
 const collaboratorLogin = any.word()
 

@@ -6,7 +6,7 @@ import { http, HttpResponse } from 'msw'
 import any from '@travi/any'
 import assert from 'node:assert'
 
-import { repository } from './common-steps.mjs'
+import { repository } from './common-steps.js'
 import settings from '../../../../lib/settings.js'
 
 const possibleReviewerTypes = ['User', 'Team']

@@ -1,7 +1,7 @@
 import { Given, When } from '@cucumber/cucumber'
 import any from '@travi/any'
 
-import { repository } from './common-steps.mjs'
+import { repository } from './common-steps.js'
 
 export function buildRepositoryCreatedEvent () {
   return {

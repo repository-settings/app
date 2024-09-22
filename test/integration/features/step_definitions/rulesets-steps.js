@@ -5,7 +5,7 @@ import { Given, Then } from '@cucumber/cucumber'
 import assert from 'node:assert'
 import { http, HttpResponse } from 'msw'
 
-import { repository } from './common-steps.mjs'
+import { repository } from './common-steps.js'
 import settings from '../../../../lib/settings.js'
 import any from '@travi/any'
 
