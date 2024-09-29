@@ -34,6 +34,7 @@ rulesets:
     rules:
       - type: required_status_checks
         parameters:
+          strict_required_status_checks_policy: false # Required field
           required_status_checks:
             - context: test
               integration_id: 123456
