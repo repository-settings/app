@@ -18,6 +18,7 @@ describe('rulesets', () => {
       repos: {
         createRepoRuleset: jest.fn(),
         deleteRepoRuleset: jest.fn(),
+        getRepoRuleset: jest.fn(),
         getRepoRulesets: jest.fn(),
         updateRepoRuleset: jest.fn()
       }
@@ -25,20 +26,35 @@ describe('rulesets', () => {
   })
 
   it('should sync rulesets', async () => {
-    const updatedValue = any.word()
+    const additionalRule = any.simpleObject()
     const existingRulesetId = any.integer()
+    const secondExistingRulesetId = any.integer()
     const removedRulesetId = any.integer()
-    const existingRuleset = { name: any.word(), foo: updatedValue }
+    const existingRuleset = { name: any.word(), rules: [any.simpleObject()] }
+    const secondExistingRuleset = { name: any.word(), rules: [any.simpleObject()] }
     const newRuleset = { name: any.word() }
-    const plugin = configure(github, owner, repo, [newRuleset, existingRuleset])
+    const plugin = configure(github, owner, repo, [
+      newRuleset,
+      { ...existingRuleset, rules: [...existingRuleset.rules, additionalRule] },
+      secondExistingRuleset
+    ])
+    const existingRulesets = [
+      { id: existingRulesetId, ...existingRuleset },
+      { id: secondExistingRulesetId, ...secondExistingRuleset },
+      { id: removedRulesetId, name: any.word() }
+    ]
     when(github.repos.getRepoRulesets)
       .calledWith({ owner, repo })
       .mockResolvedValue({
-        data: [
-          { ruleset_id: existingRulesetId, ...existingRuleset, foo: any.word() },
-          { ruleset_id: removedRulesetId, name: any.word() }
-        ]
+        data: existingRulesets.map(
+          ({ rules, conditions, bypass_actors: bypassActors, ...rulesetListProperties }) => rulesetListProperties
+        )
       })
+    existingRulesets.forEach(ruleset => {
+      when(github.repos.getRepoRuleset)
+        .calledWith({ owner, repo, ruleset_id: ruleset.id })
+        .mockResolvedValue({ data: ruleset })
+    })
 
     await plugin.sync()
 
@@ -48,7 +64,13 @@ describe('rulesets', () => {
       repo,
       ruleset_id: existingRulesetId,
       ...existingRuleset,
-      foo: updatedValue
+      rules: [...existingRuleset.rules, additionalRule]
+    })
+    expect(github.repos.updateRepoRuleset).not.toHaveBeenCalledWith({
+      owner,
+      repo,
+      ruleset_id: secondExistingRulesetId,
+      ...secondExistingRuleset
     })
     expect(github.repos.deleteRepoRuleset).toHaveBeenCalledWith({ owner, repo, ruleset_id: removedRulesetId })
   })
