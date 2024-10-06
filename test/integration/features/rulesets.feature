@@ -17,3 +17,9 @@ Feature: Repository Rulesets
     And the ruleset is removed from the config
     When a settings sync is triggered
     Then the ruleset is deleted
+
+  Scenario: No Updates
+    Given a ruleset exists for the repository
+    And no ruleset updates are made to the config
+    When a settings sync is triggered
+    Then no ruleset updates are triggered
