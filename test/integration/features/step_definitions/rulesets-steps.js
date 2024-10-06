@@ -22,8 +22,18 @@ Given('no rulesets are defined for the repository', async function () {
 })
 
 Given('a ruleset exists for the repository', async function () {
-  const rulesetSubset = { name: rulesetName }
-  const existingRulesets = [{ id: rulesetId, ...rulesetSubset }]
+  const existingRulesetSubset = {
+    id: rulesetId,
+    name: rulesetName,
+    _links: any.simpleObject(),
+    created_at: any.string(),
+    updated_at: any.string(),
+    source_type: any.word(),
+    source: any.string(),
+    node_id: any.string()
+  }
+  const existingRuleset = { ...existingRulesetSubset }
+  const existingRulesets = [existingRuleset]
 
   this.server.use(
     http.get(`https://api.github.com/repos/${repository.owner.name}/${repository.name}/rulesets`, ({ request }) => {
@@ -38,7 +48,12 @@ Given('a ruleset exists for the repository', async function () {
     }),
     http.get(
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/rulesets/${rulesetId}`,
-      ({ request }) => HttpResponse.json({ id: rulesetId, ...rulesetSubset, rules: existingRules })
+      ({ request }) =>
+        HttpResponse.json({
+          ...existingRuleset,
+          rules: existingRules,
+          current_user_can_bypass: any.boolean()
+        })
     )
   )
 })
@@ -105,6 +120,19 @@ Given('the ruleset is removed from the config', async function () {
   )
 })
 
+Given('no ruleset updates are made to the config', async function () {
+  const existingRuleset = { name: rulesetName, rules: existingRules }
+
+  this.server.use(
+    http.get(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
+        settings.FILE_NAME
+      )}`,
+      ({ request }) => HttpResponse.arrayBuffer(Buffer.from(dump({ rulesets: [existingRuleset] })))
+    )
+  )
+})
+
 Then('the ruleset is enabled for the repository', async function () {
   assert.deepEqual(this.createdRuleset, this.ruleset)
 })
@@ -115,4 +143,8 @@ Then('the ruleset is updated', async function () {
 
 Then('the ruleset is deleted', async function () {
   assert.equal(this.removedRuleset, rulesetId)
+})
+
+Then('no ruleset updates are triggered', async function () {
+  return undefined
 })
