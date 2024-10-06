@@ -11,6 +11,7 @@ import any from '@travi/any'
 
 const rulesetId = any.integer()
 const rulesetName = any.word()
+const existingRules = any.listOf(any.simpleObject)
 
 Given('no rulesets are defined for the repository', async function () {
   this.server.use(
@@ -21,9 +22,15 @@ Given('no rulesets are defined for the repository', async function () {
 })
 
 Given('a ruleset exists for the repository', async function () {
+  const rulesetSubset = { name: rulesetName }
+
   this.server.use(
     http.get(`https://api.github.com/repos/${repository.owner.name}/${repository.name}/rulesets`, ({ request }) =>
-      HttpResponse.json([{ ruleset_id: rulesetId, name: rulesetName, enforcement: 'evaluate' }])
+      HttpResponse.json([{ id: rulesetId, ...rulesetSubset }])
+    ),
+    http.get(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/rulesets/${rulesetId}`,
+      ({ request }) => HttpResponse.json({ id: rulesetId, ...rulesetSubset, rules: existingRules })
     )
   )
 })
@@ -50,26 +57,20 @@ Given('a ruleset is defined in the config', async function () {
 })
 
 Given('the ruleset is modified in the config', async function () {
-  this.ruleset = { name: rulesetName, enforcement: 'active' }
+  const additionalRule = any.simpleObject()
+  this.updatedRuleset = { name: rulesetName, rules: [...existingRules, additionalRule] }
 
   this.server.use(
     http.get(
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
         settings.FILE_NAME
       )}`,
-      ({ request }) =>
-        HttpResponse.arrayBuffer(
-          Buffer.from(
-            dump({
-              rulesets: [{ ruleset_id: rulesetId, ...this.ruleset }]
-            })
-          )
-        )
+      ({ request }) => HttpResponse.arrayBuffer(Buffer.from(dump({ rulesets: [this.updatedRuleset] })))
     ),
     http.put(
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/rulesets/${rulesetId}`,
       async ({ request }) => {
-        this.updatedRuleset = await request.json()
+        this.rulesetUpdate = await request.json()
 
         return new HttpResponse(null, { status: StatusCodes.OK })
       }
@@ -101,7 +102,7 @@ Then('the ruleset is enabled for the repository', async function () {
 })
 
 Then('the ruleset is updated', async function () {
-  assert.deepEqual(this.updatedRuleset, this.ruleset)
+  assert.deepEqual(this.rulesetUpdate, this.updatedRuleset)
 })
 
 Then('the ruleset is deleted', async function () {
