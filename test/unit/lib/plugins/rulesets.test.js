@@ -44,7 +44,7 @@ describe('rulesets', () => {
       { id: removedRulesetId, name: any.word() }
     ]
     when(github.repos.getRepoRulesets)
-      .calledWith({ owner, repo })
+      .calledWith({ owner, repo, includes_parents: false })
       .mockResolvedValue({
         data: existingRulesets.map(
           ({ rules, conditions, bypass_actors: bypassActors, ...rulesetListProperties }) => rulesetListProperties

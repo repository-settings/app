@@ -23,11 +23,19 @@ Given('no rulesets are defined for the repository', async function () {
 
 Given('a ruleset exists for the repository', async function () {
   const rulesetSubset = { name: rulesetName }
+  const existingRulesets = [{ id: rulesetId, ...rulesetSubset }]
 
   this.server.use(
-    http.get(`https://api.github.com/repos/${repository.owner.name}/${repository.name}/rulesets`, ({ request }) =>
-      HttpResponse.json([{ id: rulesetId, ...rulesetSubset }])
-    ),
+    http.get(`https://api.github.com/repos/${repository.owner.name}/${repository.name}/rulesets`, ({ request }) => {
+      const url = new URL(request.url)
+
+      if (url.searchParams.get('includes_parents') === 'false') return HttpResponse.json(existingRulesets)
+
+      return HttpResponse.json([
+        ...existingRulesets,
+        ...any.listOf(() => ({ id: any.integer(), ...any.simpleObject() }))
+      ])
+    }),
     http.get(
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/rulesets/${rulesetId}`,
       ({ request }) => HttpResponse.json({ id: rulesetId, ...rulesetSubset, rules: existingRules })
