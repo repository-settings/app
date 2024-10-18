@@ -1,6 +1,6 @@
 # Branches
 
-https://docs.github.com/en/rest/reference/repos#update-branch-protection
+https://docs.github.com/en/rest/branches/branch-protection
 
 > [!IMPORTANT]
 > Each top-level element under branch protection must be filled (eg:
