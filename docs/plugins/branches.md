@@ -7,7 +7,7 @@ https://docs.github.com/en/rest/branches/branch-protection
 `required_pull_request_reviews`, `required_status_checks`, `enforce_admins` and
 `restrictions`).
 If you don't want to use one of them you must set it to `null` (see comments in
-the example above).
+the example below).
 Otherwise, none of the settings will be applied.
 
 ```yaml
