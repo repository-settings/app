@@ -48,7 +48,7 @@
     "npm-run-all2": "7.0.2",
     "prettier-standard": "16.4.1",
     "publint": "0.3.5",
-    "smee-client": "2.0.4",
+    "smee-client": "3.0.0",
     "standard": "17.1.2"
   },
   "standard": {
