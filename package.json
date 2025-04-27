@@ -41,7 +41,7 @@
     "http-status-codes": "2.3.0",
     "jest": "29.7.0",
     "jest-when": "3.7.0",
-    "lockfile-lint": "4.14.0",
+    "lockfile-lint": "4.14.1",
     "ls-engines": "0.9.3",
     "msw": "2.6.8",
     "nodemon": "3.1.10",
