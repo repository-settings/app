@@ -39,7 +39,7 @@
     "@form8ion/remark-preset": "1.0.5",
     "@travi/any": "3.1.2",
     "http-status-codes": "2.3.0",
-    "jest": "30.0.0",
+    "jest": "30.0.1",
     "jest-when": "3.7.0",
     "lockfile-lint": "4.14.1",
     "ls-engines": "0.9.3",
