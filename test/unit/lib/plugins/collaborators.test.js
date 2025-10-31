@@ -1,21 +1,19 @@
-import Collaborators from '../../../../lib/plugins/collaborators'
 import { jest } from '@jest/globals'
+import { when } from 'jest-when'
+
+import Collaborators from '../../../../lib/plugins/collaborators'
 
 describe('Collaborators', () => {
   let github
+  const repoOwner = 'bkeepers'
+  const repoName = 'test'
 
   function configure (config) {
-    return new Collaborators(github, { owner: 'bkeepers', repo: 'test' }, config)
+    return new Collaborators(github, { owner: repoOwner, repo: repoName }, config)
   }
 
   beforeEach(() => {
-    github = {
-      repos: {
-        listCollaborators: jest.fn().mockImplementation(() => Promise.resolve([])),
-        removeCollaborator: jest.fn().mockImplementation(() => Promise.resolve()),
-        addCollaborator: jest.fn().mockImplementation(() => Promise.resolve())
-      }
-    }
+    github = { request: jest.fn().mockImplementation(() => Promise.resolve()) }
   })
 
   describe('sync', () => {
@@ -27,8 +25,13 @@ describe('Collaborators', () => {
         { username: 'DIFFERENTcase', permission: 'push' }
       ])
 
-      github.repos.listCollaborators.mockReturnValueOnce(
-        Promise.resolve({
+      when(github.request)
+        .calledWith('GET /repos/{owner}/{repo}/collaborators', {
+          repo: repoName,
+          owner: repoOwner,
+          affiliation: 'direct'
+        })
+        .mockResolvedValue({
           data: [
             { login: 'bkeepers', permissions: { admin: true, push: true, pull: true } },
             { login: 'updated-permission', permissions: { admin: false, push: false, pull: true } },
@@ -36,32 +39,27 @@ describe('Collaborators', () => {
             { login: 'differentCase', permissions: { admin: false, push: true, pull: true } }
           ]
         })
-      )
 
       return plugin.sync().then(() => {
-        expect(github.repos.addCollaborator).toHaveBeenCalledWith({
+        expect(github.request).toHaveBeenCalledWith('PUT /repos/{owner}/{repo}/collaborators/{username}', {
           owner: 'bkeepers',
           repo: 'test',
           username: 'added-user',
           permission: 'push'
         })
 
-        expect(github.repos.addCollaborator).toHaveBeenCalledWith({
+        expect(github.request).toHaveBeenCalledWith('PUT /repos/{owner}/{repo}/collaborators/{username}', {
           owner: 'bkeepers',
           repo: 'test',
           username: 'updated-permission',
           permission: 'push'
         })
 
-        expect(github.repos.addCollaborator).toHaveBeenCalledTimes(2)
-
-        expect(github.repos.removeCollaborator).toHaveBeenCalledWith({
+        expect(github.request).toHaveBeenCalledWith('DELETE /repos/{owner}/{repo}/collaborators/{username}', {
           owner: 'bkeepers',
           repo: 'test',
           username: 'removed-user'
         })
-
-        expect(github.repos.removeCollaborator).toHaveBeenCalledTimes(1)
       })
     })
   })

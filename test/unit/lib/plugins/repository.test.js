@@ -3,22 +3,16 @@ import { jest } from '@jest/globals'
 
 describe('Repository', () => {
   let github
+  const repoOwner = 'bkeepers'
+  const repoName = 'test'
 
   function configure (config) {
-    return new Repository(github, { owner: 'bkeepers', repo: 'test' }, config)
+    return new Repository(github, { owner: repoOwner, repo: repoName }, config)
   }
 
   beforeEach(() => {
     github = {
-      repos: {
-        get: jest.fn().mockImplementation(() => Promise.resolve({})),
-        update: jest.fn().mockImplementation(() => Promise.resolve()),
-        replaceAllTopics: jest.fn().mockImplementation(() => Promise.resolve()),
-        enableVulnerabilityAlerts: jest.fn().mockImplementation(() => Promise.resolve()),
-        disableVulnerabilityAlerts: jest.fn().mockImplementation(() => Promise.resolve()),
-        enableAutomatedSecurityFixes: jest.fn().mockImplementation(() => Promise.resolve()),
-        disableAutomatedSecurityFixes: jest.fn().mockImplementation(() => Promise.resolve())
-      }
+      request: jest.fn().mockImplementation(() => Promise.resolve())
     }
   })
 
@@ -29,10 +23,10 @@ describe('Repository', () => {
         description: 'Hello World!'
       })
       return plugin.sync().then(() => {
-        expect(github.repos.update).toHaveBeenCalledWith({
-          owner: 'bkeepers',
-          repo: 'test',
-          name: 'test',
+        expect(github.request).toHaveBeenCalledWith('PATCH /repos/{owner}/{repo}', {
+          owner: repoOwner,
+          repo: repoName,
+          name: repoName,
           description: 'Hello World!',
           mediaType: { previews: ['baptiste'] }
         })
@@ -44,9 +38,9 @@ describe('Repository', () => {
         name: 'new-name'
       })
       return plugin.sync().then(() => {
-        expect(github.repos.update).toHaveBeenCalledWith({
-          owner: 'bkeepers',
-          repo: 'test',
+        expect(github.request).toHaveBeenCalledWith('PATCH /repos/{owner}/{repo}', {
+          owner: repoOwner,
+          repo: repoName,
           name: 'new-name',
           mediaType: { previews: ['baptiste'] }
         })
@@ -59,9 +53,9 @@ describe('Repository', () => {
       })
 
       return plugin.sync().then(() => {
-        expect(github.repos.replaceAllTopics).toHaveBeenCalledWith({
-          owner: 'bkeepers',
-          repo: 'test',
+        expect(github.request).toHaveBeenCalledWith('PUT /repos/{owner}/{repo}/topics', {
+          owner: repoOwner,
+          repo: repoName,
           names: ['foo', 'bar'],
           mediaType: {
             previews: ['mercy']
@@ -77,9 +71,9 @@ describe('Repository', () => {
         })
 
         return plugin.sync().then(() => {
-          expect(github.repos.enableVulnerabilityAlerts).not.toHaveBeenCalledWith({
-            owner: 'bkeepers',
-            repo: 'test',
+          expect(github.request).not.toHaveBeenCalledWith('PUT /repos/{owner}/{repo}/vulnerability-alerts', {
+            owner: repoOwner,
+            repo: repoName,
             mediaType: {
               previews: ['dorian']
             }
@@ -87,53 +81,53 @@ describe('Repository', () => {
         })
       })
 
-      it('enables vulerability alerts when set to true', () => {
+      it('enables vulerability alerts when set to true', async () => {
         const plugin = configure({
           enable_vulnerability_alerts: true
         })
 
-        return plugin.sync().then(() => {
-          expect(github.repos.enableVulnerabilityAlerts).toHaveBeenCalledWith({
-            owner: 'bkeepers',
-            repo: 'test',
-            mediaType: {
-              previews: ['dorian']
-            }
-          })
+        await plugin.sync()
+
+        expect(github.request).toHaveBeenCalledWith('PUT /repos/{owner}/{repo}/vulnerability-alerts', {
+          owner: repoOwner,
+          repo: repoName,
+          mediaType: {
+            previews: ['dorian']
+          }
         })
       })
 
-      it('disables vulerability alerts when set to false', () => {
+      it('disables vulerability alerts when set to false', async () => {
         const plugin = configure({
           enable_vulnerability_alerts: false
         })
 
-        return plugin.sync().then(() => {
-          expect(github.repos.disableVulnerabilityAlerts).toHaveBeenCalledWith({
-            owner: 'bkeepers',
-            repo: 'test',
-            mediaType: {
-              previews: ['dorian']
-            }
-          })
+        await plugin.sync()
+
+        expect(github.request).toHaveBeenCalledWith('DELETE /repos/{owner}/{repo}/vulnerability-alerts', {
+          owner: repoOwner,
+          repo: repoName,
+          mediaType: {
+            previews: ['dorian']
+          }
         })
       })
     })
 
     describe('automated security fixes', () => {
-      it('it skips if not set', () => {
+      it('it skips if not set', async () => {
         const plugin = configure({
           enable_automated_security_fixes: undefined
         })
 
-        return plugin.sync().then(() => {
-          expect(github.repos.enableAutomatedSecurityFixes).not.toHaveBeenCalledWith({
-            owner: 'bkeepers',
-            repo: 'test',
-            mediaType: {
-              previews: ['london']
-            }
-          })
+        await plugin.sync()
+
+        expect(github.request).not.toHaveBeenCalledWith('PUT /repos/{owner}/{repo}/automated-security-fixes', {
+          owner: repoOwner,
+          repo: repoName,
+          mediaType: {
+            previews: ['london']
+          }
         })
       })
 
@@ -143,9 +137,9 @@ describe('Repository', () => {
         })
 
         return plugin.sync().then(() => {
-          expect(github.repos.enableAutomatedSecurityFixes).toHaveBeenCalledWith({
-            owner: 'bkeepers',
-            repo: 'test',
+          expect(github.request).toHaveBeenCalledWith('PUT /repos/{owner}/{repo}/automated-security-fixes', {
+            owner: repoOwner,
+            repo: repoName,
             mediaType: {
               previews: ['london']
             }
@@ -153,19 +147,19 @@ describe('Repository', () => {
         })
       })
 
-      it('disables vulerability alerts when set to false', () => {
+      it('disables vulnerability alerts when set to false', async () => {
         const plugin = configure({
           enable_automated_security_fixes: false
         })
 
-        return plugin.sync().then(() => {
-          expect(github.repos.disableAutomatedSecurityFixes).toHaveBeenCalledWith({
-            owner: 'bkeepers',
-            repo: 'test',
-            mediaType: {
-              previews: ['london']
-            }
-          })
+        await plugin.sync()
+
+        expect(github.request).toHaveBeenCalledWith('DELETE /repos/{owner}/{repo}/automated-security-fixes', {
+          owner: repoOwner,
+          repo: repoName,
+          mediaType: {
+            previews: ['london']
+          }
         })
       })
     })
