@@ -11,8 +11,8 @@
     {
       "customType": "regex",
       "description": "Update semantic-release version used by npx",
-      "fileMatch": [
-        "^\\.github/workflows/release\\.yml$"
+      "managerFilePatterns": [
+        "/^\\.github/workflows/release\\.yml$/"
       ],
       "matchStrings": [
         "\\srun: npx semantic-release@(?<currentValue>.*?)\\s"
