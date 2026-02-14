@@ -32,7 +32,7 @@
     "deep-equal": "2.2.3",
     "deepmerge": "4.3.1",
     "js-yaml": "4.1.1",
-    "probot": "13.3.9"
+    "probot": "14.0.2"
   },
   "devDependencies": {
     "@cucumber/cucumber": "11.3.0",
@@ -57,7 +57,7 @@
     ]
   },
   "engines": {
-    "node": "^18.17 || >=20.6.1"
+    "node": "^20.18.0 || ^22.11.0 || >=24.11.0"
   },
   "jest": {
     "testEnvironment": "node"

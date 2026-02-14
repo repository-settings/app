@@ -13,27 +13,17 @@ describe('Teams', () => {
   const removedTeamId = any.integer()
   const unchangedTeamName = 'unchanged'
   const unchangedTeamId = any.integer()
-  const org = 'bkeepers'
+  const repoOwner = 'bkeepers'
+  const repoName = 'test'
 
   function configure (config) {
-    return new Teams(github, { owner: 'bkeepers', repo: 'test' }, config)
+    return new Teams(github, { owner: repoOwner, repo: repoName }, config)
   }
 
   beforeEach(() => {
     github = {
-      paginate: jest.fn().mockImplementation(() => Promise.resolve()),
-      repos: {
-        listTeams: jest.fn().mockImplementation(() =>
-          Promise.resolve({
-            data: [
-              { id: unchangedTeamId, slug: unchangedTeamName, permission: 'push' },
-              { id: removedTeamId, slug: removedTeamName, permission: 'push' },
-              { id: updatedTeamId, slug: updatedTeamName, permission: 'pull' }
-            ]
-          })
-        )
-      },
-      request: jest.fn()
+      request: jest.fn().mockImplementation(() => Promise.resolve()),
+      paginate: jest.fn().mockImplementation(() => Promise.resolve())
     }
   })
 
@@ -45,31 +35,40 @@ describe('Teams', () => {
         { name: addedTeamName, permission: 'pull' }
       ])
       when(github.request)
-        .calledWith('GET /orgs/:org/teams/:team_slug', { org, team_slug: addedTeamName })
+        .calledWith('GET /repos/{owner}/{repo}/teams', { owner: repoOwner, repo: repoName })
+        .mockResolvedValue({
+          data: [
+            { id: unchangedTeamId, slug: unchangedTeamName, permission: 'push' },
+            { id: removedTeamId, slug: removedTeamName, permission: 'push' },
+            { id: updatedTeamId, slug: updatedTeamName, permission: 'pull' }
+          ]
+        })
+      when(github.request)
+        .calledWith('GET /orgs/{org}/teams/{team_slug}', { org: repoOwner, team_slug: addedTeamName })
         .mockResolvedValue({ data: { id: addedTeamId } })
 
       await plugin.sync()
 
-      expect(github.request).toHaveBeenCalledWith('PUT /teams/:team_id/repos/:owner/:repo', {
-        org,
-        owner: org,
-        repo: 'test',
+      expect(github.request).toHaveBeenCalledWith('PUT /teams/{team_id}/repos/{owner}/{repo}', {
+        org: repoOwner,
+        owner: repoOwner,
+        repo: repoName,
         team_id: updatedTeamId,
         permission: 'admin'
       })
 
-      expect(github.request).toHaveBeenCalledWith('PUT /teams/:team_id/repos/:owner/:repo', {
-        org,
-        owner: org,
-        repo: 'test',
+      expect(github.request).toHaveBeenCalledWith('PUT /teams/{team_id}/repos/{owner}/{repo}', {
+        org: repoOwner,
+        owner: repoOwner,
+        repo: repoName,
         team_id: addedTeamId,
         permission: 'pull'
       })
 
-      expect(github.request).toHaveBeenCalledWith('DELETE /teams/:team_id/repos/:owner/:repo', {
-        org,
-        owner: org,
-        repo: 'test',
+      expect(github.request).toHaveBeenCalledWith('DELETE /teams/{team_id}/repos/{owner}/{repo}', {
+        org: repoOwner,
+        owner: repoOwner,
+        repo: repoName,
         team_id: removedTeamId
       })
     })
