@@ -32,7 +32,7 @@
     "deep-equal": "2.2.3",
     "deepmerge": "4.3.1",
     "js-yaml": "4.1.1",
-    "probot": "14.0.2"
+    "probot": "14.2.4"
   },
   "devDependencies": {
     "@cucumber/cucumber": "12.6.0",
