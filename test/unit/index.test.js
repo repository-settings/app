@@ -28,7 +28,7 @@ describe('plugin', () => {
       }
     }
 
-    app = new Probot({ secret: any.string(), Octokit })
+    app = new Probot({ secret: any.string(), Octokit, appId: any.string(), privateKey: any.string() })
 
     event = {
       name: 'push',

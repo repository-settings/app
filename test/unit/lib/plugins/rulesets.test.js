@@ -15,13 +15,7 @@ describe('rulesets', () => {
 
   beforeEach(() => {
     github = {
-      repos: {
-        createRepoRuleset: jest.fn(),
-        deleteRepoRuleset: jest.fn(),
-        getRepoRuleset: jest.fn(),
-        getRepoRulesets: jest.fn(),
-        updateRepoRuleset: jest.fn()
-      }
+      request: jest.fn().mockImplementation(() => Promise.resolve())
     }
   })
 
@@ -43,35 +37,39 @@ describe('rulesets', () => {
       { id: secondExistingRulesetId, ...secondExistingRuleset },
       { id: removedRulesetId, name: any.word() }
     ]
-    when(github.repos.getRepoRulesets)
-      .calledWith({ owner, repo, includes_parents: false })
+    when(github.request)
+      .calledWith('GET /repos/{owner}/{repo}/rulesets', { owner, repo, includes_parents: false })
       .mockResolvedValue({
         data: existingRulesets.map(
           ({ rules, conditions, bypass_actors: bypassActors, ...rulesetListProperties }) => rulesetListProperties
         )
       })
     existingRulesets.forEach(ruleset => {
-      when(github.repos.getRepoRuleset)
-        .calledWith({ owner, repo, ruleset_id: ruleset.id })
+      when(github.request)
+        .calledWith('GET /repos/{owner}/{repo}/rulesets/{ruleset_id}', { owner, repo, ruleset_id: ruleset.id })
         .mockResolvedValue({ data: ruleset })
     })
 
     await plugin.sync()
 
-    expect(github.repos.createRepoRuleset).toHaveBeenCalledWith({ owner, repo, ...newRuleset })
-    expect(github.repos.updateRepoRuleset).toHaveBeenCalledWith({
+    expect(github.request).toHaveBeenCalledWith('POST /repos/{owner}/{repo}/rulesets', { owner, repo, ...newRuleset })
+    expect(github.request).toHaveBeenCalledWith('PUT /repos/{owner}/{repo}/rulesets/{ruleset_id}', {
       owner,
       repo,
       ruleset_id: existingRulesetId,
       ...existingRuleset,
       rules: [...existingRuleset.rules, additionalRule]
     })
-    expect(github.repos.updateRepoRuleset).not.toHaveBeenCalledWith({
+    expect(github.request).not.toHaveBeenCalledWith('PUT /repos/{owner}/{repo}/rulesets/{ruleset_id}', {
       owner,
       repo,
       ruleset_id: secondExistingRulesetId,
       ...secondExistingRuleset
     })
-    expect(github.repos.deleteRepoRuleset).toHaveBeenCalledWith({ owner, repo, ruleset_id: removedRulesetId })
+    expect(github.request).toHaveBeenCalledWith('DELETE /repos/{owner}/{repo}/rulesets/{ruleset_id}', {
+      owner,
+      repo,
+      ruleset_id: removedRulesetId
+    })
   })
 })
