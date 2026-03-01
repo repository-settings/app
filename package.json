@@ -78,5 +78,5 @@
     "access": "public",
     "provenance": true
   },
-  "packageManager": "npm@11.10.1"
+  "packageManager": "npm@11.11.0"
 }
