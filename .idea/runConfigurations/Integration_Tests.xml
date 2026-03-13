@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Integration Tests" type="cucumber.js" factoryName="Cucumber.js">
+    <option name="myFilePath" value="$PROJECT_DIR$/test/integration/features" />
+    <option name="myNameFilter" value="" />
+    <option name="cucumberJsArguments" value="--config=./cucumber.js" />
+    <option name="workingDirectory" value="$PROJECT_DIR$" />
+    <method v="2" />
+  </configuration>
+</component>

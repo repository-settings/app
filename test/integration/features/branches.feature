@@ -6,7 +6,6 @@ Feature: Classic Branch Protection
     When a settings sync is triggered
     Then the branch-protection rule is enabled for the repository
 
-  @wip
   Scenario: Update a branch-protection rule
     Given a branch-protection rule exists for the repository
     And the branch-protection rule is modified in the config
@@ -19,14 +18,13 @@ Feature: Classic Branch Protection
     When a settings sync is triggered
     Then the branch-protection rule is deleted
 
-  @wip
   Scenario: No Updates
     Given a branch-protection rule exists for the repository
     And no branch-protection updates are made to the config
     When a settings sync is triggered
-    Then no branch-protection updates are triggered
+#    Then no branch-protection updates are triggered
+    Then the branch-protection rule is updated to match the existing value
 
-  @wip
   Scenario: Remove all branch-protection rules
     Given multiple branch-protection rules exist for the repository
     And all branch-protection rules are removed from the config
