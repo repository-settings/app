@@ -66,7 +66,7 @@ Given('a ruleset is defined in the config', async function () {
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
         settings.FILE_NAME
       )}`,
-      ({ request }) => HttpResponse.arrayBuffer(Buffer.from(dump({ rulesets: [this.ruleset] })))
+      () => HttpResponse.text(dump({ rulesets: [this.ruleset] }))
     ),
     http.post(
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/rulesets`,
@@ -88,7 +88,7 @@ Given('the ruleset is modified in the config', async function () {
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
         settings.FILE_NAME
       )}`,
-      ({ request }) => HttpResponse.arrayBuffer(Buffer.from(dump({ rulesets: [this.updatedRuleset] })))
+      () => HttpResponse.text(dump({ rulesets: [this.updatedRuleset] }))
     ),
     http.put(
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/rulesets/${rulesetId}`,
@@ -107,7 +107,7 @@ Given('the ruleset is removed from the config', async function () {
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
         settings.FILE_NAME
       )}`,
-      ({ request }) => HttpResponse.arrayBuffer(Buffer.from(dump({ rulesets: [] })))
+      () => HttpResponse.text(dump({ rulesets: [] }))
     ),
     http.delete(
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/rulesets/:rulesetId`,
@@ -128,7 +128,7 @@ Given('no ruleset updates are made to the config', async function () {
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
         settings.FILE_NAME
       )}`,
-      ({ request }) => HttpResponse.arrayBuffer(Buffer.from(dump({ rulesets: [existingRuleset] })))
+      () => HttpResponse.text(dump({ rulesets: [existingRuleset] }))
     )
   )
 })

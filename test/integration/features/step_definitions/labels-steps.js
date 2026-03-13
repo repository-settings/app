@@ -36,9 +36,7 @@ Given('a label is added', async function () {
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
         settings.FILE_NAME
       )}`,
-      ({ request }) => {
-        return HttpResponse.arrayBuffer(Buffer.from(dump({ labels: [this.label] })))
-      }
+      () => HttpResponse.text(dump({ labels: [this.label] }))
     ),
     http.post(
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/labels`,
@@ -60,9 +58,7 @@ Given('a label is added with a leading `#` on the color code', async function ()
         settings.FILE_NAME
       )}`,
       ({ request }) => {
-        return HttpResponse.arrayBuffer(
-          Buffer.from(dump({ labels: [{ ...this.label, color: `#${this.label.color}` }] }))
-        )
+        return HttpResponse.text(dump({ labels: [{ ...this.label, color: `#${this.label.color}` }] }))
       }
     ),
     http.post(
@@ -85,9 +81,7 @@ Given('the color is updated on the existing label', async function () {
         settings.FILE_NAME
       )}`,
       ({ request }) => {
-        return HttpResponse.arrayBuffer(
-          Buffer.from(dump({ labels: [{ name: this.label.name, color: this.newColor }] }))
-        )
+        return HttpResponse.text(dump({ labels: [{ name: this.label.name, color: this.newColor }] }))
       }
     ),
     http.patch(
@@ -108,7 +102,7 @@ Given('the label is removed from the config', async function () {
         settings.FILE_NAME
       )}`,
       ({ request }) => {
-        return HttpResponse.arrayBuffer(Buffer.from(dump({ labels: [] })))
+        return HttpResponse.text(dump({ labels: [] }))
       }
     ),
     http.delete(
