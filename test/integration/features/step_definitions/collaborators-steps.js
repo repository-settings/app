@@ -50,11 +50,7 @@ Given('a collaborator is granted {string} privileges in the config', async funct
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
         settings.FILE_NAME
       )}`,
-      ({ request }) => {
-        return HttpResponse.arrayBuffer(
-          Buffer.from(dump({ collaborators: [{ username: collaboratorLogin, permission: accessLevel }] }))
-        )
-      }
+      () => HttpResponse.text(dump({ collaborators: [{ username: collaboratorLogin, permission: accessLevel }] }))
     ),
     http.put(
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/collaborators/${collaboratorLogin}`,
@@ -73,11 +69,7 @@ Given('the collaborator privileges are updated to {string} in the config', async
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
         settings.FILE_NAME
       )}`,
-      ({ request }) => {
-        return HttpResponse.arrayBuffer(
-          Buffer.from(dump({ collaborators: [{ username: collaboratorLogin, permission: accessLevel }] }))
-        )
-      }
+      () => HttpResponse.text(dump({ collaborators: [{ username: collaboratorLogin, permission: accessLevel }] }))
     ),
     http.put(
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/collaborators/${collaboratorLogin}`,
@@ -96,9 +88,7 @@ Given('the collaborator privileges are removed in the config', async function ()
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
         settings.FILE_NAME
       )}`,
-      ({ request }) => {
-        return HttpResponse.arrayBuffer(Buffer.from(dump({ collaborators: [] })))
-      }
+      () => HttpResponse.text(dump({ collaborators: [] }))
     ),
     http.delete(
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/collaborators/:collaboratorLogin`,

@@ -109,9 +109,7 @@ Given('an environment is defined in the config', async function () {
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
         settings.FILE_NAME
       )}`,
-      ({ request }) => {
-        return HttpResponse.arrayBuffer(Buffer.from(dump({ environments: [{ name: this.environmentName }] })))
-      }
+      () => HttpResponse.text(dump({ environments: [{ name: this.environmentName }] }))
     ),
     http.put(
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/environments/${this.environmentName}`,
@@ -133,11 +131,7 @@ Given('an environment is defined in the config with reviewers', async function (
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
         settings.FILE_NAME
       )}`,
-      ({ request }) => {
-        return HttpResponse.arrayBuffer(
-          Buffer.from(dump({ environments: [{ name: this.environmentName, reviewers: this.reviewers }] }))
-        )
-      }
+      () => HttpResponse.text(dump({ environments: [{ name: this.environmentName, reviewers: this.reviewers }] }))
     ),
     http.put(
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/environments/${this.environmentName}`,
@@ -158,15 +152,7 @@ Given('wait-timer is not defined for the environment in the config', async funct
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
         settings.FILE_NAME
       )}`,
-      ({ request }) => {
-        return HttpResponse.arrayBuffer(
-          Buffer.from(
-            dump({
-              environments: [environmentWithoutWaitTimer]
-            })
-          )
-        )
-      }
+      () => HttpResponse.text(dump({ environments: [environmentWithoutWaitTimer] }))
     )
   )
 })
@@ -179,15 +165,7 @@ Given('the environment is modified in the config', async function () {
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
         settings.FILE_NAME
       )}`,
-      ({ request }) => {
-        return HttpResponse.arrayBuffer(
-          Buffer.from(
-            dump({
-              environments: [{ name: this.environment.name, ...this.environmentUpdates }]
-            })
-          )
-        )
-      }
+      () => HttpResponse.text(dump({ environments: [{ name: this.environment.name, ...this.environmentUpdates }] }))
     ),
     http.put(
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/environments/${this.environment.name}`,
@@ -206,9 +184,7 @@ Given('the environment is removed from the config', async function () {
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
         settings.FILE_NAME
       )}`,
-      ({ request }) => {
-        return HttpResponse.arrayBuffer(Buffer.from(dump({ environments: [] })))
-      }
+      () => HttpResponse.text(dump({ environments: [] }))
     ),
     http.delete(
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/environments/:environmentName`,
@@ -231,13 +207,11 @@ Given('a reviewer has its type changed', async function () {
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
         settings.FILE_NAME
       )}`,
-      ({ request }) => {
-        return HttpResponse.arrayBuffer(
-          Buffer.from(
-            dump({
-              environments: [{ ...this.environment, reviewers: [...unchangedReviewers, this.updatedReviewer] }]
-            })
-          )
+      () => {
+        return HttpResponse.text(
+          dump({
+            environments: [{ ...this.environment, reviewers: [...unchangedReviewers, this.updatedReviewer] }]
+          })
         )
       }
     ),
@@ -261,13 +235,11 @@ Given('a reviewer has its id changed', async function () {
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
         settings.FILE_NAME
       )}`,
-      ({ request }) => {
-        return HttpResponse.arrayBuffer(
-          Buffer.from(
-            dump({
-              environments: [{ ...this.environment, reviewers: [...unchangedReviewers, this.updatedReviewer] }]
-            })
-          )
+      () => {
+        return HttpResponse.text(
+          dump({
+            environments: [{ ...this.environment, reviewers: [...unchangedReviewers, this.updatedReviewer] }]
+          })
         )
       }
     ),
@@ -290,15 +262,7 @@ Given('a reviewer is added to the environment', async function () {
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
         settings.FILE_NAME
       )}`,
-      ({ request }) => {
-        return HttpResponse.arrayBuffer(
-          Buffer.from(
-            dump({
-              environments: [{ ...this.environment, reviewers: [this.addedReviewer] }]
-            })
-          )
-        )
-      }
+      () => HttpResponse.text(dump({ environments: [{ ...this.environment, reviewers: [this.addedReviewer] }] }))
     ),
     http.put(
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/environments/${this.environment.name}`,
@@ -320,15 +284,7 @@ Given('a reviewer is removed from the environment in the config', async function
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
         settings.FILE_NAME
       )}`,
-      ({ request }) => {
-        return HttpResponse.arrayBuffer(
-          Buffer.from(
-            dump({
-              environments: [{ ...this.environment, reviewers: remainingReviewers }]
-            })
-          )
-        )
-      }
+      () => HttpResponse.text(dump({ environments: [{ ...this.environment, reviewers: remainingReviewers }] }))
     ),
     http.put(
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/environments/${this.environment.name}`,
@@ -349,18 +305,16 @@ Given('an environment is defined in the config with a protected branches deploym
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
         settings.FILE_NAME
       )}`,
-      ({ request }) => {
-        return HttpResponse.arrayBuffer(
-          Buffer.from(
-            dump({
-              environments: [
-                {
-                  name: this.environmentName,
-                  deployment_branch_policy: { protected_branches: true }
-                }
-              ]
-            })
-          )
+      () => {
+        return HttpResponse.text(
+          dump({
+            environments: [
+              {
+                name: this.environmentName,
+                deployment_branch_policy: { protected_branches: true }
+              }
+            ]
+          })
         )
       }
     ),
@@ -390,18 +344,16 @@ Given('an environment is defined in the config with a custom branches deployment
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
         settings.FILE_NAME
       )}`,
-      ({ request }) => {
-        return HttpResponse.arrayBuffer(
-          Buffer.from(
-            dump({
-              environments: [
-                {
-                  name: this.environmentName,
-                  deployment_branch_policy: { protected_branches: false, custom_branches: this.customBranches }
-                }
-              ]
-            })
-          )
+      () => {
+        return HttpResponse.text(
+          dump({
+            environments: [
+              {
+                name: this.environmentName,
+                deployment_branch_policy: { protected_branches: false, custom_branches: this.customBranches }
+              }
+            ]
+          })
         )
       }
     ),
@@ -431,18 +383,16 @@ Given('a protected deployment branch policy is defined for the environment', asy
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
         settings.FILE_NAME
       )}`,
-      ({ request }) => {
-        return HttpResponse.arrayBuffer(
-          Buffer.from(
-            dump({
-              environments: [
-                {
-                  ...this.environment,
-                  deployment_branch_policy: { protected_branches: true }
-                }
-              ]
-            })
-          )
+      () => {
+        return HttpResponse.text(
+          dump({
+            environments: [
+              {
+                ...this.environment,
+                deployment_branch_policy: { protected_branches: true }
+              }
+            ]
+          })
         )
       }
     ),
@@ -466,18 +416,16 @@ Given('a custom deployment branch policy is defined for the environment', async 
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
         settings.FILE_NAME
       )}`,
-      ({ request }) => {
-        return HttpResponse.arrayBuffer(
-          Buffer.from(
-            dump({
-              environments: [
-                {
-                  ...this.environment,
-                  deployment_branch_policy: { protected_branches: false, custom_branches: this.customBranchNames }
-                }
-              ]
-            })
-          )
+      () => {
+        return HttpResponse.text(
+          dump({
+            environments: [
+              {
+                ...this.environment,
+                deployment_branch_policy: { protected_branches: false, custom_branches: this.customBranchNames }
+              }
+            ]
+          })
         )
       }
     ),
@@ -509,9 +457,9 @@ Given('an environment is defined in the config with the same reviewers but sorte
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
         settings.FILE_NAME
       )}`,
-      ({ request }) => {
-        return HttpResponse.arrayBuffer(
-          Buffer.from(dump({ environments: [{ ...this.environment, reviewers: ascendingIdSortedReviewers }] }))
+      () => {
+        return HttpResponse.text(
+          dump({ environments: [{ ...this.environment, reviewers: ascendingIdSortedReviewers }] })
         )
       }
     )
@@ -526,21 +474,19 @@ Given(
         `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
           settings.FILE_NAME
         )}`,
-        ({ request }) => {
-          return HttpResponse.arrayBuffer(
-            Buffer.from(
-              dump({
-                environments: [
-                  {
-                    ...this.environment,
-                    deployment_branch_policy: {
-                      protected_branches: false,
-                      custom_branches: this.customBranches.map(branch => branch.name).reverse()
-                    }
+        () => {
+          return HttpResponse.text(
+            dump({
+              environments: [
+                {
+                  ...this.environment,
+                  deployment_branch_policy: {
+                    protected_branches: false,
+                    custom_branches: this.customBranches.map(branch => branch.name).reverse()
                   }
-                ]
-              })
-            )
+                }
+              ]
+            })
           )
         }
       )

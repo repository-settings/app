@@ -23,7 +23,7 @@ Given('basic repository config is defined', async function () {
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
         settings.FILE_NAME
       )}`,
-      ({ request }) => HttpResponse.arrayBuffer(Buffer.from(dump({ repository: this.repository })))
+      () => HttpResponse.text(dump({ repository: this.repository }))
     ),
     http.patch(`https://api.github.com/repos/${repository.owner.name}/${repository.name}`, async ({ request }) => {
       this.repositoryDetails = await request.json()
@@ -44,7 +44,7 @@ Given('topics are defined in the repository config', async function () {
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
         settings.FILE_NAME
       )}`,
-      ({ request }) => HttpResponse.arrayBuffer(Buffer.from(dump({ repository: this.repository })))
+      () => HttpResponse.text(dump({ repository: this.repository }))
     ),
     http.patch(`https://api.github.com/repos/${repository.owner.name}/${repository.name}`, async ({ request }) => {
       return new HttpResponse(null, { status: StatusCodes.OK })
@@ -68,7 +68,7 @@ Given('vulnerability alerts are {string} in the config', async function (enablem
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
         settings.FILE_NAME
       )}`,
-      ({ request }) => HttpResponse.arrayBuffer(Buffer.from(dump({ repository: this.repository })))
+      () => HttpResponse.text(dump({ repository: this.repository }))
     ),
     http.patch(`https://api.github.com/repos/${repository.owner.name}/${repository.name}`, async ({ request }) => {
       return new HttpResponse(null, { status: StatusCodes.OK })
@@ -97,14 +97,14 @@ Given('security fixes are {string} in the config', async function (enablement) {
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
         settings.FILE_NAME
       )}`,
-      ({ request }) => HttpResponse.arrayBuffer(Buffer.from(dump({ repository: this.repository })))
+      () => HttpResponse.text(dump({ repository: this.repository }))
     ),
     http.patch(`https://api.github.com/repos/${repository.owner.name}/${repository.name}`, async ({ request }) => {
       return new HttpResponse(null, { status: StatusCodes.OK })
     }),
     http[this.repository.enable_automated_security_fixes ? 'put' : 'delete'](
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/automated-security-fixes`,
-      async ({ request }) => {
+      async () => {
         this.securityFixesEnablement = enablement
 
         return new HttpResponse(null, {

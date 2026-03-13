@@ -36,7 +36,7 @@ Given('a milestone is added', async function () {
         settings.FILE_NAME
       )}`,
       ({ request }) => {
-        return HttpResponse.arrayBuffer(Buffer.from(dump({ milestones: [this.milestone] })))
+        return HttpResponse.text(dump({ milestones: [this.milestone] }))
       }
     ),
     http.post(
@@ -59,9 +59,7 @@ Given('the milestone is updated in the config', async function () {
         settings.FILE_NAME
       )}`,
       ({ request }) => {
-        return HttpResponse.arrayBuffer(
-          Buffer.from(dump({ milestones: [{ ...this.milestone, ...this.milestoneUpdates }] }))
-        )
+        return HttpResponse.text(dump({ milestones: [{ ...this.milestone, ...this.milestoneUpdates }] }))
       }
     ),
     http.patch(
@@ -81,9 +79,7 @@ Given('the milestone is removed from the config', async function () {
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
         settings.FILE_NAME
       )}`,
-      ({ request }) => {
-        return HttpResponse.arrayBuffer(Buffer.from(dump({ milestones: [] })))
-      }
+      () => HttpResponse.text(dump({ milestones: [] }))
     ),
     http.delete(
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/milestones/:milestoneNumber`,

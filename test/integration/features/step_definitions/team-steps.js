@@ -36,7 +36,7 @@ Given('a team is granted {string} privileges in the config', async function (acc
         settings.FILE_NAME
       )}`,
       ({ request }) => {
-        return HttpResponse.arrayBuffer(Buffer.from(dump({ teams: [{ name: teamName, permission: accessLevel }] })))
+        return HttpResponse.text(dump({ teams: [{ name: teamName, permission: accessLevel }] }))
       }
     ),
     http.get(`https://api.github.com/orgs/${repository.owner.name}/teams/${teamName}`, ({ request }) => {
@@ -60,7 +60,7 @@ Given('the team privileges are updated to {string} in the config', async functio
         settings.FILE_NAME
       )}`,
       ({ request }) => {
-        return HttpResponse.arrayBuffer(Buffer.from(dump({ teams: [{ name: teamName, permission: accessLevel }] })))
+        return HttpResponse.text(dump({ teams: [{ name: teamName, permission: accessLevel }] }))
       }
     ),
     http.put(
@@ -80,9 +80,7 @@ Given('the team privileges are removed in the config', async function () {
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
         settings.FILE_NAME
       )}`,
-      ({ request }) => {
-        return HttpResponse.arrayBuffer(Buffer.from(dump({ teams: [] })))
-      }
+      () => HttpResponse.text(dump({ teams: [] }))
     ),
     http.delete(
       `https://api.github.com/teams/:teamId/repos/${repository.owner.name}/${repository.name}`,

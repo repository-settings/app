@@ -31,7 +31,7 @@ Given('a branch-protection rule is defined in the config', async function () {
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
         settings.FILE_NAME
       )}`,
-      ({ request }) => HttpResponse.arrayBuffer(Buffer.from(dump({ branches: [this.branchProtectionRule] })))
+      () => HttpResponse.text(dump({ branches: [this.branchProtectionRule] }))
     ),
     http.put(
       `https://api.github.com/repos/${repository.owner.name}/${repository.name}/branches/${branchName}/protection`,
@@ -56,12 +56,10 @@ Given('the branch-protection rule is removed from the config', async function ()
         settings.FILE_NAME
       )}`,
       ({ request }) =>
-        HttpResponse.arrayBuffer(
-          Buffer.from(
-            dump({
-              branches: [{ name: this.branchName, protection: {} }]
-            })
-          )
+        HttpResponse.text(
+          dump({
+            branches: [{ name: this.branchName, protection: {} }]
+          })
         )
     ),
     http.delete(
