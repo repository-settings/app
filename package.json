@@ -42,7 +42,7 @@
     "jest": "30.4.2",
     "jest-when": "4.0.3",
     "lockfile-lint": "5.0.0",
-    "ls-engines": "0.9.4",
+    "ls-engines": "0.10.1",
     "msw": "2.14.6",
     "nodemon": "3.1.14",
     "npm-run-all2": "9.0.2",
