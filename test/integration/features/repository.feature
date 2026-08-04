@@ -5,6 +5,11 @@ Feature: Repository
     When a settings sync is triggered
     Then the repository will be configured
 
+  Scenario: Basic repository settings from a settings.yaml file
+    Given basic repository config is defined in a settings.yaml file
+    When a settings sync is triggered
+    Then the repository will be configured
+
   Scenario: Repository with topics defined
     Given topics are defined in the repository config
     When a settings sync is triggered

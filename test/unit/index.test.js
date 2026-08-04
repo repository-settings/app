@@ -44,13 +44,27 @@ describe('plugin', () => {
     }
     sync = jest.fn()
 
-    plugin(app, {}, { sync, FILE_NAME: '.github/settings.yml' })
+    plugin(app, {}, { sync, FILE_NAMES: ['.github/settings.yml', '.github/settings.yaml'] })
   })
 
   describe('with settings modified on master', () => {
     it('syncs settings', async () => {
       await app.receive(event)
       expect(configGet).toHaveBeenCalledWith(expect.objectContaining({ path: '.github/settings.yml' }))
+      expect(sync).toHaveBeenCalled()
+    })
+  })
+
+  describe('with settings.yaml modified on master', () => {
+    beforeEach(() => {
+      event.payload = JSON.parse(JSON.stringify(pushSettings))
+      event.payload.ref = 'refs/heads/master'
+      event.payload.commits[0].added = ['.github/settings.yaml']
+      event.payload.head_commit.added = ['.github/settings.yaml']
+    })
+
+    it('syncs settings', async () => {
+      await app.receive(event)
       expect(sync).toHaveBeenCalled()
     })
   })
@@ -108,6 +122,38 @@ describe('plugin', () => {
     it('does sync settings', async () => {
       await app.receive(event)
       expect(sync).toHaveBeenCalled()
+    })
+
+    describe('when settings.yml does not exist', () => {
+      const yamlConfig = { repository: { name: any.word() } }
+
+      beforeEach(() => {
+        configGet
+          .mockResolvedValueOnce({ config: null, files: [{ config: null }] })
+          .mockResolvedValueOnce({ config: yamlConfig, files: [{ config: yamlConfig }] })
+      })
+
+      it('falls back to settings.yaml', async () => {
+        await app.receive(event)
+
+        expect(configGet).toHaveBeenCalledTimes(2)
+        expect(configGet).toHaveBeenNthCalledWith(1, expect.objectContaining({ path: '.github/settings.yml' }))
+        expect(configGet).toHaveBeenNthCalledWith(2, expect.objectContaining({ path: '.github/settings.yaml' }))
+        expect(sync).toHaveBeenCalledWith(expect.anything(), expect.anything(), yamlConfig)
+      })
+    })
+
+    describe('when neither settings.yml nor settings.yaml exists', () => {
+      beforeEach(() => {
+        configGet.mockResolvedValue({ config: null, files: [{ config: null }] })
+      })
+
+      it('syncs with an empty config', async () => {
+        await app.receive(event)
+
+        expect(configGet).toHaveBeenCalledTimes(2)
+        expect(sync).toHaveBeenCalledWith(expect.anything(), expect.anything(), {})
+      })
     })
   })
 })
