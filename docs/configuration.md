@@ -1,6 +1,6 @@
 # Configuration
 
-Create a `.github/settings.yml` file in your repository. Changes to this file on the default branch will be synced to GitHub.
+Create a `.github/settings.yml` (or `.github/settings.yaml`) file in your repository. Changes to this file on the default branch will be synced to GitHub. When both files exist, `.github/settings.yml` takes precedence and `.github/settings.yaml` is ignored.
 
 ## Sections
 
