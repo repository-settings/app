@@ -115,6 +115,35 @@ Given('security fixes are {string} in the config', async function (enablement) {
   )
 })
 
+Given('immutable releases are {string} in the config', async function (enablement) {
+  this.repository = {
+    name: repository.name,
+    enable_immutable_releases: enablement === 'enabled'
+  }
+
+  this.server.use(
+    http.get(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
+        settings.FILE_NAME
+      )}`,
+      () => HttpResponse.text(dump({ repository: this.repository }))
+    ),
+    http.patch(`https://api.github.com/repos/${repository.owner.name}/${repository.name}`, async ({ request }) => {
+      return new HttpResponse(null, { status: StatusCodes.OK })
+    }),
+    http[this.repository.enable_immutable_releases ? 'put' : 'delete'](
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/immutable-releases`,
+      async () => {
+        this.immutableReleasesEnablement = enablement
+
+        return new HttpResponse(null, {
+          status: this.repository.enable_immutable_releases ? StatusCodes.OK : StatusCodes.NO_CONTENT
+        })
+      }
+    )
+  )
+})
+
 Then('the repository will be configured', async function () {
   assert.deepEqual(this.repositoryDetails, this.repository)
 })
@@ -129,4 +158,8 @@ Then('vulnerability alerts are {string}', async function (enablement) {
 
 Then('security fixes are {string}', async function (enablement) {
   assert.equal(this.securityFixesEnablement, enablement)
+})
+
+Then('immutable releases are {string}', async function (enablement) {
+  assert.equal(this.immutableReleasesEnablement, enablement)
 })
