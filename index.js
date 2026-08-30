@@ -5,8 +5,21 @@ import SettingsApp from './lib/settings.js'
  * @param {import('probot').Probot} robot
  */
 export default (robot, _, Settings = SettingsApp) => {
+  async function loadConfig (context) {
+    for (const filePath of Settings.FILE_NAMES) {
+      const fileName = filePath.replace(/^\.github\//, '')
+      const config = await context.config(fileName, undefined, { arrayMerge: mergeArrayByName })
+
+      if (config !== null) {
+        return config
+      }
+    }
+
+    return {}
+  }
+
   async function syncSettings (context, repo = context.repo()) {
-    const config = await context.config('settings.yml', {}, { arrayMerge: mergeArrayByName })
+    const config = await loadConfig(context)
     return Settings.sync(context.octokit, repo, config)
   }
 
@@ -21,11 +34,13 @@ export default (robot, _, Settings = SettingsApp) => {
     }
 
     const settingsModified = payload.commits.find(commit => {
-      return commit.added.includes(Settings.FILE_NAME) || commit.modified.includes(Settings.FILE_NAME)
+      return Settings.FILE_NAMES.some(fileName => {
+        return commit.added.includes(fileName) || commit.modified.includes(fileName)
+      })
     })
 
     if (!settingsModified) {
-      robot.log.debug(`No changes in '${Settings.FILE_NAME}' detected, returning...`)
+      robot.log.debug(`No changes in '${Settings.FILE_NAMES.join("', '")}' detected, returning...`)
       return
     }
 
