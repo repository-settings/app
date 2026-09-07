@@ -19,22 +19,22 @@ export function buildPushEvent ({ pushBranch } = {}) {
 
 Given('the repository has no settings file', async function () {
   this.server.use(
-    http.get(
-      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
-        settings.FILE_NAME
-      )}`,
-      ({ request }) => {
-        return new HttpResponse(null, { status: StatusCodes.NOT_FOUND })
-      }
-    ),
-    http.get(
-      `https://api.github.com/repos/${repository.owner.name}/.github/contents/${encodeURIComponent(
-        settings.FILE_NAME
-      )}`,
-      ({ request }) => {
-        return new HttpResponse(null, { status: StatusCodes.NOT_FOUND })
-      }
-    )
+    ...settings.FILE_NAMES.flatMap(fileName => [
+      http.get(
+        `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
+          fileName
+        )}`,
+        ({ request }) => {
+          return new HttpResponse(null, { status: StatusCodes.NOT_FOUND })
+        }
+      ),
+      http.get(
+        `https://api.github.com/repos/${repository.owner.name}/.github/contents/${encodeURIComponent(fileName)}`,
+        ({ request }) => {
+          return new HttpResponse(null, { status: StatusCodes.NOT_FOUND })
+        }
+      )
+    ])
   )
 })
 
