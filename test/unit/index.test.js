@@ -1,4 +1,4 @@
-import { Probot, ProbotOctokit } from 'probot'
+import { Probot } from 'probot'
 import any from '@travi/any'
 import plugin from '../../index.js'
 import { readFileSync } from 'fs'
@@ -9,17 +9,25 @@ const pushReadme = JSON.parse(readFileSync(new URL('../fixtures/events/push.read
 const repositoryEdited = JSON.parse(readFileSync(new URL('../fixtures/events/repository.edited.json', import.meta.url)))
 
 describe('plugin', () => {
-  let app, event, sync
+  let app, event, sync, configGet
 
   beforeEach(() => {
+    configGet = jest.fn().mockResolvedValue({ config: {}, files: [{ config: {} }] })
+
     class Octokit {
       static defaults () {
-        return ProbotOctokit
+        return Octokit
       }
 
       constructor () {
         this.config = {
-          get: jest.fn().mockReturnValue({})
+          get: configGet
+        }
+        this.hook = {
+          before: () => {},
+          after: () => {},
+          error: () => {},
+          wrap: () => {}
         }
       }
 
@@ -42,6 +50,7 @@ describe('plugin', () => {
   describe('with settings modified on master', () => {
     it('syncs settings', async () => {
       await app.receive(event)
+      expect(configGet).toHaveBeenCalledWith(expect.objectContaining({ path: '.github/settings.yml' }))
       expect(sync).toHaveBeenCalled()
     })
   })
