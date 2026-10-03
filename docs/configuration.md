@@ -15,6 +15,7 @@ Find details about each available section in their own page:
 * [Environments](./plugins/environments.md)
 * [Labels](./plugins/labels.md)
 * [Milestones](./plugins/milestones.md)
+* [Autolinks](./plugins/autolinks.md)
 
 ### Inheritance
 
