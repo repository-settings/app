@@ -131,7 +131,7 @@ describe('Repository', () => {
         })
       })
 
-      it('enables vulerability alerts when set to true', () => {
+      it('enables automated security fixes when set to true', () => {
         const plugin = configure({
           enable_automated_security_fixes: true
         })
@@ -147,7 +147,7 @@ describe('Repository', () => {
         })
       })
 
-      it('disables vulnerability alerts when set to false', async () => {
+      it('disables automated security fixes when set to false', async () => {
         const plugin = configure({
           enable_automated_security_fixes: false
         })
@@ -160,6 +160,47 @@ describe('Repository', () => {
           mediaType: {
             previews: ['london']
           }
+        })
+      })
+    })
+
+    describe('immutable releases', () => {
+      it('it skips if not set', async () => {
+        const plugin = configure({
+          enable_immutable_releases: undefined
+        })
+
+        await plugin.sync()
+
+        expect(github.request).not.toHaveBeenCalledWith('PUT /repos/{owner}/{repo}/immutable-releases', {
+          owner: repoOwner,
+          repo: repoName,
+        })
+      })
+
+      it('enables immutable releases when set to true', () => {
+        const plugin = configure({
+          enable_immutable_releases: true
+        })
+
+        return plugin.sync().then(() => {
+          expect(github.request).toHaveBeenCalledWith('PUT /repos/{owner}/{repo}/immutable-releases', {
+            owner: repoOwner,
+            repo: repoName,
+          })
+        })
+      })
+
+      it('disables immutable releases when set to false', async () => {
+        const plugin = configure({
+          enable_immutable_releases: false
+        })
+
+        await plugin.sync()
+
+        expect(github.request).toHaveBeenCalledWith('DELETE /repos/{owner}/{repo}/immutable-releases', {
+          owner: repoOwner,
+          repo: repoName,
         })
       })
     })
