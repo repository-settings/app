@@ -24,19 +24,21 @@ describe('repository.edited trigger', function () {
     })
   })
 
-  it('does not apply configuration when the repository does not have a settings.yml', async () => {
-    githubScope
-      .get(`/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(Settings.FILE_NAME)}`)
-      .reply(NOT_FOUND, {
-        message: 'Not Found',
-        documentation_url: 'https://developer.github.com/v3/repos/contents/#get-contents'
-      })
-    githubScope
-      .get(`/repos/${repository.owner.name}/.github/contents/${encodeURIComponent(Settings.FILE_NAME)}`)
-      .reply(NOT_FOUND, {
-        message: 'Not Found',
-        documentation_url: 'https://developer.github.com/v3/repos/contents/#get-contents'
-      })
+  it('does not apply configuration when the repository has neither a settings.yml nor a settings.yaml', async () => {
+    for (const fileName of Settings.FILE_NAMES) {
+      githubScope
+        .get(`/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(fileName)}`)
+        .reply(NOT_FOUND, {
+          message: 'Not Found',
+          documentation_url: 'https://developer.github.com/v3/repos/contents/#get-contents'
+        })
+      githubScope
+        .get(`/repos/${repository.owner.name}/.github/contents/${encodeURIComponent(fileName)}`)
+        .reply(NOT_FOUND, {
+          message: 'Not Found',
+          documentation_url: 'https://developer.github.com/v3/repos/contents/#get-contents'
+        })
+    }
 
     await probot.receive(buildRepositoryEditedEvent())
   })

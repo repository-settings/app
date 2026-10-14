@@ -33,6 +33,42 @@ Given('basic repository config is defined', async function () {
   )
 })
 
+Given('basic repository config is defined in a settings.yaml file', async function () {
+  this.repository = {
+    name: repository.name,
+    description: any.sentence(),
+    default_branch: 'main',
+    visibility: any.fromList(['public', 'private', 'internal']),
+    homepage: any.url()
+  }
+
+  this.server.use(
+    http.get(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
+        settings.FILE_NAMES[0]
+      )}`,
+      () => new HttpResponse(null, { status: StatusCodes.NOT_FOUND })
+    ),
+    http.get(
+      `https://api.github.com/repos/${repository.owner.name}/.github/contents/${encodeURIComponent(
+        settings.FILE_NAMES[0]
+      )}`,
+      () => new HttpResponse(null, { status: StatusCodes.NOT_FOUND })
+    ),
+    http.get(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
+        settings.FILE_NAMES[1]
+      )}`,
+      () => HttpResponse.text(dump({ repository: this.repository }))
+    ),
+    http.patch(`https://api.github.com/repos/${repository.owner.name}/${repository.name}`, async ({ request }) => {
+      this.repositoryDetails = await request.json()
+
+      return new HttpResponse(null, { status: StatusCodes.OK })
+    })
+  )
+})
+
 Given('topics are defined in the repository config', async function () {
   this.repository = {
     name: repository.name,
