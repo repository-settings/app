@@ -1,6 +1,6 @@
 # GitHub Repository Settings
 
-This GitHub App syncs repository settings defined in `.github/settings.yml` to GitHub, enabling Pull Requests for repository settings.
+This GitHub App syncs repository settings defined in `.github/settings.yml` (or `.github/settings.yaml`) to GitHub, enabling Pull Requests for repository settings.
 
 <!--status-badges start -->
 
