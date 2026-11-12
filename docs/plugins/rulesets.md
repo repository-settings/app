@@ -61,3 +61,23 @@ rulesets:
         actor_type: Integration
         bypass_mode: always
 ```
+
+## Bypass actors
+
+A team can be defined as a bypass actor by its slug.
+Use `team` instead of `actor_id` and `actor_type`.
+The team must belong to the organization that owns the repository.
+
+```yaml
+rulesets:
+  - name: changes must be reviewed
+    # ...
+    bypass_actors:
+      - team: maintainers
+        bypass_mode: pull_request
+```
+
+A ruleset is not synced when one of its teams can not be found.
+The other rulesets are still synced.
+
+`bypass_mode` defaults to `always` when omitted.
