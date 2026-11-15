@@ -60,4 +60,8 @@ repository:
   # Either `true` to enable vulnerability alerts, or `false` to disable
   # vulnerability alerts.
   enable_vulnerability_alerts: true
+
+  # Either `true` to enable release immutability, or `false` to disable
+  # release immutability.
+  enable_immutable_releases: true
 ```
