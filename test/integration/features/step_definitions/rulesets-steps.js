@@ -79,6 +79,32 @@ Given('a ruleset is defined in the config', async function () {
   )
 })
 
+Given('a ruleset with a team as a bypass actor is defined in the config', async function () {
+  const teamSlug = any.word()
+  this.teamId = any.integer()
+  this.ruleset = { name: any.word(), bypass_actors: [{ team: teamSlug, bypass_mode: 'pull_request' }] }
+
+  this.server.use(
+    http.get(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/contents/${encodeURIComponent(
+        settings.FILE_NAME
+      )}`,
+      () => HttpResponse.text(dump({ rulesets: [this.ruleset] }))
+    ),
+    http.get(`https://api.github.com/orgs/${repository.owner.name}/teams/${teamSlug}`, () =>
+      HttpResponse.json({ id: this.teamId })
+    ),
+    http.post(
+      `https://api.github.com/repos/${repository.owner.name}/${repository.name}/rulesets`,
+      async ({ request }) => {
+        this.createdRuleset = await request.json()
+
+        return new HttpResponse(null, { status: StatusCodes.CREATED })
+      }
+    )
+  )
+})
+
 Given('the ruleset is modified in the config', async function () {
   const additionalRule = any.simpleObject()
   this.updatedRuleset = { name: rulesetName, rules: [...existingRules, additionalRule] }
@@ -135,6 +161,13 @@ Given('no ruleset updates are made to the config', async function () {
 
 Then('the ruleset is enabled for the repository', async function () {
   assert.deepEqual(this.createdRuleset, this.ruleset)
+})
+
+Then('the team is a bypass actor of the ruleset', async function () {
+  assert.deepEqual(this.createdRuleset, {
+    name: this.ruleset.name,
+    bypass_actors: [{ actor_id: this.teamId, actor_type: 'Team', bypass_mode: 'pull_request' }]
+  })
 })
 
 Then('the ruleset is updated', async function () {

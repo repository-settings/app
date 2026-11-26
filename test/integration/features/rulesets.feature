@@ -6,6 +6,12 @@ Feature: Repository Rulesets
     When a settings sync is triggered
     Then the ruleset is enabled for the repository
 
+  Scenario: Add a ruleset with a team as a bypass actor
+    Given no rulesets are defined for the repository
+    And a ruleset with a team as a bypass actor is defined in the config
+    When a settings sync is triggered
+    Then the team is a bypass actor of the ruleset
+
   Scenario: Update a ruleset
     Given a ruleset exists for the repository
     And the ruleset is modified in the config
